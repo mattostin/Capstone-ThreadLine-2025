@@ -1,0 +1,15 @@
+/* styling */
+body{
+    background-color:  rgb(26, 115, 153);
+}
+
+.copyright{
+    position: relative;
+    height: 99vh;
+}
+.script{
+    position: absolute;
+    bottom:0;
+    right:0;
+}
+

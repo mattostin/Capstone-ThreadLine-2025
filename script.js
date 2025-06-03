@@ -1,0 +1,1 @@
+//JS will add the functionality to our project like add/remove, calculate total, and simulate checkout
