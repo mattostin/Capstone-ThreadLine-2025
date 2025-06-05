@@ -1,15 +1,91 @@
 /* styling */
-body{
-    background-color:  rgb(26, 115, 153);
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+/*
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #4ca7d0 0%, #1a5c80 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+*/
+
+
+
+/* copyright  */
+.copyright {
+  position: relative;
+  z-index: 1;
 }
 
-.copyright{
-    position: relative;
-    height: 99vh;
-}
-.script{
-    position: absolute;
-    bottom:0;
-    right:0;
+.script {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: black;
+  z-index: 10;
 }
 
+/* Main title */
+.text {
+  font-size: 49px;
+  text-align: center;
+  margin-top: 150px;
+  color: white;
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal
+
+}
+
+/* Slogan */
+.text2 {
+  font-size: 32px;
+  text-align: center;
+  margin-top: 30px;
+  color: white;
+   font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal
+}
+
+.cta-buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: white;
+  color: #1a5c80;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #2c212129;
+}
+
+.btn.secondary {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn.secondary:hover {
+  background-color: rgba(245, 239, 239, 0.1);
+}
