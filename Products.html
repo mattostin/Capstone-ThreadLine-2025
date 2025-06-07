@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Shop - ThreadLine</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products - ThreadLine</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Shop Our Collection</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="products.html">Shop</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
+  <nav class="navbar">
+    <h1 class="logo">ThreadLine</h1>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
 
-  <main>
-    <div class="product">
-      <img src="placeholder.jpg" alt="Product Image">
-      <p>Classic T-Shirt - $25</p>
+  <section class="product-grid">
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150" alt="T-Shirt">
+      <h3>Graphic T-Shirt</h3>
+      <p>$19.99</p>
     </div>
-    <!-- Add more products here -->
-  </main>
-
-  <footer class="copyright">
-    <p class="script">© 2025 ThreadLine. All rights reserved.</p>
-  </footer>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150" alt="Hoodie">
+      <h3>Cozy Hoodie</h3>
+      <p>$34.99</p>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150" alt="Jeans">
+      <h3>Denim Jeans</h3>
+      <p>$39.99</p>
+    </div>
+  </section>
 </body>
 </html>
