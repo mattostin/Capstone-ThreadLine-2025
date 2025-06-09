@@ -100,3 +100,11 @@ footer {
   color: #000;
   font-size: 0.9rem;
 }
+
+/* PRODUCT IMAGE STYLING */
+.product-box img {
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
