@@ -1,0 +1,15 @@
+<section class="product-grid">
+  <!-- White Jacket -->
+  <div class="product-box">
+    <img src="Screenshot 2025-06-09 at 6.30.28 PM.png" alt="ThreadLine Sport Jacket - White Front">
+    <img src="Screenshot 2025-06-09 at 6.30.43 PM.png" alt="ThreadLine Sport Jacket - White Back">
+    <p>Men's Softness Sport Jacket - White<br>$55</p>
+  </div>
+
+  <!-- Gray Jacket -->
+  <div class="product-box">
+    <img src="Screenshot 2025-06-09 at 6.31.06 PM.png" alt="ThreadLine Sport Jacket - Gray Front">
+    <img src="Screenshot 2025-06-09 at 6.31.23 PM.png" alt="ThreadLine Sport Jacket - Gray Back">
+    <p>Men's Softness Sport Jacket - Gray<br>$55</p>
+  </div>
+</section>
