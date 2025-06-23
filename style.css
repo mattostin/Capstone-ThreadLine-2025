@@ -101,10 +101,41 @@ footer {
   font-size: 0.9rem;
 }
 
-/* PRODUCT IMAGE STYLING */
+/* PRODUCT GRID LAYOUT */
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* PRODUCT BOX STYLING */
+.product-box {
+  text-align: center;
+  max-width: 320px;
+  background-color: #ffffffc2;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* IMAGE UNIFORMITY */
 .product-box img {
-  width: 100%;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 300px;
+  height: 330px; /* Keeps all images same height box */
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* TEXT STYLE FOR PRODUCT NAME & PRICE */
+.product-box p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 10px;
 }
