@@ -149,9 +149,9 @@ footer {
   margin-top: 10px;
 }
 
-/* SIGNUP PAGE STYLING */
+/* the style for the signup page */
 .signup-container {
-  max-width: 400px;
+  max-width: 300px;
   margin: 5rem auto;
   padding: 2rem;
   background-color: #ffffffcc;
@@ -204,7 +204,7 @@ html, body {
 
 
 html {
-  overflow-y: scroll; /* ✅ Forces scrollbar space on all pages */
+  overflow-y: scroll; /* putting scroll bar on all pages so it doesn't shift each page*/
 }
 
 body {
