@@ -1,1 +1,149 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreadLine | Checkout</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    .checkout-container {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      color: #222;
+    }
+
+    .checkout-section {
+      margin-bottom: 2rem;
+    }
+
+    .checkout-section label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .checkout-section input,
+    .checkout-section select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .checkout-summary {
+      background-color: #f2f2f2;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .checkout-summary p {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #075eb6;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .checkout-btn:hover {
+      background-color: #064a8a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.875rem;
+      background-color: #eee;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="checkout-container">
+    <h2>Checkout</h2>
+
+    <!-- Billing Details -->
+    <div class="checkout-section">
+      <h3>Billing Information</h3>
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" placeholder="John Doe" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+
+      <label for="address">Shipping Address</label>
+      <input type="text" id="address" placeholder="123 Threadline Blvd" required />
+    </div>
+
+    <!-- Payment Info -->
+    <div class="checkout-section">
+      <h3>Payment Information</h3>
+      <label for="card">Card Number</label>
+      <input type="text" id="card" placeholder="1234 5678 9012 3456" required />
+
+      <label for="expiry">Expiry Date</label>
+      <input type="text" id="expiry" placeholder="MM/YY" required />
+
+      <label for="cvv">CVV</label>
+      <input type="text" id="cvv" placeholder="123" required />
+    </div>
+
+    <!-- Order Summary -->
+    <div class="checkout-section checkout-summary">
+      <h3>Order Summary</h3>
+      <p><span>Gray Jacket</span><span>$55.00</span></p>
+      <p><span>Green Shorts</span><span>$30.00</span></p>
+      <hr />
+      <p><strong>Total</strong><strong>$85.00</strong></p>
+    </div>
+
+    <!-- Place Order -->
+    <button class="checkout-btn" onclick="placeOrder()">Place Order</button>
+  </div>
+
+  <footer>
+    © 2025 ThreadLine. All rights reserved.
+  </footer>
+
+  <script>
+    function placeOrder() {
+      alert("Thank you for your order!");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
