@@ -119,25 +119,26 @@ footer {
   padding: 20px;
 }
 
-/* PRODUCT BOX STYLING */
 .product-box {
+  width: 320px;
+  height: 430px; /* Fixed height to match content */
   text-align: center;
-  max-width: 320px;
   background-color: #ffffffc2;
-  padding: 10px;
+  padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* IMAGE UNIFORMITY */
 .product-box img {
-  width: 200px;
-  height: 330px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 10px;
+  width: 100%;
+  height: 250px;
+  object-fit: cover;  /* fills the box nicely */
   border: 1px solid #ccc;
   border-radius: 6px;
+  margin-bottom: 10px;
 }
 
 /* TEXT STYLE FOR PRODUCT NAME & PRICE */
