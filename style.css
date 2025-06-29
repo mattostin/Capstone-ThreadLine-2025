@@ -121,21 +121,22 @@ footer {
 
 .product-box {
   width: 320px;
-  height: 430px; /* Fixed height to match content */
+  height: 420px;
   text-align: center;
   background-color: #ffffffc2;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  overflow: hidden; /* prevents anything from overflowing */
 }
 
 .product-box img {
   width: 100%;
-  height: 250px;
-  object-fit: cover;  /* fills the box nicely */
+  height: 180px;
+  object-fit: contain; /* shows full image and fits inside the box */
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-bottom: 10px;
