@@ -217,3 +217,20 @@ body {
   background-attachment: fixed;
   color: #111;
 }
+
+/* WRAP TWO IMAGES SIDE-BY-SIDE */
+.product-images {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* IMAGE SIZING INSIDE WRAPPER */
+.product-images img {
+  width: 140px;
+  height: 180px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
