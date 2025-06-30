@@ -21,7 +21,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="codeForBothJackets.html">Shop</a></li>
       <li><a href="login.html">Login</a></li>
-      <li><a href="signup.html">Signup</a></li>
+      <li><a href="signup.php">Signup</a></li>
     </ul>
   </nav>
 
