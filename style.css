@@ -121,17 +121,17 @@ footer {
 
 .product-box {
   width: 320px;
-  height: 450px;
   text-align: center;
   background-color: #ffffffc2;
-  padding: 10px;
+  padding: 20px 10px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: hidden; /* prevents anything from overflowing */
+  gap: 15px;
 }
+
 
 .product-box img {
   width: 100%;
@@ -233,4 +233,115 @@ body {
   object-fit: contain;
   border: 1px solid #ccc;
   border-radius: 6px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #111;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.logo {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+}
+
+.product-box {
+  width: 320px;
+  text-align: center;
+  background-color: #ffffffc2;
+  padding: 20px 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.product-images {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  height: 190px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.product-images img {
+  width: 140px;
+  height: 180px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.bg-white {
+  background-color: #f6f6f6;
+}
+.bg-gray {
+  background-color: #e0e0e0;
+}
+.bg-green {
+  background-color: #d6e4d1;
+}
+
+.product-box p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.add-to-cart-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 0.6rem 1.2rem;
+  background-color: #075eb6;
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #054a8e;
 }
