@@ -11,7 +11,6 @@
   <header class="navbar">
     <a href="index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="checkout.html">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
         <li style="color: white; font-weight: bold;">
