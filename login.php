@@ -65,12 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
 
-            // ✅ Update is_logged_in, last_activity, and last_login
+            // Track IP address and login time
             $now = date('Y-m-d H:i:s');
-            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ?, last_login = ? WHERE id = ?");
-            $update->bind_param("ssi", $now, $now, $id);
+            $ip = $_SERVER['HTTP_CLIENT_IP'] ??
+                  $_SERVER['HTTP_X_FORWARDED_FOR'] ??
+                  $_SERVER['REMOTE_ADDR'];
+
+            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ?, last_login_ip = ? WHERE id = ?");
+            $update->bind_param("ssi", $now, $ip, $id);
             $update->execute();
-            $update->close();
 
             header("Location: codeForBothJackets.php");
             exit();
