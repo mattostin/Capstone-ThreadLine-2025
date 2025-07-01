@@ -1,5 +1,4 @@
 <?php
-// Start session
 session_start();
 
 // Enable error reporting
@@ -31,9 +30,18 @@ echo <<<HTML
 <nav class="navbar">
   <div class="logo">ThreadLine</div>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
+    <li><a href="index.php">Home</a></li>
     <li><a href="codeForBothJackets.html">Shop</a></li>
-    <li><a href="signup.php">Signup</a></li>
+HTML;
+
+if (isset($_SESSION['username'])) {
+  echo "<li style='color:white;font-weight:bold;'>Hi, " . htmlspecialchars($_SESSION['username']) . "</li>";
+  echo "<li><a href='logout.php'>Logout</a></li>";
+} else {
+  echo "<li><a href='signup.php'>Signup</a></li>";
+}
+
+echo <<<HTML
   </ul>
 </nav>
 <div class="signup-container">
@@ -63,12 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->fetch();
 
         if (password_verify($password, $hashed_password)) {
-            // Set session variables
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
-
-            echo "<h2>✅ Welcome back, $username!</h2>";
-            echo "<p><a href='index.html' style='color: #075eb6; font-weight: bold;'>Go to homepage</a></p>";
+            header("Location: index.php");
+            exit();
         } else {
             echo "<h2>❌ Incorrect password.</h2>";
         }
@@ -78,7 +84,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->close();
 } else {
-    echo "<h2>Invalid request.</h2>";
+    // Show the login form if not POST
+    echo <<<FORM
+    <h2>Login</h2>
+    <form class="signup-form" method="POST" action="login.php">
+      <input type="email" name="email" placeholder="Email Address" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p style="margin-top: 1rem;">
+      Don't have an account? <a href="signup.php" style="color: #075eb6; font-weight: bold;">Sign Up</a>
+    </p>
+FORM;
 }
 
 $conn->close();
