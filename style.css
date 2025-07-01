@@ -29,6 +29,7 @@ body {
   font-family: 'Lilita One', cursive;
   font-size: 1.5rem;
   color: white;
+  text-decoration: none;
 }
 
 .nav-links {
