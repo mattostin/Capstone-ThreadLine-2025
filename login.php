@@ -67,7 +67,7 @@ $conn->close();
 </head>
 <body>
   <nav class="navbar">
-    <div class="logo">ThreadLine</div>
+    <a href="index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="index.php">Home</a></li>
       <li><a href="codeForBothJackets.php">Shop</a></li>
