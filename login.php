@@ -1,4 +1,5 @@
 <?php
+// Start session
 session_start();
 
 // Enable error reporting
@@ -32,16 +33,7 @@ echo <<<HTML
   <ul class="nav-links">
     <li><a href="index.php">Home</a></li>
     <li><a href="codeForBothJackets.html">Shop</a></li>
-HTML;
-
-if (isset($_SESSION['username'])) {
-  echo "<li style='color:white;font-weight:bold;'>Hi, " . htmlspecialchars($_SESSION['username']) . "</li>";
-  echo "<li><a href='logout.php'>Logout</a></li>";
-} else {
-  echo "<li><a href='signup.php'>Signup</a></li>";
-}
-
-echo <<<HTML
+    <li><a href="signup.php">Signup</a></li>
   </ul>
 </nav>
 <div class="signup-container">
@@ -73,7 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
-            header("Location: index.php");
+
+            // Redirect to shop page
+            header("Location: codeForBothJackets.html");
             exit();
         } else {
             echo "<h2>❌ Incorrect password.</h2>";
@@ -84,10 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->close();
 } else {
-    // Show the login form if not POST
     echo <<<FORM
     <h2>Login</h2>
-    <form class="signup-form" method="POST" action="login.php">
+    <form class="signup-form" action="login.php" method="POST">
       <input type="email" name="email" placeholder="Email Address" required />
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Login</button>
@@ -100,7 +93,6 @@ FORM;
 
 $conn->close();
 
-// Footer
 echo <<<HTML
 </div>
 <footer>
