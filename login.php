@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
 
-            // ✅ Update is_logged_in and last_activity
+            // ✅ Update both login and activity timestamps
             $now = date('Y-m-d H:i:s');
-            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ? WHERE id = ?");
-            $update->bind_param("si", $now, $id);
+            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_login = ?, last_activity = ? WHERE id = ?");
+            $update->bind_param("ssi", $now, $now, $id);
             $update->execute();
 
             header("Location: codeForBothJackets.php");
