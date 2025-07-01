@@ -1,30 +1,56 @@
 <?php
 session_start();
+
+// Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database connection
+// DB connection
 $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
-// Check DB connection
+// HTML Header
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreadLine | Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="navbar">
+  <a class="logo" href="index.html">ThreadLine</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="codeForBothJackets.php">Shop</a></li>
+    <li><a href="signup.php">Signup</a></li>
+  </ul>
+</nav>
+<div class="signup-container">
+HTML;
+
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("<h2>❌ Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
 }
 
-// If form submitted, handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = $_POST['email'];
     $password = $_POST['password'];
 
     $sql = "SELECT id, username, password FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
+
     if (!$stmt) {
-        die("Query error: " . $conn->error);
+        die("<h2>❌ Query error: " . $conn->error . "</h2></div></body></html>");
     }
 
     $stmt->bind_param("s", $email);
@@ -39,63 +65,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
 
+            // ✅ Update is_logged_in and last_activity
+            $now = date('Y-m-d H:i:s');
+            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ? WHERE id = ?");
+            $update->bind_param("si", $now, $id);
+            $update->execute();
+
             header("Location: codeForBothJackets.php");
             exit();
         } else {
-            $error = "❌ Incorrect password.";
+            echo "<h2>❌ Incorrect password.</h2>";
         }
     } else {
-        $error = "❌ No account found with that email.";
+        echo "<h2>❌ No account found with that email.</h2>";
     }
 
     $stmt->close();
-}
-
-$conn->close();
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThreadLine | Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <nav class="navbar">
-    <a href="index.html" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="index.php">Home</a></li>
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="signup.php">Signup</a></li>
-    </ul>
-  </nav>
-
-  <div class="signup-container">
+} else {
+    echo <<<FORM
     <h2>Login</h2>
-
-    <?php if (!empty($error)): ?>
-      <p style="color: red; font-weight: bold;"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
-
-    <form class="signup-form" method="POST" action="login.php">
+    <form class="signup-form" action="login.php" method="POST">
       <input type="email" name="email" placeholder="Email Address" required />
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-
     <p style="margin-top: 1rem;">
-      Don’t have an account? 
-      <a href="signup.php" style="color: #075eb6; font-weight: bold;">Sign Up</a>
+      Don't have an account? <a href="signup.php" style="color: #075eb6; font-weight: bold;">Sign Up</a>
     </p>
-  </div>
+FORM;
+}
 
-  <footer>
-    <p>© 2025 ThreadLine. All rights reserved.</p>
-  </footer>
+$conn->close();
+
+echo <<<HTML
+</div>
+<footer>
+  <p>© 2025 ThreadLine. All rights reserved.</p>
+</footer>
 </body>
 </html>
+HTML;
+?>
