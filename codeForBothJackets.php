@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +11,18 @@
   <header class="navbar">
     <div class="logo">ThreadLine</div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="codeForBothJackets.html">Shop</a></li>
+      <li><a href="index.php">Home</a></li>
+      <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="checkout.html">Checkout</a></li>
-
-      
+      <?php if (isset($_SESSION['username'])): ?>
+        <li style="color: white; font-weight: bold;">
+          Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?>
+        </li>
+        <li><a href="logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="signup.php">Signup</a></li>
+      <?php endif; ?>
     </ul>
   </header>
 
