@@ -53,7 +53,7 @@
             <img src="/images/whiteShortFront.png" alt="White Short Front">
             <img src="/images/whiteShortBack.png" alt="White Short Back">
           </div>
-          <p>Men's Softness Sport Jacket - Gray<br>$55</p>
+          <p>Men's Everyday Shorts - white <br>$55</p>
         </div>
       </a>
 
