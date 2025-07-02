@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     .checkout-container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 4rem auto;
       padding: 2rem;
       background-color: #ffffffdd;
@@ -26,39 +26,28 @@
       justify-content: space-between;
       margin-bottom: 1.2rem;
       background-color: #f9f9f9;
-      padding: 1rem;
+      padding: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .checkout-item-img {
-      width: 70px;
-      height: 70px;
-      object-fit: contain;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-right: 1rem;
+      font-size: 1.1rem;
     }
 
     .checkout-left {
       display: flex;
-      align-items: center;
-      gap: 1rem;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
-    #clear-cart-btn,
-    #proceed-btn {
-      margin-top: 1.5rem;
+    #clear-cart-btn, #payment-btn {
+      margin-top: 2rem;
       padding: 0.75rem 1.5rem;
+      background-color: #e74c3c;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
-    }
-
-    #clear-cart-btn {
-      background-color: #e74c3c;
-      color: white;
+      transition: background-color 0.3s ease;
       margin-right: 1rem;
     }
 
@@ -66,36 +55,29 @@
       background-color: #c0392b;
     }
 
-    #proceed-btn {
+    #payment-btn {
       background-color: #075eb6;
-      color: white;
+    }
+
+    #payment-btn:hover {
+      background-color: #054a8e;
     }
 
     #total-amount {
-      font-size: 1.2rem;
-      margin-top: 1rem;
+      font-size: 1.4rem;
+      margin-top: 2rem;
       text-align: right;
       font-weight: bold;
     }
+
+    .checkout-actions {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
   </style>
-</head>
-<body>
-  <header class="navbar">
-    <a href="index.html" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="logout.php">Logout</a></li>
-    </ul>
-  </header>
-
-  <main class="checkout-container">
-    <h2>Checkout Summary</h2>
-    <div id="checkout-items"></div>
-    <h3 id="total-amount"></h3>
-    <button id="clear-cart-btn">Clear Cart</button>
-    <button id="proceed-btn" onclick="window.location.href='payment.php'">Proceed to Payment</button>
-  </main>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -114,15 +96,8 @@
         const left = document.createElement('div');
         left.className = 'checkout-left';
 
-        const img = document.createElement('img');
-        img.className = 'checkout-item-img';
-        img.src = item.image || 'placeholder.png';
-        img.alt = item.name;
-
         const nameQty = document.createElement('div');
         nameQty.innerHTML = `<strong>${item.name}</strong><br>Size: ${item.size}<br>Qty: ${item.quantity}`;
-
-        left.appendChild(img);
         left.appendChild(nameQty);
 
         const right = document.createElement('div');
@@ -142,7 +117,30 @@
         localStorage.removeItem('cart');
         location.reload();
       });
+
+      document.getElementById('payment-btn').addEventListener('click', () => {
+        window.location.href = 'payment.php';
+      });
     });
   </script>
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="codeForBothJackets.php">Shop</a></li>
+      <li><a href="logout.php">Logout</a></li>
+    </ul>
+  </header>
+
+  <main class="checkout-container">
+    <h2>Checkout Summary</h2>
+    <div id="checkout-items"></div>
+    <h3 id="total-amount"></h3>
+    <div class="checkout-actions">
+      <button id="clear-cart-btn">Clear Cart</button>
+      <button id="payment-btn">Proceed to Payment</button>
+    </div>
+  </main>
 </body>
 </html>
