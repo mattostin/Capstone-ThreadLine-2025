@@ -26,11 +26,13 @@ body {
 }
 
 .logo {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
   color: white;
   text-decoration: none;
+  font-weight: bold;
 }
+
 
 .nav-links {
   list-style: none;
