@@ -27,8 +27,25 @@
       gap: 1.5rem;
     }
 
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 220px;
+    }
+
     label {
       font-weight: 600;
+      margin-bottom: 0.5rem;
     }
 
     input[type="text"],
@@ -50,6 +67,8 @@
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      width: fit-content;
+      align-self: flex-end;
     }
 
     button:hover {
@@ -69,31 +88,57 @@
   <main class="payment-container">
     <h2>Payment and Billing</h2>
     <form action="confirm.php" method="post">
-      <div>
+      <div class="form-group">
         <label for="name">Full Name</label>
         <input type="text" name="name" id="name" required />
       </div>
-      <div>
+
+      <div class="form-group">
         <label for="email">Email Address</label>
         <input type="email" name="email" id="email" required />
       </div>
-      <div>
-        <label for="card">Card Number</label>
-        <input type="text" name="card" id="card" maxlength="16" required />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="card">Card Number</label>
+          <input type="text" name="card" id="card" maxlength="16" required />
+        </div>
+
+        <div class="form-group">
+          <label for="exp">Expiration Date (MM/YY)</label>
+          <input type="text" name="exp" id="exp" placeholder="MM/YY" maxlength="5" required />
+        </div>
+
+        <div class="form-group">
+          <label for="cvv">CVV</label>
+          <input type="text" name="cvv" id="cvv" maxlength="4" required />
+        </div>
       </div>
-      <div>
-        <label for="City">City</label>
-        <input type="text" name="City" id="City" required />
-        <label for="Street">Street</label>
-        <input type="text" name="address" id="address" required />
 
-        <label for="Zip Code">Zip Code</label>
-        <input type="text" name="zip" id="zip" required />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="City">City</label>
+          <input type="text" name="City" id="City" required />
+        </div>
 
-        <label for="State">State</label>
-        <input type="text" name="state" id="state" required />
-
+        <div class="form-group">
+          <label for="address">Street</label>
+          <input type="text" name="address" id="address" required />
+        </div>
       </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="zip">Zip Code</label>
+          <input type="text" name="zip" id="zip" required />
+        </div>
+
+        <div class="form-group">
+          <label for="state">State</label>
+          <input type="text" name="state" id="state" required />
+        </div>
+      </div>
+
       <button type="submit">Submit Payment</button>
     </form>
   </main>
