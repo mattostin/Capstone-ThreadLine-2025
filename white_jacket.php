@@ -6,22 +6,27 @@
   <title>White Jacket - ThreadLine</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
     .product-fullscreen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       min-height: 100vh;
-      padding: 3rem 2rem;
+      padding: 4rem 2rem;
     }
 
     .product-detail-box {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1400px;
       background-color: #ffffffcc;
       border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-      padding: 2.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      padding: 3rem;
       text-align: center;
     }
 
@@ -29,48 +34,48 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 30px;
-      margin-bottom: 2rem;
+      gap: 40px;
+      margin-bottom: 2.5rem;
     }
 
     .product-detail-images img {
-      width: 300px;
-      max-width: 100%;
+      width: 400px;
       height: auto;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      max-width: 100%;
+      border-radius: 8px;
+      border: 2px solid #ccc;
       object-fit: contain;
     }
 
     .product-detail-box p {
-      font-size: 1.4rem;
-      font-weight: 500;
+      font-size: 2rem;
+      font-weight: 600;
       margin-top: 0.5rem;
     }
 
     .product-detail-box strong {
-      font-size: 1.5rem;
+      font-size: 2.2rem;
       display: block;
-      margin: 0.25rem 0 1rem;
+      margin: 0.5rem 0 2rem;
     }
 
     .size-selector {
       display: flex;
       justify-content: center;
-      gap: 1rem;
-      margin-top: 1rem;
+      gap: 1.5rem;
+      margin: 2rem 0;
       flex-wrap: wrap;
     }
 
     .size-btn {
-      padding: 0.75rem 1.5rem;
+      padding: 1rem 2rem;
+      font-size: 1.25rem;
       border: 2px solid #075eb6;
       background-color: white;
-      border-radius: 6px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
       transition: 0.3s ease;
-      font-size: 1rem;
     }
 
     .size-btn.selected,
@@ -80,21 +85,31 @@
     }
 
     input[type="number"] {
-      padding: 0.75rem;
+      padding: 1rem;
       margin-top: 1rem;
-      width: 80px;
-      font-size: 1rem;
-      border-radius: 6px;
+      width: 120px;
+      font-size: 1.25rem;
+      border-radius: 8px;
       border: 1px solid #ccc;
       text-align: center;
     }
 
     .add-to-cart-btn {
-      margin-top: 1.5rem;
-      width: 85%;
-      max-width: 300px;
-      padding: 0.9rem;
-      font-size: 1.1rem;
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 320px;
+      padding: 1.2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background-color: #075eb6;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #054a8e;
     }
   </style>
   <script>
@@ -167,7 +182,7 @@
       <strong>$55</strong>
 
       <form id="addToCartForm">
-        <label style="margin-top: 1rem;">Size:</label>
+        <label style="font-size: 1.4rem;">Size:</label>
         <div class="size-selector">
           <button type="button" class="size-btn" data-size="S">S</button>
           <button type="button" class="size-btn" data-size="M">M</button>
@@ -175,7 +190,7 @@
           <button type="button" class="size-btn" data-size="XL">XL</button>
         </div>
 
-        <label for="quantity">Quantity:</label><br>
+        <label for="quantity" style="font-size: 1.4rem;">Quantity:</label><br>
         <input type="number" id="quantity" name="quantity" min="1" value="1" required />
 
         <button type="submit" class="add-to-cart-btn">Add to Cart</button>
