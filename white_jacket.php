@@ -5,6 +5,72 @@
   <meta charset="UTF-8" />
   <title>White Jacket - ThreadLine</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .product-detail-container {
+      display: flex;
+      justify-content: center;
+      padding: 4rem 2rem;
+    }
+
+    .product-detail-box {
+      background-color: #ffffffcc;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .product-detail-images {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-detail-images img {
+      width: 200px;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      object-fit: contain;
+    }
+
+    .product-detail-box p {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .product-detail-box strong {
+      font-size: 1.3rem;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    form label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    select, input[type="number"] {
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      width: 80%;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .add-to-cart-btn {
+      margin-top: 1.5rem;
+      width: 85%;
+      padding: 0.8rem;
+      font-size: 1rem;
+    }
+  </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('addToCartForm');
@@ -51,15 +117,16 @@
     </ul>
   </header>
 
-  <main style="display: flex; justify-content: center; padding: 2rem;">
-    <div class="product-box">
-      <div class="product-images bg-white">
-        <img src="white-frontt.png" alt="White Jacket Front" />
-        <img src="white-back.png" alt="White Jacket Back" />
+  <main class="product-detail-container">
+    <div class="product-detail-box">
+      <div class="product-detail-images">
+        <img src="white-frontt.png" alt="White Jacket Front">
+        <img src="white-back.png" alt="White Jacket Back">
       </div>
-      <p>Men's Softness Sport Jacket - White<br><strong>$55</strong></p>
+      <p>Men's Softness Sport Jacket - White</p>
+      <strong>$55</strong>
 
-      <form id="addToCartForm" class="signup-form" style="margin-top: 1rem;">
+      <form id="addToCartForm">
         <label for="size">Size:</label>
         <select id="size" name="size" required>
           <option value="">Select</option>
@@ -70,7 +137,7 @@
         </select>
 
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" class="qty-input" min="1" value="1" required />
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required />
 
         <button type="submit" class="add-to-cart-btn">Add to Cart</button>
       </form>
