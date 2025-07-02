@@ -43,8 +43,8 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email    = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $email    = $_POST['email'];
+    $password = $_POST['password'];
 
     $sql = "SELECT id, username, password FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
@@ -65,22 +65,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
 
-            // Track login time and IP
+            // Track IP address and login time
             $now = date('Y-m-d H:i:s');
             $ip = $_SERVER['HTTP_CLIENT_IP'] ??
                   $_SERVER['HTTP_X_FORWARDED_FOR'] ??
                   $_SERVER['REMOTE_ADDR'];
 
-            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ?, last_login = ?, last_login_ip = ? WHERE id = ?");
-            $update->bind_param("sssi", $now, $now, $ip, $id);
+            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_login = ?, last_login_ip = ? WHERE id = ?");
+            $update->bind_param("ssi", $now, $ip, $id);
+            $update->execute();
 
-            if ($update->execute()) {
-                $update->close();
-                header("Location: codeForBothJackets.php");
-                exit();
-            } else {
-                echo "<h2>❌ Failed to update login metadata.</h2>";
-            }
+            header("Location: codeForBothJackets.php");
+            exit();
         } else {
             echo "<h2>❌ Incorrect password.</h2>";
         }
