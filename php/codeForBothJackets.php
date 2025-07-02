@@ -53,7 +53,7 @@
             <img src="/images/whiteShortFront.png" alt="White Short Front">
             <img src="/images/whiteShortBack.png" alt="White Short Back">
           </div>
-          <p>Men's Everyday Shorts - white <br>$55</p>
+          <p>Men's Everyday Shorts - White <br>$55</p>
         </div>
       </a>
 
