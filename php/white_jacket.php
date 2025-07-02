@@ -4,113 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>White Jacket - ThreadLine</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    .product-fullscreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 4rem 2rem;
-    }
-
-    .product-detail-box {
-      width: 100%;
-      max-width: 1400px;
-      background-color: #ffffffcc;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      padding: 3rem;
-      text-align: center;
-    }
-
-    .product-detail-images {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 40px;
-      margin-bottom: 2.5rem;
-    }
-
-    .product-detail-images img {
-      width: 400px;
-      height: auto;
-      max-width: 100%;
-      border-radius: 8px;
-      border: 2px solid #ccc;
-      object-fit: contain;
-    }
-
-    .product-detail-box p {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-top: 0.5rem;
-    }
-
-    .product-detail-box strong {
-      font-size: 2.2rem;
-      display: block;
-      margin: 0.5rem 0 2rem;
-    }
-
-    .size-selector {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-    }
-
-    .size-btn {
-      padding: 1rem 2rem;
-      font-size: 1.25rem;
-      border: 2px solid #075eb6;
-      background-color: white;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .size-btn.selected,
-    .size-btn:hover {
-      background-color: #075eb6;
-      color: white;
-    }
-
-    input[type="number"] {
-      padding: 1rem;
-      margin-top: 1rem;
-      width: 120px;
-      font-size: 1.25rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-
-    .add-to-cart-btn {
-      margin-top: 2rem;
-      width: 100%;
-      max-width: 320px;
-      padding: 1.2rem;
-      font-size: 1.3rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      background-color: #075eb6;
-      color: white;
-      transition: background-color 0.3s ease;
-    }
-
-    .add-to-cart-btn:hover {
-      background-color: #054a8e;
-    }
+    /* custom layout styles already included here */
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -134,9 +30,7 @@
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(
-          item => item.id === 1 && item.size === selectedSize
-        );
+        const existingIndex = cart.findIndex(item => item.id === 1 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
@@ -175,8 +69,8 @@
   <main class="product-fullscreen">
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="white-frontt.png" alt="White Jacket Front">
-        <img src="white-back.png" alt="White Jacket Back">
+        <img src="../images/white-frontt.png" alt="White Jacket Front">
+        <img src="../images/white-back.png" alt="White Jacket Back">
       </div>
       <p>Men's Softness Sport Jacket - White</p>
       <strong>$55</strong>
@@ -190,12 +84,4 @@
           <button type="button" class="size-btn" data-size="XL">XL</button>
         </div>
 
-        <label for="quantity" style="font-size: 1.4rem;">Quantity:</label><br>
-        <input type="number" id="quantity" name="quantity" min="1" value="1" required />
-
-        <button type="submit" class="add-to-cart-btn">Add to Cart</button>
-      </form>
-    </div>
-  </main>
-</body>
-</html>
+        <label for="quantity" style="font-size: 1.4rem;">Quan

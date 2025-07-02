@@ -5,12 +5,6 @@
   <meta charset="UTF-8" />
   <title>Green Shorts - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    /* (unchanged styles) */
-  </style>
-  <script>
-    // (unchanged logic)
-  </script>
 </head>
 <body>
   <header class="navbar">
