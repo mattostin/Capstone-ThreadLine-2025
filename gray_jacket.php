@@ -151,7 +151,7 @@
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert("White Jacket added to cart!");
+        alert("Gray Jacket added to cart!");
       });
     });
   </script>
@@ -178,7 +178,7 @@
         <img src="gray-front.png" alt="Gray Jacket Front">
         <img src="gray-back.png" alt="Gray Jacket Back">
       </div>
-      <p>Men's Softness Sport Jacket - White</p>
+      <p>Men's Softness Sport Jacket - Gray</p>
       <strong>$55</strong>
 
       <form id="addToCartForm">
