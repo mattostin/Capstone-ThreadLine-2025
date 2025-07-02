@@ -25,7 +25,7 @@
     <h1 style="text-align: center;">Our Featured Clothing</h1>
     <section class="product-grid">
       <!-- White Jacket -->
-      <a href="product_white_jacket.php" class="product-box-link">
+      <a href="white_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-white">
             <img src="white-frontt.png" alt="White Jacket Front">
@@ -36,7 +36,7 @@
       </a>
 
       <!-- Gray Jacket -->
-      <a href="product_gray_jacket.php" class="product-box-link">
+      <a href="gray_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-gray">
             <img src="gray-front.png" alt="Gray Jacket Front">
@@ -47,7 +47,7 @@
       </a>
 
       <!-- Green Shorts -->
-      <a href="product_green_shorts.php" class="product-box-link">
+      <a href="green_shorts.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-green">
             <img src="greenShortFront.png" alt="Green Shorts Front">
