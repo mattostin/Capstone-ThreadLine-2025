@@ -1,5 +1,21 @@
-<?php session_start(); ?>
-<?php date_default_timezone_set('America/Los_Angeles'); ?>
+<?php 
+session_start(); 
+date_default_timezone_set('America/Los_Angeles');
+
+if (isset($_SESSION['user_id'])) {
+    $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
+    if (!$conn->connect_error) {
+        $userId = $_SESSION['user_id'];
+        $now = date('Y-m-d H:i:s');
+        $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
+        $stmt = $conn->prepare($updateSql);
+        $stmt->bind_param("si", $now, $userId);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
