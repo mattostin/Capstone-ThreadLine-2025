@@ -347,3 +347,8 @@ body {
   background-color: #054a8e;
 }
 
+.qty-input {
+  width: 50px;
+  padding: 4px;
+  margin-right: 0.5rem;
+}
