@@ -45,7 +45,7 @@ if (isset($_SESSION['user_id'])) {
   <header class="navbar">
     <a href="index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="checkout.html">Checkout</a></li>
+      <li><a href="checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
         <li style="color: white; font-weight: bold;">
           Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?>
@@ -69,7 +69,7 @@ if (isset($_SESSION['user_id'])) {
           <img src="white-back.png" alt="ThreadLine White Jacket Back">
         </div>
         <p>Men's Softness Sport Jacket - White<br>$55</p>
-        <a href="checkout.html" class="add-to-cart-btn">Add to Cart</a>
+        <a href="checkout.php" class="add-to-cart-btn">Add to Cart</a>
       </div>
 
       <!-- Gray Jacket -->
@@ -79,7 +79,7 @@ if (isset($_SESSION['user_id'])) {
           <img src="gray-back.png" alt="ThreadLine Gray Jacket Back">
         </div>
         <p>Men's Softness Sport Jacket - Gray<br>$55</p>
-        <a href="checkout.html" class="add-to-cart-btn">Add to Cart</a>
+        <a href="checkout.php" class="add-to-cart-btn">Add to Cart</a>
       </div>
 
       <!-- Green Shorts -->
@@ -89,7 +89,7 @@ if (isset($_SESSION['user_id'])) {
           <img src="greenShortBack.png" alt="ThreadLine Green Shorts Back">
         </div>
         <p>Men’s Everyday Shorts - Green<br>$35</p>
-        <a href="checkout.html" class="add-to-cart-btn">Add to Cart</a>
+        <a href="checkout.php" class="add-to-cart-btn">Add to Cart</a>
       </div>
     </section>
   </main>
