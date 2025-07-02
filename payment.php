@@ -2,39 +2,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Payment - ThreadLine</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <style>
     .payment-container {
-      max-width: 600px;
+      max-width: 1200px;
       margin: 4rem auto;
       padding: 2rem;
       background-color: #ffffffdd;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      font-family: 'Poppins', sans-serif;
     }
 
-    .payment-container h2 {
+    h2 {
       margin-bottom: 1.5rem;
+      font-size: 2rem;
     }
 
-    .payment-container input {
-      width: 100%;
-      margin-bottom: 1rem;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
       padding: 0.75rem;
-      border-radius: 6px;
       border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
     }
 
-    .payment-container button {
+    button {
+      padding: 0.75rem 1.5rem;
       background-color: #075eb6;
       color: white;
       border: none;
-      padding: 1rem 2rem;
       border-radius: 6px;
-      cursor: pointer;
       font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #054a8e;
     }
   </style>
 </head>
@@ -47,16 +66,27 @@
     </ul>
   </header>
 
-  <div class="payment-container">
-    <h2>Billing Information</h2>
-    <form>
-      <input type="text" placeholder="Full Name" required>
-      <input type="text" placeholder="Address" required>
-      <input type="text" placeholder="Card Number" required>
-      <input type="text" placeholder="Expiration Date" required>
-      <input type="text" placeholder="CVV" required>
+  <main class="payment-container">
+    <h2>Payment and Billing</h2>
+    <form action="confirm.php" method="post">
+      <div>
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" required />
+      </div>
+      <div>
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" required />
+      </div>
+      <div>
+        <label for="card">Card Number</label>
+        <input type="text" name="card" id="card" maxlength="16" required />
+      </div>
+      <div>
+        <label for="address">Billing Address</label>
+        <input type="text" name="address" id="address" required />
+      </div>
       <button type="submit">Submit Payment</button>
     </form>
-  </div>
+  </main>
 </body>
 </html>
