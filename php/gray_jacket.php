@@ -4,20 +4,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Gray Jacket - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
   <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
+    <a href="/html/index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="checkout.php">Checkout</a></li>
+      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+      <li><a href="/php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
         <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="logout.php">Logout</a></li>
+        <li><a href="/php/logout.php">Logout</a></li>
       <?php else: ?>
-        <li><a href="login.php">Login</a></li>
-        <li><a href="signup.php">Signup</a></li>
+        <li><a href="/php/login.php">Login</a></li>
+        <li><a href="/php/signup.php">Signup</a></li>
       <?php endif; ?>
     </ul>
   </header>
@@ -25,8 +25,8 @@
   <main class="product-fullscreen">
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="../images/gray-front.png" alt="Gray Jacket Front">
-        <img src="../images/gray-back.png" alt="Gray Jacket Back">
+        <img src="/images/gray-front.png" alt="Gray Jacket Front">
+        <img src="/images/gray-back.png" alt="Gray Jacket Back">
       </div>
       <p>Men's Softness Sport Jacket - Gray</p>
       <strong>$55</strong>
