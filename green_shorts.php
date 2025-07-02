@@ -6,68 +6,195 @@
   <title>Green Shorts - ThreadLine</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Same styling as above (you can reuse it in a common CSS block if you prefer) */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .product-fullscreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 4rem 2rem;
+    }
+
+    .product-detail-box {
+      width: 100%;
+      max-width: 1400px;
+      background-color: #ffffffcc;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .product-detail-images {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 2.5rem;
+    }
+
+    .product-detail-images img {
+      width: 400px;
+      height: auto;
+      max-width: 100%;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      object-fit: contain;
+    }
+
+    .product-detail-box p {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .product-detail-box strong {
+      font-size: 2.2rem;
+      display: block;
+      margin: 0.5rem 0 2rem;
+    }
+
+    .size-selector {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .size-btn {
+      padding: 1rem 2rem;
+      font-size: 1.25rem;
+      border: 2px solid #075eb6;
+      background-color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .size-btn.selected,
+    .size-btn:hover {
+      background-color: #075eb6;
+      color: white;
+    }
+
+    input[type="number"] {
+      padding: 1rem;
+      margin-top: 1rem;
+      width: 120px;
+      font-size: 1.25rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .add-to-cart-btn {
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 320px;
+      padding: 1.2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background-color: #075eb6;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #054a8e;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const sizeButtons = document.querySelectorAll('.size-btn');
-      let selectedSize = null;
+      let selectedSize = "";
 
-      sizeButtons.forEach(btn => {
+      document.querySelectorAll('.size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          sizeButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+          document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
           selectedSize = btn.dataset.size;
         });
       });
 
-      document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-        const qty = parseInt(document.getElementById('qty').value);
+      document.getElementById('addToCartForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const quantity = parseInt(document.getElementById('quantity').value);
+
         if (!selectedSize) {
           alert("Please select a size.");
           return;
         }
 
-        const item = {
-          id: 3,
-          name: "Green Shorts - Size " + selectedSize,
-          price: 35,
-          quantity: qty
-        };
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingIndex = cart.findIndex(
+          item => item.id === 1 && item.size === selectedSize
+        );
 
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart.push(item);
+        if (existingIndex > -1) {
+          cart[existingIndex].quantity += quantity;
+        } else {
+          cart.push({
+            id: 1,
+            name: "Green Shorts",
+            price: 55,
+            quantity: quantity,
+            size: selectedSize
+          });
+        }
+
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert("Added to cart!");
+        alert("Men's Everyday Shorts added to cart!");
       });
     });
   </script>
 </head>
 <body>
   <header class="navbar">
-    <a href="index.html" class="logo" style="font-weight: 600;">ThreadLine</a>
+    <a href="index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="checkout.php">Checkout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
+        <li><a href="logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="signup.php">Signup</a></li>
+      <?php endif; ?>
     </ul>
   </header>
 
-  <main class="product-detail-container">
-    <img src="greenShortFront.png" alt="Green Shorts" />
-    <div class="product-info">
-      <h2>Men's Everyday Shorts - Green</h2>
-      <p>$35</p>
-      <div class="size-options">
-        <button class="size-btn" data-size="S">S</button>
-        <button class="size-btn" data-size="M">M</button>
-        <button class="size-btn" data-size="L">L</button>
-        <button class="size-btn" data-size="XL">XL</button>
+  <main class="product-fullscreen">
+    <div class="product-detail-box">
+      <div class="product-detail-images">
+        <img src="greenShortFront.png" alt="Gray Jacket Front">
+        <img src="greenShortBack" alt="Gray Jacket Back">
       </div>
-      <div class="qty-add">
-        <label for="qty">Quantity:</label>
-        <input type="number" id="qty" value="1" min="1" />
-      </div>
-      <button class="add-to-cart-btn" id="add-to-cart-btn">Add to Cart</button>
+      <p>Men's Everyday Shorts - Green</p>
+      <strong>$55</strong>
+
+      <form id="addToCartForm">
+        <label style="font-size: 1.4rem;">Size:</label>
+        <div class="size-selector">
+          <button type="button" class="size-btn" data-size="S">S</button>
+          <button type="button" class="size-btn" data-size="M">M</button>
+          <button type="button" class="size-btn" data-size="L">L</button>
+          <button type="button" class="size-btn" data-size="XL">XL</button>
+        </div>
+
+        <label for="quantity" style="font-size: 1.4rem;">Quantity:</label><br>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required />
+
+        <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+      </form>
     </div>
   </main>
 </body>
