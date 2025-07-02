@@ -82,8 +82,17 @@
         <input type="text" name="card" id="card" maxlength="16" required />
       </div>
       <div>
-        <label for="address">Billing Address</label>
+        <label for="City">City</label>
+        <input type="text" name="City" id="City" required />
+        <label for="Street">Street</label>
         <input type="text" name="address" id="address" required />
+
+        <label for="Zip Code">Zip Code</label>
+        <input type="text" name="zip" id="zip" required />
+
+        <label for="State">State</label>
+        <input type="text" name="state" id="state" required />
+
       </div>
       <button type="submit">Submit Payment</button>
     </form>
