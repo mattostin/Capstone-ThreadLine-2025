@@ -7,42 +7,65 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     .checkout-container {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 4rem auto;
       padding: 2rem;
-      background-color: #ffffffee;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #ffffffdd;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-    .checkout-item {
+
+    #checkout-items ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #checkout-items li {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 1.2rem;
+      background-color: #f9f9f9;
       padding: 1rem;
-      border-bottom: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .checkout-item img {
-      width: 60px;
-      height: 60px;
+
+    .checkout-item-img {
+      width: 70px;
+      height: 70px;
       object-fit: contain;
       border: 1px solid #ccc;
       border-radius: 6px;
       margin-right: 1rem;
     }
-    .checkout-item .item-info {
+
+    .checkout-left {
       display: flex;
       align-items: center;
-      flex: 1;
+      gap: 1rem;
     }
-    .checkout-item .item-name {
-      font-size: 1rem;
-      font-weight: bold;
-      color: #222;
-    }
-    #total-amount {
-      text-align: right;
-      font-size: 1.4rem;
+
+    #clear-cart-btn {
       margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #clear-cart-btn:hover {
+      background-color: #c0392b;
+    }
+
+    #total-amount {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      text-align: right;
       font-weight: bold;
     }
   </style>
@@ -57,37 +80,41 @@
         return;
       }
 
+      const ul = document.createElement('ul');
+
       cart.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'checkout-item';
+        const li = document.createElement('li');
+        const left = document.createElement('div');
+        left.className = 'checkout-left';
 
-        const image = document.createElement('img');
-        if (item.name.includes("White Jacket")) {
-          image.src = 'white-frontt.png';
-        } else if (item.name.includes("Gray Jacket")) {
-          image.src = 'gray-front.png';
-        } else if (item.name.includes("Green Shorts")) {
-          image.src = 'greenShortFront.png';
-        } else {
-          image.src = 'default.png'; // fallback
-        }
+        const img = document.createElement('img');
+        img.className = 'checkout-item-img';
+        img.src = item.image;
+        img.alt = item.name;
 
-        const info = document.createElement('div');
-        info.className = 'item-info';
+        const nameQty = document.createElement('div');
+        nameQty.innerHTML = `<strong>${item.name}</strong><br>Size: ${item.size}<br>Qty: ${item.quantity}`;
 
-        const name = document.createElement('span');
-        name.className = 'item-name';
-        name.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+        left.appendChild(img);
+        left.appendChild(nameQty);
 
-        info.appendChild(image);
-        info.appendChild(name);
-        div.appendChild(info);
-        container.appendChild(div);
+        const right = document.createElement('div');
+        right.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
+
+        li.appendChild(left);
+        li.appendChild(right);
+        ul.appendChild(li);
 
         total += item.price * item.quantity;
       });
 
+      container.appendChild(ul);
       document.getElementById('total-amount').textContent = "Total: $" + total.toFixed(2);
+
+      document.getElementById('clear-cart-btn').addEventListener('click', () => {
+        localStorage.removeItem('cart');
+        location.reload();
+      });
     });
   </script>
 </head>
@@ -104,6 +131,7 @@
     <h2>Checkout Summary</h2>
     <div id="checkout-items"></div>
     <h3 id="total-amount"></h3>
+    <button id="clear-cart-btn">Clear Cart</button>
   </main>
 </body>
 </html>
