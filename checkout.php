@@ -46,20 +46,29 @@
       gap: 1rem;
     }
 
-    #clear-cart-btn {
-      margin-top: 2rem;
+    #clear-cart-btn,
+    #proceed-btn {
+      margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
-      background-color: #e74c3c;
-      color: white;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+    }
+
+    #clear-cart-btn {
+      background-color: #e74c3c;
+      color: white;
+      margin-right: 1rem;
     }
 
     #clear-cart-btn:hover {
       background-color: #c0392b;
+    }
+
+    #proceed-btn {
+      background-color: #075eb6;
+      color: white;
     }
 
     #total-amount {
@@ -69,6 +78,24 @@
       font-weight: bold;
     }
   </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="codeForBothJackets.php">Shop</a></li>
+      <li><a href="logout.php">Logout</a></li>
+    </ul>
+  </header>
+
+  <main class="checkout-container">
+    <h2>Checkout Summary</h2>
+    <div id="checkout-items"></div>
+    <h3 id="total-amount"></h3>
+    <button id="clear-cart-btn">Clear Cart</button>
+    <button id="proceed-btn" onclick="window.location.href='payment.php'">Proceed to Payment</button>
+  </main>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -89,7 +116,7 @@
 
         const img = document.createElement('img');
         img.className = 'checkout-item-img';
-        img.src = item.image;
+        img.src = item.image || 'placeholder.png';
         img.alt = item.name;
 
         const nameQty = document.createElement('div');
@@ -110,28 +137,12 @@
 
       container.appendChild(ul);
       document.getElementById('total-amount').textContent = "Total: $" + total.toFixed(2);
-      <button onclick="window.location.href='payment.php'" style="margin-top:2rem; background:#075eb6; color:white; padding:0.75rem 1.5rem; border:none; border-radius:6px; font-size:1rem; cursor:pointer;">Proceed to Payment</button>
+
       document.getElementById('clear-cart-btn').addEventListener('click', () => {
         localStorage.removeItem('cart');
         location.reload();
       });
     });
   </script>
-</head>
-<body>
-  <header class="navbar">
-    <a href="index.html" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="logout.php">Logout</a></li>
-    </ul>
-  </header>
-
-  <main class="checkout-container">
-    <h2>Checkout Summary</h2>
-    <div id="checkout-items"></div>
-    <h3 id="total-amount"></h3>
-    <button id="clear-cart-btn">Clear Cart</button>
-  </main>
 </body>
 </html>
