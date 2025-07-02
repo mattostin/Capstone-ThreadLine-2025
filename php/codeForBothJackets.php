@@ -4,19 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Shop - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
+    <a href="/html/index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="checkout.php">Checkout</a></li>
+      <li><a href="/php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
         <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="logout.php">Logout</a></li>
+        <li><a href="/php/logout.php">Logout</a></li>
       <?php else: ?>
-        <li><a href="login.php">Login</a></li>
-        <li><a href="signup.php">Signup</a></li>
+        <li><a href="/php/login.php">Login</a></li>
+        <li><a href="/php/signup.php">Signup</a></li>
       <?php endif; ?>
     </ul>
   </header>
@@ -25,7 +25,7 @@
     <h1 style="text-align: center;">Our Featured Clothing</h1>
     <section class="product-grid">
       <!-- White Jacket -->
-      <a href="white_jacket.php" class="product-box-link">
+      <a href="/php/white_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-white">
             <img src="/images/white-frontt.png" alt="White Jacket Front">
@@ -36,7 +36,7 @@
       </a>
 
       <!-- Gray Jacket -->
-      <a href="gray_jacket.php" class="product-box-link">
+      <a href="/php/gray_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-gray">
             <img src="/images/gray-front.png" alt="Gray Jacket Front">
@@ -47,7 +47,7 @@
       </a>
 
       <!-- White Shorts -->
-      <a href="whiteshort.php" class="product-box-link">
+      <a href="/php/whiteshort.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-white">
             <img src="/images/whiteShortFront.png" alt="White Short Front">
@@ -58,7 +58,7 @@
       </a>
 
       <!-- Green Shorts -->
-      <a href="green_shorts.php" class="product-box-link">
+      <a href="/php/green_shorts.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-green">
             <img src="/images/greenShortFront.png" alt="Green Shorts Front">
