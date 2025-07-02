@@ -8,16 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = productBox.dataset.name;
       const price = parseFloat(productBox.dataset.price);
       const qty = parseInt(productBox.querySelector('.qty-input').value);
+      const size = productBox.querySelector('input[name="size"]:checked')?.value;
+      const image = productBox.querySelector('img')?.getAttribute('src');
 
-      const existing = cart.find(item => item.id === id);
+      if (!size) {
+        alert('Please select a size before adding to cart.');
+        return;
+      }
+
+      const existing = cart.find(item => item.id === id && item.size === size);
       if (existing) {
         existing.quantity += qty;
       } else {
-        cart.push({ id, name, price, quantity: qty });
+        cart.push({ id, name, price, quantity: qty, size, image });
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${name} added to cart!`);
+      alert(`${name} (${size}) added to cart!`);
     });
   });
 });
