@@ -110,7 +110,7 @@
 
       container.appendChild(ul);
       document.getElementById('total-amount').textContent = "Total: $" + total.toFixed(2);
-
+      <button onclick="window.location.href='payment.php'" style="margin-top:2rem; background:#075eb6; color:white; padding:0.75rem 1.5rem; border:none; border-radius:6px; font-size:1rem; cursor:pointer;">Proceed to Payment</button>
       document.getElementById('clear-cart-btn').addEventListener('click', () => {
         localStorage.removeItem('cart');
         location.reload();
