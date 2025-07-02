@@ -1,4 +1,6 @@
 <?php session_start(); ?>
+<?php date_default_timezone_set('America/Los_Angeles'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

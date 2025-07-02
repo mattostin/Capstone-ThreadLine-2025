@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('America/Los_Angeles'); // Or your local time zone
 
 // Enable error reporting
 ini_set('display_errors', 1);

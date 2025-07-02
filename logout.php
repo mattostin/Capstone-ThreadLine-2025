@@ -1,5 +1,7 @@
 <?php
 session_start();
+date_default_timezone_set('America/Los_Angeles'); // Or your local time zone
+
 if (isset($_SESSION['user_id'])) {
     $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
     $update = $conn->prepare("UPDATE users SET is_logged_in = 0 WHERE id = ?");
