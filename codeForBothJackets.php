@@ -1,19 +1,35 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 date_default_timezone_set('America/Los_Angeles');
 
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Update last_activity if user is logged in
 if (isset($_SESSION['user_id'])) {
     $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
-    if (!$conn->connect_error) {
-        $userId = $_SESSION['user_id'];
-        $now = date('Y-m-d H:i:s');
-        $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
-        $stmt = $conn->prepare($updateSql);
-        $stmt->bind_param("si", $now, $userId);
-        $stmt->execute();
-        $stmt->close();
-        $conn->close();
+
+    if ($conn->connect_error) {
+        die("DB Connection failed: " . $conn->connect_error);
     }
+
+    $now = date('Y-m-d H:i:s');
+    $userId = $_SESSION['user_id'];
+
+    $update = $conn->prepare("UPDATE users SET last_activity = ? WHERE id = ?");
+    if (!$update) {
+        die("Prepare failed: " . $conn->error);
+    }
+
+    $update->bind_param("si", $now, $userId);
+    if (!$update->execute()) {
+        die("Execute failed: " . $update->error);
+    }
+
+    $update->close();
+    $conn->close();
 }
 ?>
 
