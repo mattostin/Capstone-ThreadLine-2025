@@ -176,7 +176,7 @@
     <div class="product-detail-box">
       <div class="product-detail-images">
         <img src="greenShortFront.png" alt="Gray Jacket Front">
-        <img src="greenShortBack" alt="Gray Jacket Back">
+        <img src="greenShortBack.png" alt="Gray Jacket Back">
       </div>
       <p>Men's Everyday Shorts - Green</p>
       <strong>$55</strong>
