@@ -1,6 +1,6 @@
 <?php
 session_start();
-date_default_timezone_set('America/Los_Angeles'); // Or your local time zone
+date_default_timezone_set('America/Los_Angeles');
 
 if (isset($_SESSION['user_id'])) {
     $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
@@ -10,8 +10,8 @@ if (isset($_SESSION['user_id'])) {
     $update->close();
     $conn->close();
 }
+
 session_unset();
 session_destroy();
-header("Location: index.html");
+header("Location: ../html/index.html");
 exit();
-

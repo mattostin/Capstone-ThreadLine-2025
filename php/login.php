@@ -1,20 +1,17 @@
 <?php
 session_start();
-date_default_timezone_set('America/Los_Angeles'); // Or your local time zone
+date_default_timezone_set('America/Los_Angeles');
 
-// Enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// DB connection
 $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
-// HTML Header
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -25,15 +22,15 @@ echo <<<HTML
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 <nav class="navbar">
-  <a class="logo" href="index.html">ThreadLine</a>
+  <a class="logo" href="../html/index.html">ThreadLine</a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
+    <li><a href="../html/index.html">Home</a></li>
     <li><a href="codeForBothJackets.php">Shop</a></li>
-    <li><a href="signup.php">Signup</a></li>
+    <li><a href="../html/signup.html">Signup</a></li>
   </ul>
 </nav>
 <div class="signup-container">
@@ -66,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
 
-            // Track IP address and login time
             $now = date('Y-m-d H:i:s');
             $ip = $_SERVER['HTTP_CLIENT_IP'] ??
                   $_SERVER['HTTP_X_FORWARDED_FOR'] ??
@@ -95,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <button type="submit">Login</button>
     </form>
     <p style="margin-top: 1rem;">
-      Don't have an account? <a href="signup.php" style="color: #075eb6; font-weight: bold;">Sign Up</a>
+      Don't have an account? <a href="../html/signup.html" style="color: #075eb6; font-weight: bold;">Sign Up</a>
     </p>
 FORM;
 }

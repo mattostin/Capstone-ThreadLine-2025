@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css" />
+
   <style>
     .checkout-container {
       max-width: 1200px;
@@ -78,6 +81,7 @@
       margin-top: 2rem;
     }
   </style>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -126,7 +130,7 @@
 </head>
 <body>
   <header class="navbar">
-    <a href="index.html" class="logo">ThreadLine</a>
+    <a href="../html/index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="logout.php">Logout</a></li>

@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Shop - ThreadLine</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
   <header class="navbar">
-    <a href="index.html" class="logo">ThreadLine</a>
+    <a href="../html/index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
@@ -28,8 +28,8 @@
       <a href="white_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-white">
-            <img src="white-frontt.png" alt="White Jacket Front">
-            <img src="white-back.png" alt="White Jacket Back">
+            <img src="../images/white-frontt.png" alt="White Jacket Front">
+            <img src="../images/white-back.png" alt="White Jacket Back">
           </div>
           <p>Men's Softness Sport Jacket - White<br>$55</p>
         </div>
@@ -39,19 +39,19 @@
       <a href="gray_jacket.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-gray">
-            <img src="gray-front.png" alt="Gray Jacket Front">
-            <img src="gray-back.png" alt="Gray Jacket Back">
+            <img src="../images/gray-front.png" alt="Gray Jacket Front">
+            <img src="../images/gray-back.png" alt="Gray Jacket Back">
           </div>
           <p>Men's Softness Sport Jacket - Gray<br>$55</p>
         </div>
       </a>
 
-      <!-- Gray Jacket -->
+      <!-- White Shorts -->
       <a href="whiteshort.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-white">
-            <img src="whiteShortBack.png" alt="White Short Front">
-            <img src="whiteShortBack.png" alt="White Short Back">
+            <img src="../images/whiteShortFront.png" alt="White Short Front">
+            <img src="../images/whiteShortBack.png" alt="White Short Back">
           </div>
           <p>Men's Softness Sport Jacket - Gray<br>$55</p>
         </div>
@@ -61,8 +61,8 @@
       <a href="green_shorts.php" class="product-box-link">
         <div class="product-box">
           <div class="product-images bg-green">
-            <img src="greenShortFront.png" alt="Green Shorts Front">
-            <img src="greenShortBack.png" alt="Green Shorts Back">
+            <img src="../images/greenShortFront.png" alt="Green Shorts Front">
+            <img src="../images/greenShortBack.png" alt="Green Shorts Back">
           </div>
           <p>Men’s Everyday Shorts - Green<br>$35</p>
         </div>
