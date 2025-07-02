@@ -46,6 +46,17 @@
         </div>
       </a>
 
+      <!-- Gray Jacket -->
+      <a href="whiteshort.php" class="product-box-link">
+        <div class="product-box">
+          <div class="product-images bg-white">
+            <img src="whiteShortBack.png" alt="White Short Front">
+            <img src="whiteShortBack.png" alt="White Short Back">
+          </div>
+          <p>Men's Softness Sport Jacket - Gray<br>$55</p>
+        </div>
+      </a>
+
       <!-- Green Shorts -->
       <a href="green_shorts.php" class="product-box-link">
         <div class="product-box">
