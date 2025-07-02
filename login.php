@@ -1,112 +1,81 @@
 <?php
 session_start();
+require_once 'config.php'; // Make sure this file connects to your DB
 
-// Enable error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-// DB connection
-$host = "localhost";
-$username = "thredqwx_admin";
-$password = "Mostin2003$";
-$database = "thredqwx_threadline";
-$conn = new mysqli($host, $username, $password, $database);
+    // Prepare statement to fetch user
+    $sql = "SELECT id, username, password FROM users WHERE username = ?";
+    if ($stmt = $mysqli->prepare($sql)) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
 
-// HTML Header
-echo <<<HTML
+        if ($stmt->num_rows == 1) {
+            $stmt->bind_result($id, $username, $hashed_password);
+            $stmt->fetch();
+
+            if (password_verify($password, $hashed_password)) {
+                // Get user IP
+                function getUserIP() {
+                    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                        return $_SERVER['HTTP_CLIENT_IP'];
+                    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                        return explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+                    } else {
+                        return $_SERVER['REMOTE_ADDR'];
+                    }
+                }
+                $user_ip = getUserIP();
+
+                // Set session variables
+                $_SESSION["loggedin"] = true;
+                $_SESSION["id"] = $id;
+                $_SESSION["username"] = $username;
+
+                // Update login stats
+                $update_sql = "UPDATE users SET is_logged_in = 1, last_login = NOW(), last_activity = NOW(), last_login_ip = ? WHERE id = ?";
+                if ($update_stmt = $mysqli->prepare($update_sql)) {
+                    $update_stmt->bind_param("si", $user_ip, $id);
+                    $update_stmt->execute();
+                    $update_stmt->close();
+                }
+
+                // Redirect to homepage or dashboard
+                header("location: index.php");
+                exit;
+            } else {
+                echo "Invalid password.";
+            }
+        } else {
+            echo "No account found with that username.";
+        }
+
+        $stmt->close();
+    }
+}
+$mysqli->close();
+?>
+
+<!-- Simple login form -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThreadLine | Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Login - ThreadLine</title>
 </head>
 <body>
-<nav class="navbar">
-  <a class="logo" href="index.html">ThreadLine</a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="codeForBothJackets.php">Shop</a></li>
-    <li><a href="signup.php">Signup</a></li>
-  </ul>
-</nav>
-<div class="signup-container">
-HTML;
-
-if ($conn->connect_error) {
-    die("<h2>❌ Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email    = $_POST['email'];
-    $password = $_POST['password'];
-
-    $sql = "SELECT id, username, password FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-
-    if (!$stmt) {
-        die("<h2>❌ Query error: " . $conn->error . "</h2></div></body></html>");
-    }
-
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 1) {
-        $stmt->bind_result($id, $username, $hashed_password);
-        $stmt->fetch();
-
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION['user_id'] = $id;
-            $_SESSION['username'] = $username;
-
-            // Track IP address and login time
-            $now = date('Y-m-d H:i:s');
-            $ip = $_SERVER['HTTP_CLIENT_IP'] ??
-                  $_SERVER['HTTP_X_FORWARDED_FOR'] ??
-                  $_SERVER['REMOTE_ADDR'];
-
-            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_activity = ?, last_login_ip = ? WHERE id = ?");
-            $update->bind_param("ssi", $now, $ip, $id);
-            $update->execute();
-
-            header("Location: codeForBothJackets.php");
-            exit();
-        } else {
-            echo "<h2>❌ Incorrect password.</h2>";
-        }
-    } else {
-        echo "<h2>❌ No account found with that email.</h2>";
-    }
-
-    $stmt->close();
-} else {
-    echo <<<FORM
     <h2>Login</h2>
-    <form class="signup-form" action="login.php" method="POST">
-      <input type="email" name="email" placeholder="Email Address" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
+    <form action="login.php" method="post">
+        <label>Username</label>
+        <input type="text" name="username" required><br>
+
+        <label>Password</label>
+        <input type="password" name="password" required><br>
+
+        <input type="submit" value="Login">
     </form>
-    <p style="margin-top: 1rem;">
-      Don't have an account? <a href="signup.php" style="color: #075eb6; font-weight: bold;">Sign Up</a>
-    </p>
-FORM;
-}
-
-$conn->close();
-
-echo <<<HTML
-</div>
-<footer>
-  <p>© 2025 ThreadLine. All rights reserved.</p>
-</footer>
 </body>
 </html>
-HTML;
-?>
