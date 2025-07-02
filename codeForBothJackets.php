@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <title>Shop - ThreadLine</title>
   <link rel="stylesheet" href="style.css">
-  <script src="cart.js" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -25,36 +24,38 @@
   <main>
     <h1 style="text-align: center;">Our Featured Clothing</h1>
     <section class="product-grid">
-      <!-- Product Box -->
-      <div class="product-box" data-id="1" data-name="White Jacket" data-price="55">
-        <div class="product-images bg-white">
-          <img src="white-frontt.png" alt="White Jacket Front">
-          <img src="white-back.png" alt="White Jacket Back">
+      <!-- White Jacket -->
+      <a href="product_white_jacket.php" class="product-box-link">
+        <div class="product-box">
+          <div class="product-images bg-white">
+            <img src="white-frontt.png" alt="White Jacket Front">
+            <img src="white-back.png" alt="White Jacket Back">
+          </div>
+          <p>Men's Softness Sport Jacket - White<br>$55</p>
         </div>
-        <p>Men's Softness Sport Jacket - White<br>$55</p>
-        <input type="number" min="1" value="1" class="qty-input">
-        <button class="add-to-cart-btn">Add to Cart</button>
-      </div>
+      </a>
 
-      <div class="product-box" data-id="2" data-name="Gray Jacket" data-price="55">
-        <div class="product-images bg-gray">
-          <img src="gray-front.png" alt="Gray Jacket Front">
-          <img src="gray-back.png" alt="Gray Jacket Back">
+      <!-- Gray Jacket -->
+      <a href="product_gray_jacket.php" class="product-box-link">
+        <div class="product-box">
+          <div class="product-images bg-gray">
+            <img src="gray-front.png" alt="Gray Jacket Front">
+            <img src="gray-back.png" alt="Gray Jacket Back">
+          </div>
+          <p>Men's Softness Sport Jacket - Gray<br>$55</p>
         </div>
-        <p>Men's Softness Sport Jacket - Gray<br>$55</p>
-        <input type="number" min="1" value="1" class="qty-input">
-        <button class="add-to-cart-btn">Add to Cart</button>
-      </div>
+      </a>
 
-      <div class="product-box" data-id="3" data-name="Green Shorts" data-price="35">
-        <div class="product-images bg-green">
-          <img src="greenShortFront.png" alt="Green Shorts Front">
-          <img src="greenShortBack.png" alt="Green Shorts Back">
+      <!-- Green Shorts -->
+      <a href="product_green_shorts.php" class="product-box-link">
+        <div class="product-box">
+          <div class="product-images bg-green">
+            <img src="greenShortFront.png" alt="Green Shorts Front">
+            <img src="greenShortBack.png" alt="Green Shorts Back">
+          </div>
+          <p>Men’s Everyday Shorts - Green<br>$35</p>
         </div>
-        <p>Men’s Everyday Shorts - Green<br>$35</p>
-        <input type="number" min="1" value="1" class="qty-input">
-        <button class="add-to-cart-btn">Add to Cart</button>
-      </div>
+      </a>
     </section>
   </main>
 </body>
