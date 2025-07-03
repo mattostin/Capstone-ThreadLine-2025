@@ -7,52 +7,51 @@
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     .payment-container {
-      max-width: 1200px;
+      max-width: 700px;
       margin: 4rem auto;
-      padding: 2rem;
+      padding: 2rem 2.5rem;
       background-color: #ffffffdd;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       font-family: 'Poppins', sans-serif;
     }
 
     h2 {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       font-size: 2rem;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1.25rem;
     }
 
     label {
       font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: block;
     }
 
     input[type="text"],
     input[type="email"],
     select {
-      padding: 0.6rem;
+      padding: 0.65rem;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1rem;
       width: 100%;
-      max-width: 500px;
     }
 
-    .inline-group {
+    .flex-row {
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
     }
 
-    .inline-group input,
-    .inline-group select {
+    .flex-row > div {
       flex: 1;
-      min-width: 100px;
-      max-width: 150px;
+      min-width: 120px;
     }
 
     button[type="submit"] {
@@ -64,7 +63,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease;
-      max-width: 200px;
+      margin-top: 1rem;
     }
 
     button[type="submit"]:hover {
@@ -84,19 +83,27 @@
   <main class="payment-container">
     <h2>Payment and Billing</h2>
     <form action="../php/confirm.php" method="post">
-      <label for="fullname">Full Name</label>
-      <input type="text" id="fullname" name="fullname" required>
+      <div>
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" required>
+      </div>
 
-      <label for="address">Address</label>
-      <input type="text" id="address" name="address" required>
+      <div>
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" required>
+      </div>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
 
-      <label for="card">Credit Card Number</label>
-      <input type="text" id="card" name="card" required>
+      <div>
+        <label for="card">Credit Card Number</label>
+        <input type="text" id="card" name="card" required>
+      </div>
 
-      <div class="inline-group">
+      <div class="flex-row">
         <div>
           <label for="expiryMonth">Exp. Month</label>
           <select id="expiryMonth" name="expiryMonth" required>
