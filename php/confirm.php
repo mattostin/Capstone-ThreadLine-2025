@@ -1,113 +1,49 @@
 <?php
 session_start();
-date_default_timezone_set('America/Los_Angeles');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require 'config.php';
 
-// DB connection
-$host = "localhost";
-$username = "thredqwx_admin";
-$password = "Mostin2003$";
-$database = "thredqwx_threadline";
-$conn = new mysqli($host, $username, $password, $database);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $user_id     = $_SESSION['user_id'];
+  $fullname    = $_POST['fullname'];
+  $address     = $_POST['address'];
+  $email       = $_POST['email'];
+  $card        = $_POST['card'];
+  $card_last4  = substr($card, -4);
+  $expiryMonth = $_POST['expiryMonth'];
+  $expiryYear  = $_POST['expiryYear'];
+  $cvv         = $_POST['cvv'];
+  $zip         = $_POST['zip'];
 
-if ($conn->connect_error) {
-    die("❌ Database connection failed: " . $conn->connect_error);
+  // Insert into orders table
+  $stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("issss", $user_id, $fullname, $address, $email, $card_last4);
+  $stmt->execute();
+  $order_id = $stmt->insert_id;
+  $stmt->close();
+
+  // Decode cart items sent from JS
+  $items = json_decode($_POST['cart'], true);
+
+  // Insert each item into order_items table
+  $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+  foreach ($items as $item) {
+    $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
+    $stmt->execute();
+  }
+  $stmt->close();
+
+} else {
+  header("Location: payment.php");
+  exit();
 }
-
-if (!isset($_SESSION['user_id'])) {
-    die("❌ You must be logged in to confirm a payment.");
-}
-
-// Get user-submitted info
-$user_id      = $_SESSION['user_id'];
-$fullname     = $_POST['fullname'];
-$address      = $_POST['address'];
-$email        = $_POST['email'];
-$card         = $_POST['card'];
-$expiryMonth  = $_POST['expiryMonth'];
-$expiryYear   = $_POST['expiryYear'];
-$cvv          = $_POST['cvv'];
-$zip          = $_POST['zip'];
-$order_date   = date('Y-m-d H:i:s');
-
-// Decode the cart from cookie
-$cart_items = [];
-if (isset($_COOKIE['cart'])) {
-    $cart_items = json_decode($_COOKIE['cart'], true);
-}
-
-// Insert order
-$stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_number, exp_month, exp_year, cvv, zip, order_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("isssssssis", $user_id, $fullname, $address, $email, $card, $expiryMonth, $expiryYear, $cvv, $zip, $order_date);
-$stmt->execute();
-$order_id = $stmt->insert_id;
-$stmt->close();
-
-// Insert each product into order_items
-if (!empty($cart_items)) {
-    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
-    foreach ($cart_items as $item) {
-        $name = $item['name'];
-        $size = $item['size'];
-        $qty  = $item['quantity'];
-        $price = $item['price'];
-        $stmt->bind_param("issid", $order_id, $name, $size, $qty, $price);
-        $stmt->execute();
-    }
-    $stmt->close();
-}
-
-// Clear cart cookie
-setcookie('cart', '', time() - 3600, '/');
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Confirmed - ThreadLine</title>
+  <title>Order Confirmation</title>
   <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    .confirmation-container {
-      max-width: 700px;
-      margin: 4rem auto;
-      padding: 2.5rem;
-      background-color: #ffffffee;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      color: #075eb6;
-      margin-bottom: 1.5rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-
-    .button {
-      margin-top: 2rem;
-      display: inline-block;
-      background-color: #075eb6;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .button:hover {
-      background-color: #054a8e;
-    }
-  </style>
 </head>
 <body>
   <header class="navbar">

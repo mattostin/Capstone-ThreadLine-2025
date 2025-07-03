@@ -142,12 +142,16 @@
     </form>
   </main>
 
-  <!-- Save cart to cookie on form submit -->
+  <!-- Inject localStorage cart into form on submit -->
   <script>
     document.querySelector("form").addEventListener("submit", function () {
       const cart = localStorage.getItem("cart");
       if (cart) {
-        document.cookie = "cart=" + encodeURIComponent(cart) + "; path=/";
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "cart";
+        input.value = cart;
+        this.appendChild(input);
       }
     });
   </script>
