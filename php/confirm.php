@@ -1,66 +1,67 @@
 <?php
 session_start();
 
-// Sanitize and retrieve POST values
-$fullname = htmlspecialchars($_POST['fullname'] ?? '');
-$email = htmlspecialchars($_POST['email'] ?? '');
-$address = htmlspecialchars($_POST['address'] ?? '');
-$cardNumber = preg_replace('/\D/', '', $_POST['card'] ?? '');
-$cardLast4 = substr($cardNumber, -4);
-$expiryMonth = htmlspecialchars($_POST['expiryMonth'] ?? 'MM');
-$expiryYear = htmlspecialchars($_POST['expiryYear'] ?? 'YYYY');
-$zip = htmlspecialchars($_POST['zip'] ?? '');
+// Connect to your DB
+$host = "localhost"; // or use your actual host
+$dbname = "thredqwx_threadline";
+$username = "root"; // or your MySQL user
+$password = "";     // or your MySQL password
+
+try {
+  $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+  die("Database connection failed: " . $e->getMessage());
+}
+
+// Collect POST data safely
+$fullname = $_POST['fullname'] ?? '';
+$address = $_POST['address'] ?? '';
+$email = $_POST['email'] ?? '';
+$card = $_POST['card'] ?? '';
+$card_last4 = substr(preg_replace("/\D/", "", $card), -4); // store last 4 only
+$expiryMonth = $_POST['expiryMonth'] ?? '';
+$expiryYear = $_POST['expiryYear'] ?? '';
+$cvv = $_POST['cvv'] ?? '';
+$zip = $_POST['zip'] ?? '';
+
+// Insert into DB
+$stmt = $pdo->prepare("INSERT INTO threadline_payments 
+  (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$fullname, $address, $email, $card_last4, $expiryMonth, $expiryYear, $cvv, $zip]);
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Order Confirmation - ThreadLine</title>
+  <title>Payment Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    .confirmation-container {
-      max-width: 700px;
+    .confirmation {
+      max-width: 800px;
       margin: 4rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #ffffffdd;
+      background: #ffffffdd;
+      padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       font-family: 'Poppins', sans-serif;
-    }
-
-    .confirmation-container h2 {
-      font-size: 2.3rem;
-      color: #075eb6;
       text-align: center;
-      margin-bottom: 1.5rem;
     }
-
-    .confirmation-container p {
-      font-size: 1.1rem;
-      margin: 0.75rem 0;
-      color: #333;
+    .confirmation h2 {
+      margin-bottom: 1rem;
     }
-
-    .highlight {
-      font-weight: 600;
+    .confirmation p {
+      margin: 0.5rem 0;
     }
-
-    .btn-home {
-      display: block;
-      margin: 2rem auto 0;
-      padding: 0.75rem 1.5rem;
-      background-color: #075eb6;
-      color: white;
+    .confirmation .back-link {
+      display: inline-block;
+      margin-top: 2rem;
       text-decoration: none;
-      border-radius: 6px;
+      color: #007bff;
       font-weight: 600;
-      text-align: center;
-      width: fit-content;
-    }
-
-    .navbar {
-      margin-bottom: 2rem;
     }
   </style>
 </head>
@@ -73,19 +74,15 @@ $zip = htmlspecialchars($_POST['zip'] ?? '');
     </ul>
   </header>
 
-  <div class="confirmation-container">
-    <h2>Thank You for Your Purchase!</h2>
-    <p>Your order has been received and is being processed. Below are the details:</p>
-
-    <p><span class="highlight">Name:</span> <?= $fullname ?></p>
-    <p><span class="highlight">Email:</span> <?= $email ?></p>
-    <p><span class="highlight">Shipping Address:</span> <?= $address ?></p>
-    <p><span class="highlight">ZIP Code:</span> <?= $zip ?></p>
-    <p><span class="highlight">Card Used:</span> **** **** **** <?= $cardLast4 ?> (Exp: <?= $expiryMonth ?>/<?= $expiryYear ?>)</p>
-
-    <p>You will receive a confirmation email shortly with your order summary and tracking details.</p>
-
-    <a class="btn-home" href="../html/index.html">Back to Homepage</a>
-  </div>
+  <main class="confirmation">
+    <h2>Payment Successful</h2>
+    <p><strong>Name:</strong> <?= htmlspecialchars($fullname) ?></p>
+    <p><strong>Email:</strong> <?= htmlspecialchars($email) ?></p>
+    <p><strong>Address:</strong> <?= htmlspecialchars($address) ?></p>
+    <p><strong>Card Ending In:</strong> **** <?= htmlspecialchars($card_last4) ?></p>
+    <p><strong>Expiration:</strong> <?= htmlspecialchars($expiryMonth) ?>/<?= htmlspecialchars($expiryYear) ?></p>
+    <p><strong>ZIP Code:</strong> <?= htmlspecialchars($zip) ?></p>
+    <a class="back-link" href="codeForBothJackets.php">← Continue Shopping</a>
+  </main>
 </body>
 </html>
