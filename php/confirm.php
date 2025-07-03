@@ -5,7 +5,7 @@ session_start();
 $host = 'localhost';
 $dbname = 'thredqwx_threadline';
 $username = 'thredqwx_cpanel-key'; // ✅ use your actual DB username
-$password = 'Mostin2003$';   // ✅ replace with your actual password
+$password = 'Mostin2003$$';   // ✅ replace with your actual password
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
