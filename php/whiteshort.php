@@ -6,75 +6,52 @@
   <title>White Shorts - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    .product-fullscreen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
     .product-detail-box {
-      background-color: #ffffffdd;
+      max-width: 800px;
+      margin: 5rem auto;
       padding: 2rem;
+      background-color: #f4f9ff;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 900px;
-      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
     }
-
     .product-detail-images {
       display: flex;
       justify-content: center;
       gap: 2rem;
       margin-bottom: 1rem;
     }
-
     .product-detail-images img {
-      width: 300px;
+      max-width: 250px;
       height: auto;
       object-fit: contain;
     }
-
-    form {
-      margin-top: 1rem;
-    }
-
     .size-selector {
-      display: flex;
-      gap: 1rem;
-      margin: 0.5rem 0 1rem 0;
+      margin: 0.5rem 0 1rem;
     }
-
     .size-btn {
       padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
       border: 1px solid #333;
-      background: white;
+      background-color: white;
       cursor: pointer;
-      border-radius: 4px;
-      font-weight: bold;
     }
-
     .size-btn.selected {
-      background: #075eb6;
+      background-color: #007bff;
       color: white;
     }
-
-    #quantity {
+    #addToCartForm input[type="number"] {
       width: 60px;
-      padding: 0.4rem;
-      margin-top: 0.4rem;
+      padding: 0.3rem;
+      margin-right: 1rem;
     }
-
-    .navbar .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 1.5rem;
-    }
-
-    .navbar .nav-links a {
+    #addToCartForm button {
+      background-color: #005bbb;
       color: white;
-      text-decoration: none;
-      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
   <script>
@@ -123,23 +100,23 @@
   <header class="navbar">
     <a href="../html/index.html" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="checkout.php">Checkout</a></li>
+      <li><a href="../php/codeForBothJackets.php">Shop</a></li>
+      <li><a href="../php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
         <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="logout.php">Logout</a></li>
+        <li><a href="../php/logout.php">Logout</a></li>
       <?php else: ?>
-        <li><a href="login.php">Login</a></li>
-        <li><a href="signup.php">Signup</a></li>
+        <li><a href="../php/login.php">Login</a></li>
+        <li><a href="../php/signup.php">Signup</a></li>
       <?php endif; ?>
     </ul>
   </header>
 
-  <main class="product-fullscreen">
+  <main>
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="../images/white-shorts-front.png" alt="White Shorts Front">
-        <img src="../images/white-shorts-back.png" alt="White Shorts Back">
+        <img src="../images/whiteShortFront.png" alt="White Shorts Front">
+        <img src="../images/whiteShortBack.png" alt="White Shorts Back">
       </div>
       <p>Men's Soft Cotton Shorts - White</p>
       <strong>$35</strong>
@@ -154,10 +131,8 @@
         </div>
 
         <label for="quantity" style="font-size: 1.4rem;">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" value="1" min="1" required />
-
-        <br><br>
-        <button type="submit" style="padding: 0.7rem 1.5rem; background: #075eb6; color: white; border: none; border-radius: 6px; font-weight: bold;">Add to Cart</button>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" />
+        <button type="submit">Add to Cart</button>
       </form>
     </div>
   </main>
