@@ -141,5 +141,15 @@
       <button type="submit">Submit Payment</button>
     </form>
   </main>
+
+  <!-- Save cart to cookie on form submit -->
+  <script>
+    document.querySelector("form").addEventListener("submit", function () {
+      const cart = localStorage.getItem("cart");
+      if (cart) {
+        document.cookie = "cart=" + encodeURIComponent(cart) + "; path=/";
+      }
+    });
+  </script>
 </body>
 </html>

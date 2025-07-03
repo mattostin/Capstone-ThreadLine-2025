@@ -1,113 +1,130 @@
 <?php
 session_start();
+date_default_timezone_set('America/Los_Angeles');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// STEP 1: Database connection
-$host = 'localhost';
-$dbname = 'thredqwx_threadline';
-$username = 'thredqwx_cpanel-key'; // ✅ use your actual DB username
-$password = 'Mostin2003$$';   // ✅ replace with your actual password
+// DB connection
+$host = "localhost";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
+$conn = new mysqli($host, $username, $password, $database);
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+if ($conn->connect_error) {
+    die("❌ Database connection failed: " . $conn->connect_error);
 }
 
-// STEP 2: Sanitize & collect form data
-$fullname     = $_POST['fullname'] ?? '';
-$address      = $_POST['address'] ?? '';
-$email        = $_POST['email'] ?? '';
-$card         = $_POST['card'] ?? '';
-$expiryMonth  = $_POST['expiryMonth'] ?? '';
-$expiryYear   = $_POST['expiryYear'] ?? '';
-$cvv          = $_POST['cvv'] ?? '';
-$zip          = $_POST['zip'] ?? '';
+if (!isset($_SESSION['user_id'])) {
+    die("❌ You must be logged in to confirm a payment.");
+}
 
-// Only store last 4 digits of card for privacy
-$card_last4 = substr(preg_replace('/\D/', '', $card), -4);
+// Get user-submitted info
+$user_id      = $_SESSION['user_id'];
+$fullname     = $_POST['fullname'];
+$address      = $_POST['address'];
+$email        = $_POST['email'];
+$card         = $_POST['card'];
+$expiryMonth  = $_POST['expiryMonth'];
+$expiryYear   = $_POST['expiryYear'];
+$cvv          = $_POST['cvv'];
+$zip          = $_POST['zip'];
+$order_date   = date('Y-m-d H:i:s');
 
-// STEP 3: Insert into DB
-$sql = "INSERT INTO threadline_payments 
-        (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip, created_at) 
-        VALUES 
-        (:fullname, :address, :email, :card_last4, :expiry_month, :expiry_year, :cvv, :zip, NOW())";
+// Decode the cart from cookie
+$cart_items = [];
+if (isset($_COOKIE['cart'])) {
+    $cart_items = json_decode($_COOKIE['cart'], true);
+}
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute([
-    ':fullname'     => $fullname,
-    ':address'      => $address,
-    ':email'        => $email,
-    ':card_last4'   => $card_last4,
-    ':expiry_month' => $expiryMonth,
-    ':expiry_year'  => $expiryYear,
-    ':cvv'          => $cvv,
-    ':zip'          => $zip
-]);
+// Insert order
+$stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_number, exp_month, exp_year, cvv, zip, order_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("isssssssis", $user_id, $fullname, $address, $email, $card, $expiryMonth, $expiryYear, $cvv, $zip, $order_date);
+$stmt->execute();
+$order_id = $stmt->insert_id;
+$stmt->close();
 
+// Insert each product into order_items
+if (!empty($cart_items)) {
+    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+    foreach ($cart_items as $item) {
+        $name = $item['name'];
+        $size = $item['size'];
+        $qty  = $item['quantity'];
+        $price = $item['price'];
+        $stmt->bind_param("issid", $order_id, $name, $size, $qty, $price);
+        $stmt->execute();
+    }
+    $stmt->close();
+}
+
+// Clear cart cookie
+setcookie('cart', '', time() - 3600, '/');
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Confirmation - ThreadLine</title>
+  <title>Order Confirmed - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-    }
-
     .confirmation-container {
       max-width: 700px;
-      margin: 5rem auto;
-      background-color: #fff;
-      padding: 2rem 2.5rem;
+      margin: 4rem auto;
+      padding: 2.5rem;
+      background-color: #ffffffee;
       border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
       text-align: center;
     }
 
-    h2 {
-      color: #28a745;
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    h1 {
+      color: #075eb6;
+      margin-bottom: 1.5rem;
     }
 
     p {
       font-size: 1.1rem;
-      color: #333;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
     }
 
-    .btn-home {
+    .button {
+      margin-top: 2rem;
       display: inline-block;
-      margin-top: 1.5rem;
+      background-color: #075eb6;
+      color: white;
       padding: 0.75rem 1.5rem;
-      background-color: #007bff;
-      color: #fff;
+      border-radius: 6px;
       text-decoration: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
     }
 
-    .btn-home:hover {
-      background-color: #0056b3;
+    .button:hover {
+      background-color: #054a8e;
     }
   </style>
 </head>
 <body>
-  <div class="confirmation-container">
-    <h2>✅ Payment Successful!</h2>
-    <p>Thank you, <strong><?= htmlspecialchars($fullname) ?></strong>!</p>
-    <p>Your order has been received and is being processed.</p>
-    <p>A receipt has been sent to <strong><?= htmlspecialchars($email) ?></strong>.</p>
-    <p>Last 4 digits of card: <strong>**** <?= htmlspecialchars($card_last4) ?></strong></p>
+  <header class="navbar">
+    <a href="../html/index.html" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="codeForBothJackets.php">Shop</a></li>
+      <li><a href="order_history.php">My Orders</a></li>
+      <li><a href="logout.php">Logout</a></li>
+    </ul>
+  </header>
 
-    <a href="../php/codeForBothJackets.php" class="btn-home">Back to Shop</a>
-  </div>
+  <main class="confirmation-container">
+    <h1>✅ Thank You, <?= htmlspecialchars($fullname) ?>!</h1>
+    <p>Your order has been placed successfully.</p>
+    <p>A confirmation email will be sent to <strong><?= htmlspecialchars($email) ?></strong>.</p>
+    <p>Your order number is <strong>#<?= $order_id ?></strong></p>
+    <a class="button" href="order_history.php">View My Orders</a>
+  </main>
 </body>
 </html>
