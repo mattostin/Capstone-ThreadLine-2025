@@ -2,39 +2,36 @@
 session_start();
 require 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $user_id     = $_SESSION['user_id'];
-  $fullname    = $_POST['fullname'];
-  $address     = $_POST['address'];
-  $email       = $_POST['email'];
-  $card        = $_POST['card'];
-  $card_last4  = substr($card, -4);
-  $expiryMonth = $_POST['expiryMonth'];
-  $expiryYear  = $_POST['expiryYear'];
-  $cvv         = $_POST['cvv'];
-  $zip         = $_POST['zip'];
+$fullname = $_POST['fullname'] ?? '';
+$address = $_POST['address'] ?? '';
+$email = $_POST['email'] ?? '';
+$card = $_POST['card'] ?? '';
+$expiryMonth = $_POST['expiryMonth'] ?? '';
+$expiryYear = $_POST['expiryYear'] ?? '';
+$cvv = $_POST['cvv'] ?? '';
+$zip = $_POST['zip'] ?? '';
+$cart_json = $_POST['cart'] ?? '[]';
 
-  // Insert into orders table
-  $stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4) VALUES (?, ?, ?, ?, ?)");
-  $stmt->bind_param("issss", $user_id, $fullname, $address, $email, $card_last4);
-  $stmt->execute();
-  $order_id = $stmt->insert_id;
-  $stmt->close();
+// Save to `orders` table
+$card_last4 = substr(preg_replace('/\D/', '', $card), -4); // just digits, last 4
+$stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+$stmt->execute([$_SESSION['user_id'] ?? 0, $fullname, $address, $email, $card_last4]);
+$order_id = $conn->lastInsertId();
 
-  // Decode cart items sent from JS
-  $items = json_decode($_POST['cart'], true);
+// Save to `order_items` table
+$cart_items = json_decode($cart_json, true);
 
-  // Insert each item into order_items table
-  $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
-  foreach ($items as $item) {
-    $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
-    $stmt->execute();
-  }
-  $stmt->close();
-
-} else {
-  header("Location: payment.php");
-  exit();
+if (is_array($cart_items)) {
+    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+    foreach ($cart_items as $item) {
+        $stmt->execute([
+            $order_id,
+            $item['name'] ?? '',
+            $item['size'] ?? '',
+            $item['quantity'] ?? 1,
+            $item['price'] ?? 0
+        ]);
+    }
 }
 ?>
 
@@ -44,6 +41,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <title>Order Confirmation</title>
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .confirmation-container {
+      max-width: 700px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background-color: #ffffffdd;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    a.button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <header class="navbar">
