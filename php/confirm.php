@@ -1,101 +1,60 @@
 <?php
 session_start();
-require 'config.php';
+require_once 'config.php';
 
-$fullname = $_POST['fullname'] ?? '';
-$address = $_POST['address'] ?? '';
-$email = $_POST['email'] ?? '';
-$card = $_POST['card'] ?? '';
-$expiryMonth = $_POST['expiryMonth'] ?? '';
-$expiryYear = $_POST['expiryYear'] ?? '';
-$cvv = $_POST['cvv'] ?? '';
-$zip = $_POST['zip'] ?? '';
-$cart_json = $_POST['cart'] ?? '[]';
-
-// Save to `orders` table
-$card_last4 = substr(preg_replace('/\D/', '', $card), -4); // just digits, last 4
-$stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-$stmt->execute([$_SESSION['user_id'] ?? 0, $fullname, $address, $email, $card_last4]);
-$order_id = $conn->lastInsertId();
-
-// Save to `order_items` table
-$cart_items = json_decode($cart_json, true);
-
-if (is_array($cart_items)) {
-    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
-    foreach ($cart_items as $item) {
-        $stmt->execute([
-            $order_id,
-            $item['name'] ?? '',
-            $item['size'] ?? '',
-            $item['quantity'] ?? 1,
-            $item['price'] ?? 0
-        ]);
-    }
+if (!isset($_SESSION['user_id'])) {
+  die("User not logged in.");
 }
+
+$user_id = $_SESSION['user_id'];
+
+// Get form values
+$fullname = $_POST['fullname'];
+$address = $_POST['address'];
+$email = $_POST['email'];
+$card = $_POST['card'];
+$last4 = substr($card, -4);
+$expiryMonth = $_POST['expiryMonth'];
+$expiryYear = $_POST['expiryYear'];
+$cvv = $_POST['cvv'];
+$zip = $_POST['zip'];
+$cart = json_decode($_POST['cart'], true);
+
+// 1. Get most recent order for this user
+$orderStmt = $conn->prepare("SELECT id FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 1");
+$orderStmt->bind_param("i", $user_id);
+$orderStmt->execute();
+$orderStmt->bind_result($order_id);
+$orderStmt->fetch();
+$orderStmt->close();
+
+if (!$order_id) {
+  die("No order found for this user.");
+}
+
+// 2. Update order with billing info
+$update = $conn->prepare("UPDATE orders SET fullname = ?, address = ?, email = ?, card_last4 = ? WHERE id = ?");
+$update->bind_param("ssssi", $fullname, $address, $email, $last4, $order_id);
+$update->execute();
+
+// 3. Save payment
+$payment = $conn->prepare("INSERT INTO threadline_payments (order_id) VALUES (?)");
+$payment->bind_param("i", $order_id);
+$payment->execute();
+
+// 4. Confirm to user
+echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title>Payment Confirmation</title>
+<link rel='stylesheet' href='../css/style.css'>
+<style>
+  body { font-family: 'Poppins', sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
+  .confirmation-box { background: white; padding: 2rem; border-radius: 8px; display: inline-block; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .confirmation-box h2 { color: green; }
+</style>
+</head><body><div class='confirmation-box'>
+<h2>Payment Successful!</h2>
+<p>Thank you for your purchase, <strong>$fullname</strong>.</p>
+<p>Order ID: <strong>$order_id</strong></p>
+<p>Card ending in ****$last4</p>
+<a href='../html/index.html'>Return Home</a>
+</div></body></html>";
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Order Confirmation</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    .confirmation-container {
-      max-width: 700px;
-      margin: 4rem auto;
-      padding: 2rem;
-      background-color: #ffffffdd;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-
-    a.button {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-
-    a.button:hover {
-      background-color: #0056b3;
-    }
-  </style>
-</head>
-<body>
-  <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="order_history.php">My Orders</a></li>
-      <li><a href="logout.php">Logout</a></li>
-    </ul>
-  </header>
-
-  <main class="confirmation-container">
-    <h1>✅ Thank You, <?= htmlspecialchars($fullname) ?>!</h1>
-    <p>Your order has been placed successfully.</p>
-    <p>A confirmation email will be sent to <strong><?= htmlspecialchars($email) ?></strong>.</p>
-    <p>Your order number is <strong>#<?= $order_id ?></strong></p>
-    <a class="button" href="order_history.php">View My Orders</a>
-  </main>
-</body>
-</html>

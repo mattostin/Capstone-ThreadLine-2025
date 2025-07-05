@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="../css/style.css" />
 
   <style>
