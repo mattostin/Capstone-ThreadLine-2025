@@ -82,6 +82,24 @@ echo <<<HTML
       font-weight: bold;
       text-align: right;
     }
+    .confirmation-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .confirmation-buttons a {
+      text-decoration: none;
+      background-color: #075eb6;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .confirmation-buttons a:hover {
+      background-color: #054a8e;
+    }
   </style>
 </head>
 <body>
@@ -112,6 +130,11 @@ if (is_array($cartData)) {
 
 echo <<<HTML
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
+    
+    <div class="confirmation-buttons">
+      <a href="codeForBothJackets.php">Continue Shopping</a>
+      <a href="logout.php">Logout</a>
+    </div>
   </div>
   <script>
     localStorage.removeItem("cart");
