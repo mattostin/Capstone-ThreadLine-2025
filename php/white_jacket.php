@@ -122,7 +122,7 @@
 </head>
 <body>
   <header class="navbar">
-    <a href="/html/index.html" class="logo">ThreadLine</a>
+    <a href="<?= isset($_SESSION['username']) ? '/php/home.php' : '/html/index.html' ?>" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
       <li><a href="/php/checkout.php">Checkout</a></li>

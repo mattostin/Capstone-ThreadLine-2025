@@ -65,21 +65,6 @@
       margin-top: 0.4rem;
     }
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #075eb6;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
     .navbar .nav-links {
       display: flex;
       list-style: none;
@@ -136,7 +121,7 @@
 </head>
 <body>
   <header class="navbar">
-    <a href="logo_redirect.php" class="logo">ThreadLine</a>
+    <a href="<?= isset($_SESSION['username']) ? 'home.php' : '../html/index.html' ?>" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="checkout.php">Checkout</a></li>
