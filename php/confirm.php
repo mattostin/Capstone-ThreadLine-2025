@@ -1,37 +1,49 @@
 <?php
+// Secure session settings
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
 session_start();
 
-// Session timeout: 30 minutes
-if (!isset($_SESSION['LAST_ACTIVITY'])) {
-  $_SESSION['LAST_ACTIVITY'] = time();
-} elseif (time() - $_SESSION['LAST_ACTIVITY'] > 1800) {
-  session_unset();
-  session_destroy();
-  header("Location: login.php?redirect=payment.php");
-  exit;
+// Basic headers for protection
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer");
+header("X-XSS-Protection: 1; mode=block");
+
+// CSRF token validation
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+  die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
 }
-$_SESSION['LAST_ACTIVITY'] = time();
 
-// Enable error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Validate presence of required fields
+$required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
+foreach ($required as $field) {
+  if (empty($_POST[$field])) {
+    die("<h2>❌ Missing field: $field. Please complete all required fields.</h2>");
+  }
+}
 
-// Retrieve form data safely
-$fullname = htmlspecialchars($_POST['fullname'] ?? '');
-$address  = htmlspecialchars($_POST['address'] ?? '');
-$email    = htmlspecialchars($_POST['email'] ?? '');
-$card     = htmlspecialchars($_POST['card'] ?? '');
-$expiryMonth = htmlspecialchars($_POST['expiryMonth'] ?? '');
-$expiryYear  = htmlspecialchars($_POST['expiryYear'] ?? '');
-$cvv      = htmlspecialchars($_POST['cvv'] ?? '');
-$zip      = htmlspecialchars($_POST['zip'] ?? '');
-$cartJSON = $_POST['cart'] ?? '[]';
+// Sanitize inputs
+$fullname  = htmlspecialchars(trim($_POST['fullname']));
+$address   = htmlspecialchars(trim($_POST['address']));
+$email     = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$card      = preg_replace('/\D/', '', $_POST['card']);
+$expiryMonth = $_POST['expiryMonth'];
+$expiryYear  = $_POST['expiryYear'];
+$cvv      = preg_replace('/\D/', '', $_POST['cvv']);
+$zip      = htmlspecialchars(trim($_POST['zip']));
+$cartData = json_decode($_POST['cart'], true);
 
-$cartItems = json_decode($cartJSON, true);
-$totalPrice = 0;
+// Validate card number (basic check length)
+if (strlen($card) < 13 || strlen($card) > 19) {
+  die("<h2>❌ Invalid card number.</h2>");
+}
 
-?>
+// Confirm page
+echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,8 +51,8 @@ $totalPrice = 0;
   <title>Order Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    .confirm-container {
-      max-width: 900px;
+    .confirmation-container {
+      max-width: 800px;
       margin: 4rem auto;
       padding: 2rem;
       background-color: #ffffffdd;
@@ -48,80 +60,63 @@ $totalPrice = 0;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       font-family: 'Poppins', sans-serif;
     }
-
     h2 {
+      font-size: 2rem;
       margin-bottom: 1.5rem;
     }
-
-    .order-summary {
-      margin-top: 2rem;
-    }
-
-    .order-summary ul {
-      list-style: none;
+    ul {
       padding: 0;
+      list-style: none;
     }
-
-    .order-summary li {
+    li {
       margin-bottom: 1rem;
+      background: #f3f3f3;
       padding: 1rem;
-      background: #f7f7f7;
-      border-radius: 6px;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
     }
-
-    .total {
-      margin-top: 1.5rem;
+    .summary {
       font-size: 1.2rem;
+      margin-top: 2rem;
       font-weight: bold;
       text-align: right;
     }
   </style>
 </head>
 <body>
-  <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="logout.php">Logout</a></li>
-    </ul>
-  </header>
+  <div class="confirmation-container">
+    <h2>✅ Order Confirmed</h2>
+    <p>Thank you, <strong>$fullname</strong>! Your order has been successfully placed and will be shipped to:</p>
+    <p>$address<br>$zip</p>
+    <h3>Order Summary:</h3>
+HTML;
 
-  <main class="confirm-container">
-    <h2>✅ Thank You for Your Purchase, <?= htmlentities($fullname) ?>!</h2>
-    <p>Your order has been successfully processed.</p>
-    <p><strong>Shipping to:</strong> <?= htmlentities($address) ?> | <?= htmlentities($zip) ?></p>
-    <p><strong>Email confirmation sent to:</strong> <?= htmlentities($email) ?></p>
+$total = 0;
+if (is_array($cartData)) {
+  echo "<ul>";
+  foreach ($cartData as $item) {
+    $name = htmlspecialchars($item['name']);
+    $size = htmlspecialchars($item['size']);
+    $qty  = (int)$item['quantity'];
+    $price = (float)$item['price'];
+    $subtotal = $qty * $price;
+    $total += $subtotal;
+    echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>\$" . number_format($subtotal, 2) . "</div></li>";
+  }
+  echo "</ul>";
+  echo "<div class='summary'>Total Paid: \$" . number_format($total, 2) . "</div>";
+} else {
+  echo "<p>❌ Error reading cart.</p>";
+}
 
-    <div class="order-summary">
-      <h3>Order Summary:</h3>
-      <ul>
-        <?php if (is_array($cartItems)) : ?>
-          <?php foreach ($cartItems as $item): 
-              $itemName = htmlentities($item['name']);
-              $itemQty  = (int)$item['quantity'];
-              $itemSize = htmlentities($item['size']);
-              $itemPrice = (float)$item['price'];
-              $lineTotal = $itemQty * $itemPrice;
-              $totalPrice += $lineTotal;
-          ?>
-            <li>
-              <span><?= "$itemName (Size: $itemSize, Qty: $itemQty)" ?></span>
-              <span>$<?= number_format($lineTotal, 2) ?></span>
-            </li>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <li>No items in cart.</li>
-        <?php endif; ?>
-      </ul>
-      <div class="total">Total Paid: $<?= number_format($totalPrice, 2) ?></div>
-    </div>
-  </main>
-
+echo <<<HTML
+    <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
+  </div>
   <script>
-    // Clear cart from localStorage after confirmation
     localStorage.removeItem("cart");
   </script>
 </body>
 </html>
+HTML;
+?>

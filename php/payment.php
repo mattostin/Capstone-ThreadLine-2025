@@ -1,16 +1,24 @@
 <?php
+// Force HTTPS if not already
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
+    $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: $redirect");
+    exit();
+}
+
+// Secure session settings
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
 session_start();
 
-// Session timeout: 30 minutes
-if (!isset($_SESSION['LAST_ACTIVITY'])) {
-  $_SESSION['LAST_ACTIVITY'] = time();
-} elseif (time() - $_SESSION['LAST_ACTIVITY'] > 1800) {
-  session_unset();
-  session_destroy();
-  header("Location: login.php?redirect=payment.php");
-  exit;
+// Generate CSRF token if not already set
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-$_SESSION['LAST_ACTIVITY'] = time();
+$csrf_token = $_SESSION['csrf_token'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,6 +104,8 @@ $_SESSION['LAST_ACTIVITY'] = time();
   <main class="payment-container">
     <h2>Payment and Billing</h2>
     <form action="../php/confirm.php" method="post">
+      <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+
       <div>
         <label for="fullname">Full Name</label>
         <input type="text" id="fullname" name="fullname" required>
