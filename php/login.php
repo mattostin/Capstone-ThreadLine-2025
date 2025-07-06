@@ -18,12 +18,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// DB connection
 $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
+// HTML Head
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -48,10 +50,12 @@ echo <<<HTML
 <div class="signup-container">
 HTML;
 
+// Check DB connection
 if ($conn->connect_error) {
     die("<h2>❌ Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
 }
 
+// Handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = $_POST['email'];
     $password = $_POST['password'];
@@ -85,6 +89,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->close();
 }
+
+// Show the login form
+echo <<<HTML
+  <h2>Login to ThreadLine</h2>
+  <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 2rem auto;">
+    <input type="email" name="email" placeholder="Email" required style="padding: 0.75rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" />
+    <input type="password" name="password" placeholder="Password" required style="padding: 0.75rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" />
+    <button type="submit" style="padding: 0.75rem; background-color: #075eb6; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Log In</button>
+  </form>
+HTML;
 
 $conn->close();
 
