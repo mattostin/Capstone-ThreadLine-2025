@@ -51,6 +51,33 @@ echo <<<HTML
   <title>Order Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #075eb6;
+    }
+
+    .logo {
+      font-family: 'Lilita One', cursive;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
     .confirmation-container {
       max-width: 800px;
       margin: 4rem auto;
@@ -60,14 +87,17 @@ echo <<<HTML
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       font-family: 'Poppins', sans-serif;
     }
+
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
     }
+
     ul {
       padding: 0;
       list-style: none;
     }
+
     li {
       margin-bottom: 1rem;
       background: #f3f3f3;
@@ -76,15 +106,45 @@ echo <<<HTML
       display: flex;
       justify-content: space-between;
     }
+
     .summary {
       font-size: 1.2rem;
       margin-top: 2rem;
       font-weight: bold;
       text-align: right;
     }
+
+    .confirmation-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .confirmation-buttons a {
+      text-decoration: none;
+      background-color: #075eb6;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .confirmation-buttons a:hover {
+      background-color: #054a8e;
+    }
   </style>
 </head>
 <body>
+  <header class="navbar">
+    <a href="codeForBothJackets.php" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="codeForBothJackets.php">Continue Shopping</a></li>
+      <li><a href="logout.php">Logout</a></li>
+    </ul>
+  </header>
+
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong>$fullname</strong>! Your order has been successfully placed and will be shipped to:</p>
@@ -112,6 +172,11 @@ if (is_array($cartData)) {
 
 echo <<<HTML
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
+    
+    <div class="confirmation-buttons">
+      <a href="codeForBothJackets.php">Continue Shopping</a>
+      <a href="logout.php">Logout</a>
+    </div>
   </div>
   <script>
     localStorage.removeItem("cart");
