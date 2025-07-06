@@ -82,54 +82,9 @@ echo <<<HTML
       font-weight: bold;
       text-align: right;
     }
-    .confirmation-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2.5rem;
-    }
-    .confirmation-buttons a {
-      text-decoration: none;
-      background-color: #075eb6;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .confirmation-buttons a:hover {
-      background-color: #054a8e;
-    }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: #075eb6;
-    }
-    .navbar .logo {
-      font-family: 'Lilita One', cursive;
-      font-size: 1.5rem;
-      color: white;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
-  <header class="navbar">
-    <a href="";
-HTML;
-
-if (isset($_SESSION['username'])) {
-  echo 'codeForBothJackets.php';
-} else {
-  echo '../html/index.html';
-}
-
-echo <<<HTML
-" class="logo">ThreadLine</a>
-  </header>
-
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong>$fullname</strong>! Your order has been successfully placed and will be shipped to:</p>
@@ -157,11 +112,6 @@ if (is_array($cartData)) {
 
 echo <<<HTML
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
-    
-    <div class="confirmation-buttons">
-      <a href="codeForBothJackets.php">Continue Shopping</a>
-      <a href="logout.php">Logout</a>
-    </div>
   </div>
   <script>
     localStorage.removeItem("cart");
