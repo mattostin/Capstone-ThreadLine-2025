@@ -30,10 +30,10 @@ echo <<<HTML
 <nav class="navbar">
   <div class="logo">ThreadLine</div>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="codeForBothJackets.html">Shop</a></li>
-    <li><a href="login.html">Login</a></li>
-    <li><a href="signup.html">Signup</a></li>
+    <li><a href="/html/index.html">Home</a></li>
+    <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+    <li><a href="/php/login.php">Login</a></li>
+    <li><a href="/php/signup.php">Signup</a></li>
   </ul>
 </nav>
 <div class="signup-container">
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   if ($stmt->execute()) {
     echo "<h2>✅ Account Created Successfully</h2>";
-    echo "<p><a href='login.html' style='color: #075eb6; font-weight: bold;'>Click here to log in</a></p>";
+    echo "<p><a href='login.php' style='color: #075eb6; font-weight: bold;'>Click here to log in</a></p>";
   } else {
     echo "<h2>❌ Error: " . $stmt->error . "</h2>";
   }
