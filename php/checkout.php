@@ -1,12 +1,28 @@
-<?php session_start(); ?>
+<?php
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
+session_start();
+
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer");
+header("X-XSS-Protection: 1; mode=block");
+
+// 🔐 Require login
+if (!isset($_SESSION['user_id'])) {
+  header("Location: login.php");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
-
   <link rel="stylesheet" href="../css/style.css" />
-
   <style>
     .checkout-container {
       max-width: 1200px;

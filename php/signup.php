@@ -1,4 +1,17 @@
 <?php
+// ✅ Secure session and headers
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
+session_start();
+
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer");
+header("X-XSS-Protection: 1; mode=block");
+
 // Enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
