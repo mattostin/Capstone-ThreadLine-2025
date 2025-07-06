@@ -83,11 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
 
-            // ✅ Update last_activity
+            // ✅ Update activity tracking info
             $now = date('Y-m-d H:i:s');
-            $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            $updateSql = "UPDATE users SET last_activity = ?, last_login = ?, last_login_ip = ?, is_logged_in = 1 WHERE id = ?";
             $updateStmt = $conn->prepare($updateSql);
-            $updateStmt->bind_param("si", $now, $id);
+            $updateStmt->bind_param("sssi", $now, $now, $ip, $id);
             $updateStmt->execute();
             $updateStmt->close();
 
