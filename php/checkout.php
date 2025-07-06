@@ -171,4 +171,11 @@ if (isset($_SESSION['user_id'])) {
     <h2>Checkout Summary</h2>
     <div id="checkout-items"></div>
     <h3 id="total-amount"></h3>
-    <div class=
+
+    <div class="checkout-actions">
+      <button id="clear-cart-btn">Clear Cart</button>
+      <button id="payment-btn">Proceed to Payment</button>
+    </div>
+  </main>
+</body>
+</html>
