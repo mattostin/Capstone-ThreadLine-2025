@@ -1,5 +1,17 @@
 <?php
+// Secure session and headers
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
 session_start();
+
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer");
+header("X-XSS-Protection: 1; mode=block");
+
 date_default_timezone_set('America/Los_Angeles');
 
 ini_set('display_errors', 1);
@@ -60,40 +72,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->fetch();
 
         if (password_verify($password, $hashed_password)) {
-            $_SESSION['user_id'] = $id;
-            $_SESSION['username'] = $username;
-
-            $now = date('Y-m-d H:i:s');
-            $ip = $_SERVER['HTTP_CLIENT_IP'] ??
-                  $_SERVER['HTTP_X_FORWARDED_FOR'] ??
-                  $_SERVER['REMOTE_ADDR'];
-
-            $update = $conn->prepare("UPDATE users SET is_logged_in = 1, last_login = ?, last_login_ip = ? WHERE id = ?");
-            $update->bind_param("ssi", $now, $ip, $id);
-            $update->execute();
-
-            header("Location: codeForBothJackets.php");
-            exit();
+            $_SESSION["user_id"] = $id;
+            $_SESSION["username"] = $username;
+            header("Location: checkout.php");
+            exit;
         } else {
-            echo "<h2>❌ Incorrect password.</h2>";
+            echo "<h2>❌ Invalid email or password.</h2>";
         }
     } else {
-        echo "<h2>❌ No account found with that email.</h2>";
+        echo "<h2>❌ Invalid email or password.</h2>";
     }
 
     $stmt->close();
-} else {
-    echo <<<FORM
-    <h2>Login</h2>
-    <form class="signup-form" action="login.php" method="POST">
-      <input type="email" name="email" placeholder="Email Address" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-    <p style="margin-top: 1rem;">
-      Don't have an account? <a href="../html/signup.html" style="color: #075eb6; font-weight: bold;">Sign Up</a>
-    </p>
-FORM;
 }
 
 $conn->close();
