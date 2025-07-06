@@ -1,4 +1,9 @@
 <?php
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
 session_start();
 
 // Session timeout: 30 minutes
@@ -12,14 +17,10 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
 }
 $_SESSION['LAST_ACTIVITY'] = time();
 
-// ✅ Update last_activity in the database
+// Update last_activity in the DB
 if (isset($_SESSION['user_id'])) {
   date_default_timezone_set('America/Los_Angeles');
-  $host = "localhost";
-  $username = "thredqwx_admin";
-  $password = "Mostin2003$";
-  $database = "thredqwx_threadline";
-  $conn = new mysqli($host, $username, $password, $database);
+  $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
 
   if (!$conn->connect_error) {
     $now = date('Y-m-d H:i:s');
@@ -37,7 +38,7 @@ if (isset($_SESSION['user_id'])) {
 <head>
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
     .checkout-container {
       max-width: 1200px;
@@ -160,10 +161,16 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body>
   <header class="navbar">
-    <a href="logo_redirect.php" class="logo">ThreadLine</a>
+    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Shop</a></li>
-      <li><a href="logout.php">Logout</a></li>
+      <li><a href="/php/checkout.php">Checkout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
+        <li><a href="/php/logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="/php/login.php">Login</a></li>
+        <li><a href="/php/signup.php">Signup</a></li>
+      <?php endif; ?>
     </ul>
   </header>
 
@@ -171,7 +178,6 @@ if (isset($_SESSION['user_id'])) {
     <h2>Checkout Summary</h2>
     <div id="checkout-items"></div>
     <h3 id="total-amount"></h3>
-
     <div class="checkout-actions">
       <button id="clear-cart-btn">Clear Cart</button>
       <button id="payment-btn">Proceed to Payment</button>
