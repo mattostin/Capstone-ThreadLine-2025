@@ -25,7 +25,9 @@ $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
-// HTML Head
+// Determine redirect destination
+$redirect = $_GET['redirect'] ?? 'codeForBothJackets.php';
+
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -59,6 +61,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = $_POST['email'];
     $password = $_POST['password'];
+    $redirect = (!empty($_POST['redirect'])) ? $_POST['redirect'] : 'codeForBothJackets.php';
 
     $sql = "SELECT id, username, password FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
@@ -78,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (password_verify($password, $hashed_password)) {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
-            header("Location: checkout.php");
+            header("Location: $redirect");
             exit;
         } else {
             echo "<h2>❌ Invalid email or password.</h2>";
@@ -90,19 +93,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->close();
 }
 
-// Show the login form
+$conn->close();
+
+// Show login form
 echo <<<HTML
   <h2>Login to ThreadLine</h2>
   <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: 2rem auto;">
     <input type="email" name="email" placeholder="Email" required style="padding: 0.75rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" />
     <input type="password" name="password" placeholder="Password" required style="padding: 0.75rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" />
+    <input type="hidden" name="redirect" value="$redirect" />
     <button type="submit" style="padding: 0.75rem; background-color: #075eb6; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Log In</button>
   </form>
-HTML;
-
-$conn->close();
-
-echo <<<HTML
 </div>
 <footer>
   <p>© 2025 ThreadLine. All rights reserved.</p>
