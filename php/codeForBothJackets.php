@@ -1,4 +1,35 @@
-<?php session_start(); ?>
+<?php
+// Secure session
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
+session_start();
+
+// Database connection
+date_default_timezone_set('America/Los_Angeles');
+$host = "localhost";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
+$conn = new mysqli($host, $username, $password, $database);
+
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// ✅ Update last_activity if logged in
+if (isset($_SESSION['user_id'])) {
+  $user_id = $_SESSION['user_id'];
+  $now = date('Y-m-d H:i:s');
+  $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
+  $stmt = $conn->prepare($updateSql);
+  $stmt->bind_param("si", $now, $user_id);
+  $stmt->execute();
+  $stmt->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

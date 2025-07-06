@@ -11,6 +11,26 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
   exit;
 }
 $_SESSION['LAST_ACTIVITY'] = time();
+
+// ✅ Update last_activity in the database
+if (isset($_SESSION['user_id'])) {
+  date_default_timezone_set('America/Los_Angeles');
+  $host = "localhost";
+  $username = "thredqwx_admin";
+  $password = "Mostin2003$";
+  $database = "thredqwx_threadline";
+  $conn = new mysqli($host, $username, $password, $database);
+
+  if (!$conn->connect_error) {
+    $now = date('Y-m-d H:i:s');
+    $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
+    $stmt = $conn->prepare($updateSql);
+    $stmt->bind_param("si", $now, $_SESSION['user_id']);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

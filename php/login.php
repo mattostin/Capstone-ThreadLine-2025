@@ -28,6 +28,7 @@ $conn = new mysqli($host, $username, $password, $database);
 // Determine redirect destination
 $redirect = $_GET['redirect'] ?? 'codeForBothJackets.php';
 
+// HTML Header
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +82,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (password_verify($password, $hashed_password)) {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
+
+            // ✅ Update last_activity
+            $now = date('Y-m-d H:i:s');
+            $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
+            $updateStmt = $conn->prepare($updateSql);
+            $updateStmt->bind_param("si", $now, $id);
+            $updateStmt->execute();
+            $updateStmt->close();
+
             header("Location: $redirect");
             exit;
         } else {
