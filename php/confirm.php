@@ -7,7 +7,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Basic headers for protection
+// Basic headers
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: no-referrer");
@@ -18,7 +18,7 @@ if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_tok
   die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
 }
 
-// Validate presence of required fields
+// Validate required fields
 $required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
 foreach ($required as $field) {
   if (empty($_POST[$field])) {
@@ -27,22 +27,22 @@ foreach ($required as $field) {
 }
 
 // Sanitize inputs
-$fullname  = htmlspecialchars(trim($_POST['fullname']));
-$address   = htmlspecialchars(trim($_POST['address']));
-$email     = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-$card      = preg_replace('/\D/', '', $_POST['card']);
+$fullname = htmlspecialchars(trim($_POST['fullname']));
+$address = htmlspecialchars(trim($_POST['address']));
+$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$card = preg_replace('/\D/', '', $_POST['card']);
 $expiryMonth = $_POST['expiryMonth'];
-$expiryYear  = $_POST['expiryYear'];
-$cvv      = preg_replace('/\D/', '', $_POST['cvv']);
-$zip      = htmlspecialchars(trim($_POST['zip']));
+$expiryYear = $_POST['expiryYear'];
+$cvv = preg_replace('/\D/', '', $_POST['cvv']);
+$zip = htmlspecialchars(trim($_POST['zip']));
 $cartData = json_decode($_POST['cart'], true);
 
-// Validate card number (basic check length)
+// Card validation
 if (strlen($card) < 13 || strlen($card) > 19) {
   die("<h2>❌ Invalid card number.</h2>");
 }
 
-// Confirm page
+// Start HTML
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -51,33 +51,6 @@ echo <<<HTML
   <title>Order Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #075eb6;
-    }
-
-    .logo {
-      font-family: 'Lilita One', cursive;
-      font-size: 1.5rem;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
     .confirmation-container {
       max-width: 800px;
       margin: 4rem auto;
@@ -134,14 +107,59 @@ echo <<<HTML
     .confirmation-buttons a:hover {
       background-color: #054a8e;
     }
+
+    /* Navbar fix */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #075eb6;
+    }
+
+    .logo {
+      font-family: 'Lilita One', cursive;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    .nav-links li a {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nav-links li {
+      color: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <header class="navbar">
-    <a href="codeForBothJackets.php" class="logo">ThreadLine</a>
+    <a href="logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="codeForBothJackets.php">Continue Shopping</a></li>
-      <li><a href="logout.php">Logout</a></li>
+      <li><a href="checkout.php">Checkout</a></li>
+HTML;
+
+// Auth-dependent links
+if (isset($_SESSION['username'])) {
+  $username = ucfirst(htmlspecialchars($_SESSION['username']));
+  echo "<li>Hi, $username</li>";
+  echo '<li><a href="logout.php">Logout</a></li>';
+} else {
+  echo '<li><a href="login.php">Login</a></li>';
+  echo '<li><a href="signup.php">Signup</a></li>';
+}
+
+echo <<<HTML
     </ul>
   </header>
 
@@ -152,13 +170,14 @@ echo <<<HTML
     <h3>Order Summary:</h3>
 HTML;
 
+// Order Summary
 $total = 0;
 if (is_array($cartData)) {
   echo "<ul>";
   foreach ($cartData as $item) {
     $name = htmlspecialchars($item['name']);
     $size = htmlspecialchars($item['size']);
-    $qty  = (int)$item['quantity'];
+    $qty = (int)$item['quantity'];
     $price = (float)$item['price'];
     $subtotal = $qty * $price;
     $total += $subtotal;
@@ -172,7 +191,6 @@ if (is_array($cartData)) {
 
 echo <<<HTML
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
-    
     <div class="confirmation-buttons">
       <a href="codeForBothJackets.php">Continue Shopping</a>
       <a href="logout.php">Logout</a>
