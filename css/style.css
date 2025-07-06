@@ -1,43 +1,50 @@
-/* GLOBAL RESET + BASE STYLES */
+/* GOOGLE FONTS (place in your HTML head if not already) */
+/*
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+*/
+
+/* RESET + BASE STYLES */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+html, body {
+  width: 100%;
+  min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  min-height: 100vh;
   color: #111;
-  overflow-y: scroll; /* ✅ Keeps scrollbar space consistent on all pages */
+  overflow-x: hidden;
 }
 
-/* NAVIGATION BAR */
+/* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background: transparent;
+  flex-wrap: wrap;
 }
 
 .logo {
   font-family: 'Poppins', sans-serif;
   font-size: 1.5rem;
   color: white;
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
-
 
 .nav-links {
   list-style: none;
   display: flex;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -66,12 +73,13 @@ body {
   font-weight: 600;
 }
 
-/* BUTTONS */
+/* BUTTON STYLES */
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .btn,
@@ -113,7 +121,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* PRODUCT GRID LAYOUT */
+/* PRODUCT GRID */
 .product-grid {
   display: flex;
   flex-wrap: wrap;
@@ -133,196 +141,6 @@ footer {
   flex-direction: column;
   justify-content: flex-start;
   gap: 15px;
-}
-
-
-.product-box img {
-  width: 100%;
-  height: 180px;
-  object-fit: contain; /* shows full image and fits inside the box */
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-
-/* TEXT STYLE FOR PRODUCT NAME & PRICE */
-.product-box p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  font-weight: 00;
-  color: #333;
-  margin-top: 10px;
-}
-
-/* the style for the signup page */
-.signup-container {
-  max-width: 400px;
-  margin: 5rem auto;
-  padding: 2rem;
-  background-color: #ffffffcc;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.signup-container h2 {
-  font-family: 'Lilita One', cursive;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #075eb6;
-}
-
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.signup-form input {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-family: 'Poppins', sans-serif;
-}
-
-.signup-form button {
-  padding: 0.75rem 1.5rem;
-  background-color: #075eb6;
-  color: white;
-  border: none;
-  font-weight: bold;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.signup-form button:hover {
-  background-color: #054a8e;
-}
-
-html, body {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-
-html {
-  overflow-y: scroll; /* putting scroll bar on all pages so it doesn't shift each page*/
-}
-
-body {
-  min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #111;
-}
-
-/* WRAP TWO IMAGES SIDE-BY-SIDE */
-.product-images {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-/* IMAGE SIZING INSIDE WRAPPER */
-.product-images img {
-  width: 140px;
-  height: 180px;
-  object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  color: #111;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-}
-
-.logo {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.5rem;
-  color: white;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-
-.product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 40px;
-  padding: 20px;
-}
-
-.product-box {
-  width: 320px;
-  text-align: center;
-  background-color: #ffffffc2;
-  padding: 20px 10px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 15px;
-}
-
-.product-images {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  height: 190px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.product-images img {
-  width: 140px;
-  height: 180px;
-  object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.bg-white {
-  background-color: #f6f6f6;
-}
-.bg-gray {
-  background-color: #e0e0e0;
-}
-.bg-green {
-  background-color: #d6e4d1;
 }
 
 .product-box p {
@@ -353,4 +171,115 @@ body {
   width: 50px;
   padding: 4px;
   margin-right: 0.5rem;
+}
+
+/* PRODUCT IMAGES */
+.product-images {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  height: 190px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.product-images img,
+.product-box img {
+  width: 140px;
+  height: 180px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* BACKGROUND VARIANTS */
+.bg-white {
+  background-color: #f6f6f6;
+}
+.bg-gray {
+  background-color: #e0e0e0;
+}
+.bg-green {
+  background-color: #d6e4d1;
+}
+
+/* SIGNUP FORM */
+.signup-container {
+  max-width: 400px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: #ffffffcc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.signup-container h2 {
+  font-family: 'Lilita One', cursive;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #075eb6;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.signup-form input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.signup-form button {
+  padding: 0.75rem 1.5rem;
+  background-color: #075eb6;
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-form button:hover {
+  background-color: #054a8e;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+
+  .product-box {
+    width: 90%;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .signup-container {
+    margin: 3rem 1rem;
+  }
 }
