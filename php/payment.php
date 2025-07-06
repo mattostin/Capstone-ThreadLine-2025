@@ -1,16 +1,16 @@
 <?php
-// ✅ Secure session and headers
-session_set_cookie_params([
-  'secure' => true,
-  'httponly' => true,
-  'samesite' => 'Strict'
-]);
 session_start();
 
-header("X-Frame-Options: DENY");
-header("X-Content-Type-Options: nosniff");
-header("Referrer-Policy: no-referrer");
-header("X-XSS-Protection: 1; mode=block");
+// Session timeout: 30 minutes
+if (!isset($_SESSION['LAST_ACTIVITY'])) {
+  $_SESSION['LAST_ACTIVITY'] = time();
+} elseif (time() - $_SESSION['LAST_ACTIVITY'] > 1800) {
+  session_unset();
+  session_destroy();
+  header("Location: login.php?redirect=payment.php");
+  exit;
+}
+$_SESSION['LAST_ACTIVITY'] = time();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,7 +155,6 @@ header("X-XSS-Protection: 1; mode=block");
     </form>
   </main>
 
-  <!-- Inject localStorage cart into form on submit -->
   <script>
     document.querySelector("form").addEventListener("submit", function () {
       const cart = localStorage.getItem("cart");
