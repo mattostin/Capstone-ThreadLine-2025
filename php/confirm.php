@@ -27,22 +27,22 @@ foreach ($required as $field) {
 }
 
 // Sanitize inputs
-$fullname  = htmlspecialchars(trim($_POST['fullname']));
-$address   = htmlspecialchars(trim($_POST['address']));
-$email     = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-$card      = preg_replace('/\D/', '', $_POST['card']);
+$fullname    = htmlspecialchars(trim($_POST['fullname']));
+$address     = htmlspecialchars(trim($_POST['address']));
+$email       = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$card        = preg_replace('/\D/', '', $_POST['card']);
 $expiryMonth = $_POST['expiryMonth'];
 $expiryYear  = $_POST['expiryYear'];
-$cvv      = preg_replace('/\D/', '', $_POST['cvv']);
-$zip      = htmlspecialchars(trim($_POST['zip']));
-$cartData = json_decode($_POST['cart'], true);
+$cvv         = preg_replace('/\D/', '', $_POST['cvv']);
+$zip         = htmlspecialchars(trim($_POST['zip']));
+$cartData    = json_decode($_POST['cart'], true);
 
 // Validate card number (basic check length)
 if (strlen($card) < 13 || strlen($card) > 19) {
   die("<h2>❌ Invalid card number.</h2>");
 }
 
-// Confirm page
+// HTML Output
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -100,9 +100,52 @@ echo <<<HTML
     .confirmation-buttons a:hover {
       background-color: #054a8e;
     }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #075eb6;
+    }
+    .logo {
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+    .nav-links li {
+      display: inline;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <header class="navbar">
+    <a href="logo_redirect.php" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+HTML;
+
+// Show user greeting or login options
+if (isset($_SESSION['username'])) {
+  $username = ucfirst(htmlspecialchars($_SESSION['username']));
+  echo "<li>Hi, $username</li><li><a href='logout.php'>Logout</a></li>";
+} else {
+  echo "<li><a href='login.php'>Login</a></li><li><a href='signup.php'>Signup</a></li>";
+}
+
+echo <<<HTML
+    </ul>
+  </header>
+
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong>$fullname</strong>! Your order has been successfully placed and will be shipped to:</p>
@@ -114,12 +157,13 @@ $total = 0;
 if (is_array($cartData)) {
   echo "<ul>";
   foreach ($cartData as $item) {
-    $name = htmlspecialchars($item['name']);
-    $size = htmlspecialchars($item['size']);
-    $qty  = (int)$item['quantity'];
-    $price = (float)$item['price'];
+    $name     = htmlspecialchars($item['name']);
+    $size     = htmlspecialchars($item['size']);
+    $qty      = (int)$item['quantity'];
+    $price    = (float)$item['price'];
     $subtotal = $qty * $price;
-    $total += $subtotal;
+    $total   += $subtotal;
+
     echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>\$" . number_format($subtotal, 2) . "</div></li>";
   }
   echo "</ul>";
@@ -136,6 +180,7 @@ echo <<<HTML
       <a href="logout.php">Logout</a>
     </div>
   </div>
+
   <script>
     localStorage.removeItem("cart");
   </script>

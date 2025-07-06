@@ -160,7 +160,7 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body>
   <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
+    <a href="logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="logout.php">Logout</a></li>
@@ -171,10 +171,4 @@ if (isset($_SESSION['user_id'])) {
     <h2>Checkout Summary</h2>
     <div id="checkout-items"></div>
     <h3 id="total-amount"></h3>
-    <div class="checkout-actions">
-      <button id="clear-cart-btn">Clear Cart</button>
-      <button id="payment-btn">Proceed to Payment</button>
-    </div>
-  </main>
-</body>
-</html>
+    <div class=

@@ -13,7 +13,6 @@ header("Referrer-Policy: no-referrer");
 header("X-XSS-Protection: 1; mode=block");
 
 date_default_timezone_set('America/Los_Angeles');
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -26,7 +25,7 @@ $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
 // Determine redirect destination
-$redirect = $_GET['redirect'] ?? 'codeForBothJackets.php';
+$redirect = $_GET['redirect'] ?? 'home.php';
 
 // HTML Header
 echo <<<HTML
@@ -43,11 +42,11 @@ echo <<<HTML
 </head>
 <body>
 <nav class="navbar">
-  <a class="logo" href="../html/index.html">ThreadLine</a>
+  <a class="logo" href="logo_redirect.php">ThreadLine</a>
   <ul class="nav-links">
     <li><a href="../html/index.html">Home</a></li>
     <li><a href="codeForBothJackets.php">Shop</a></li>
-    <li><a href="../html/signup.html">Signup</a></li>
+    <li><a href="signup.php">Signup</a></li>
   </ul>
 </nav>
 <div class="signup-container">
@@ -62,7 +61,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = $_POST['email'];
     $password = $_POST['password'];
-    $redirect = (!empty($_POST['redirect'])) ? $_POST['redirect'] : 'codeForBothJackets.php';
+    $redirect = (!empty($_POST['redirect'])) ? $_POST['redirect'] : 'home.php';
 
     $sql = "SELECT id, username, password FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);

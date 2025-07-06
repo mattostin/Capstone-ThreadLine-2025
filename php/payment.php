@@ -1,5 +1,5 @@
 <?php
-// Force HTTPS if not already
+// Force HTTPS
 if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
     $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header("Location: $redirect");
@@ -14,7 +14,13 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Generate CSRF token if not already set
+// 🚨 Block access if not logged in
+if (!isset($_SESSION['username'])) {
+  header("Location: ../php/login.php?redirect=payment.php");
+  exit();
+}
+
+// CSRF token
 if (empty($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -94,10 +100,10 @@ $csrf_token = $_SESSION['csrf_token'];
 </head>
 <body>
   <header class="navbar">
-    <a href="../html/index.html" class="logo">ThreadLine</a>
+    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="../php/codeForBothJackets.php">Shop</a></li>
-      <li><a href="../php/logout.php">Logout</a></li>
+      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+      <li><a href="/php/logout.php">Logout</a></li>
     </ul>
   </header>
 
