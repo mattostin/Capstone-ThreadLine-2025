@@ -53,6 +53,87 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
   <meta charset="UTF-8">
   <title>Admin Product Management</title>
   <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .admin-card {
+      margin-bottom: 2rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+
+    .admin-form input[type="text"],
+    .admin-form input[type="number"],
+    .edit-form input[type="text"],
+    .edit-form input[type="number"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #0a67a3;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #555;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #c0392b;
+      color: white;
+    }
+
+    table.admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #2a2a2a;
+      color: white;
+    }
+
+    table.admin-table th,
+    table.admin-table td {
+      padding: 1rem;
+      border: 1px solid #444;
+    }
+
+    table.admin-table th {
+      background-color: #111;
+    }
+  </style>
 </head>
 <body class="admin-page">
 
@@ -91,7 +172,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
             <td><?= $p['stock'] ?></td>
             <td><?= htmlspecialchars($p['available_sizes']) ?></td>
             <td class="actions">
-              <form method="POST" class="delete-form">
+              <form method="POST" class="delete-form" style="display:inline;">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
                 <button class="btn-danger" type="submit">Delete</button>
@@ -126,7 +207,6 @@ function toggleEdit(id) {
   row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
 }
 
-// AJAX delete
 document.querySelectorAll('.delete-form').forEach(form => {
   form.addEventListener('submit', async e => {
     e.preventDefault();
