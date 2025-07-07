@@ -1,19 +1,16 @@
 <?php
-<?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require_once "config.php"; // uses the $conn from config.php
+require_once "config.php"; // this provides $conn using PDO
 
 $productId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
-$stmt->bind_param("i", $productId);
-$stmt->execute();
-$result = $stmt->get_result();
-$product = $result->fetch_assoc();
+$stmt->execute([$productId]);
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$product) {
   echo "Product not found.";
