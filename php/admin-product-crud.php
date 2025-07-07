@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $stmt->bind_param("sdisss", $_POST['product_name'], $_POST['price'], $_POST['stock'], $_POST['available_sizes'], $_POST['image_front'], $_POST['image_back']);
     $stmt->execute();
     $stmt->close();
-    header("Location: admin-product-crud.php");
+    header("Location: codeForBothJackets.php");
     exit;
   }
 
@@ -50,27 +50,118 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Admin Product Management</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f2f5;
+    }
+
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #111827;
+      color: white;
+      padding: 2rem;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    h1, h2 {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    form input, form button {
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    form button {
+      background-color: #075eb6;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #054a8e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .actions .delete {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .actions .edit {
+      background-color: #3182ce;
+      color: white;
+    }
+
+    .actions button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-
   <?php include 'navber.php'; ?>
 
   <div class="admin-wrapper">
     <div class="sidebar">
-      <h2 style="color: white;">Admin Menu</h2>
-      <ul style="list-style: none; padding-left: 0;">
-        <li><a href="admin-dashboard.php" style="color:white;">Dashboard</a></li>
-        <li><a href="admin-product-crud.php" style="color:white;">Manage Products</a></li>
-        <li><a href="logout.php" style="color:white;">Logout</a></li>
+      <h2>Admin Menu</h2>
+      <ul>
+        <li><a href="admin-dashboard.php" style="color:white">Dashboard</a></li>
+        <li><a href="admin-product-crud.php" style="color:white">Manage Products</a></li>
+        <li><a href="logout.php" style="color:white">Logout</a></li>
       </ul>
     </div>
-
     <div class="main-content">
       <div class="card">
         <h1>Admin Product Management</h1>
@@ -93,11 +184,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Sizes</th>
-              <th>Actions</th>
+              <th>Name</th><th>Price</th><th>Stock</th><th>Sizes</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -165,6 +252,5 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
       });
     });
   </script>
-
 </body>
 </html>
