@@ -38,15 +38,16 @@ if (isset($_SESSION['user_id'])) {
   <link rel="stylesheet" href="/css/style.css">
   <style>
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 2rem 1rem;
     }
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2.5rem;
+      justify-items: center;
     }
 
     .product-link {
@@ -59,6 +60,8 @@ if (isset($_SESSION['user_id'])) {
       padding: 1rem;
       border-radius: 10px;
       text-align: center;
+      width: 100%;
+      max-width: 250px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       font-family: 'Poppins', sans-serif;
       transition: transform 0.2s ease;
@@ -70,22 +73,23 @@ if (isset($_SESSION['user_id'])) {
 
     .product-box img {
       width: 100%;
-      max-width: 200px;
-      height: auto;
+      height: 200px;
       object-fit: contain;
-    }
-
-    .product-box h3 {
-      margin: 0.5rem 0;
+      margin-bottom: 1rem;
     }
 
     .product-box button {
       background-color: #075eb6;
       color: white;
       border: none;
-      padding: 0.6rem 1rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 6px;
       cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .product-box h3 {
+      margin: 0.5rem 0;
     }
   </style>
 </head>
