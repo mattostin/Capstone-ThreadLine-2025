@@ -1,5 +1,4 @@
 <?php
-// Secure session
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -81,6 +80,9 @@ if (strlen($card) < 13 || strlen($card) > 19) {
       color: white;
       text-decoration: none;
       font-weight: 600;
+      background: none !important;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
     }
 
     .nav-links li a:hover {
@@ -94,7 +96,6 @@ if (strlen($card) < 13 || strlen($card) > 19) {
       background-color: #ffffffdd;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
     }
 
     h2 {
