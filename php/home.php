@@ -11,16 +11,22 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 <head>
   <meta charset="UTF-8" />
   <title>Welcome - ThreadLine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
+
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
+
   <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
       margin: 0;
       background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
       background-repeat: no-repeat;
       background-attachment: fixed;
       min-height: 100vh;
-      font-family: 'Lilita One', cursive;
       color: white;
     }
 
@@ -29,13 +35,13 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       justify-content: space-between;
       align-items: center;
       padding: 1.2rem 2rem;
-      background: transparent;
     }
 
     .logo {
       font-size: 1.8rem;
       color: white;
       text-decoration: none;
+      font-weight: 600;
     }
 
     .nav-links {
@@ -44,15 +50,13 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       gap: 1.5rem;
     }
 
-    .nav-links li {
-      font-size: 1rem;
-    }
-
+    .nav-links li,
     .nav-links li a {
       color: white;
+      font-weight: 600;
       text-decoration: none;
-      font-weight: bold;
       transition: 0.3s;
+      font-size: 1rem;
     }
 
     .nav-links li a:hover {
@@ -70,20 +74,20 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .hero h1 {
-      font-size: 3.2rem;
+      font-size: 2.75rem;
       margin-bottom: 1rem;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
     }
 
     .hero p {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       margin-bottom: 2rem;
       max-width: 600px;
     }
 
     .shop-button {
       padding: 1rem 2.2rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       background: white;
       color: #075eb6;
       border: none;
@@ -104,7 +108,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Hidden 1px clickable pixel in bottom left */
+    /* Secret red pixel link */
     .secret-pixel {
       position: fixed;
       bottom: 0;
@@ -113,13 +117,12 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       height: 1px;
       background: red;
       z-index: 9999;
-      opacity: 0.95;
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a class="logo" href="/php/logo_redirect.php">ThreadLine</a>
+    <a class="logo" href="/php/logo_redirect.php">TheadLine</a>
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
@@ -134,7 +137,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
 
-  <!-- Secret 1px red clickable button -->
+  <!-- Hidden 1px link -->
   <a href="/php/codeForBothJackets.php" class="secret-pixel"></a>
 </body>
 </html>
