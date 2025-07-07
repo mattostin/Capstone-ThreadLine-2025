@@ -6,7 +6,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Session timeout: 30 minutes
+// Session timeout logic
 if (!isset($_SESSION['LAST_ACTIVITY'])) {
   $_SESSION['LAST_ACTIVITY'] = time();
 } elseif (time() - $_SESSION['LAST_ACTIVITY'] > 1800) {
@@ -17,15 +17,14 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
 }
 $_SESSION['LAST_ACTIVITY'] = time();
 
-// Update last_activity in the DB
+// Update last_activity in DB
 if (isset($_SESSION['user_id'])) {
   date_default_timezone_set('America/Los_Angeles');
   $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
 
   if (!$conn->connect_error) {
     $now = date('Y-m-d H:i:s');
-    $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
-    $stmt = $conn->prepare($updateSql);
+    $stmt = $conn->prepare("UPDATE users SET last_activity = ? WHERE id = ?");
     $stmt->bind_param("si", $now, $_SESSION['user_id']);
     $stmt->execute();
     $stmt->close();
@@ -112,6 +111,35 @@ if (isset($_SESSION['user_id'])) {
       margin-top: 2rem;
     }
   </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+      <li><a href="/php/checkout.php">Checkout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+          <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
+        <?php endif; ?>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
+        <li><a href="/php/logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="/php/login.php">Login</a></li>
+        <li><a href="/php/signup.php">Signup</a></li>
+      <?php endif; ?>
+    </ul>
+  </header>
+
+  <main class="checkout-container">
+    <h2>Checkout Summary</h2>
+    <div id="checkout-items"></div>
+    <h3 id="total-amount"></h3>
+    <div class="checkout-actions">
+      <button id="clear-cart-btn">Clear Cart</button>
+      <button id="payment-btn">Proceed to Payment</button>
+    </div>
+  </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -131,13 +159,9 @@ if (isset($_SESSION['user_id'])) {
         const left = document.createElement('div');
         left.className = 'checkout-left';
 
-        const nameQty = document.createElement('div');
-        nameQty.innerHTML = `<strong>${item.name}</strong><br>Size: ${item.size}<br>Qty: ${item.quantity}`;
-        left.appendChild(nameQty);
-
+        left.innerHTML = `<strong>${item.name}</strong><br>Size: ${item.size}<br>Qty: ${item.quantity}`;
         const right = document.createElement('div');
         right.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
-
         li.appendChild(left);
         li.appendChild(right);
         ul.appendChild(li);
@@ -153,36 +177,23 @@ if (isset($_SESSION['user_id'])) {
         location.reload();
       });
 
-      document.getElementById('payment-btn').addEventListener('click', () => {
-        window.location.href = 'payment.php';
+      document.getElementById('payment-btn').addEventListener('click', async () => {
+        const response = await fetch('payment.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cart)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert("✅ Payment successful!");
+          localStorage.removeItem('cart');
+          window.location.href = "thankyou.php";
+        } else {
+          alert("❌ " + result.error);
+        }
       });
     });
   </script>
-</head>
-<body>
-  <header class="navbar">
-    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <li><a href="/php/checkout.php">Checkout</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="/php/logout.php">Logout</a></li>
-      <?php else: ?>
-        <li><a href="/php/login.php">Login</a></li>
-        <li><a href="/php/signup.php">Signup</a></li>
-      <?php endif; ?>
-    </ul>
-  </header>
-
-  <main class="checkout-container">
-    <h2>Checkout Summary</h2>
-    <div id="checkout-items"></div>
-    <h3 id="total-amount"></h3>
-    <div class="checkout-actions">
-      <button id="clear-cart-btn">Clear Cart</button>
-      <button id="payment-btn">Proceed to Payment</button>
-    </div>
-  </main>
 </body>
 </html>
