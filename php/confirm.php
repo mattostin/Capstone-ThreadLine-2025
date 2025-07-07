@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -10,55 +6,45 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// 🚫 Require login
-if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
-}
+// Get posted values (in production, use actual $_POST)
+$fullname  = htmlspecialchars($_POST['fullname'] ?? "Guest");
+$address   = htmlspecialchars($_POST['address'] ?? "N/A");
+$zip       = htmlspecialchars($_POST['zip'] ?? "00000");
+$email     = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
+$cartData  = json_decode($_POST['cart'] ?? '[]', true);
 
-// ✅ Sanitize & get form data
-$fullname = htmlspecialchars($_POST['fullname'] ?? '');
-$address = htmlspecialchars($_POST['address'] ?? '');
-$zip = htmlspecialchars($_POST['zip'] ?? '');
-$email = htmlspecialchars($_POST['email'] ?? '');
-$cartJson = $_POST['cart'] ?? '[]';
-$cartData = json_decode($cartJson, true);
-$total = 0;
-
-// ✅ Connect to DB
+// Connect to database
 $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
 if ($conn->connect_error) {
-  die("DB Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
-// ✅ Reduce inventory stock
+// Update stock for each item in cart
 if (is_array($cartData)) {
   foreach ($cartData as $item) {
-    $product_id = (int) $item['id'];
-    $size = $conn->real_escape_string($item['size']);
-    $qty = (int) $item['quantity'];
-    $price = (float) $item['price'];
-    $total += $qty * $price;
+    $productName = $item['name'];
+    $quantity = (int)$item['quantity'];
 
-    $stmt = $conn->prepare("UPDATE inventory SET stock = stock - ? WHERE product_id = ? AND size = ?");
-    $stmt->bind_param("iis", $qty, $product_id, $size);
+    // Get the product ID and stock
+    $stmt = $conn->prepare("SELECT id, stock FROM products WHERE product_name = ?");
+    $stmt->bind_param("s", $productName);
     $stmt->execute();
+    $result = $stmt->get_result();
+    $product = $result->fetch_assoc();
+
+    if ($product && $product['stock'] >= $quantity) {
+      $productId = $product['id'];
+
+      // Deduct the stock
+      $updateStmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
+      $updateStmt->bind_param("ii", $quantity, $productId);
+      $updateStmt->execute();
+      $updateStmt->close();
+    }
     $stmt->close();
   }
-
-  // ✅ Insert order record (optional)
-  $username = $conn->real_escape_string($_SESSION['username']);
-  $stmt = $conn->prepare("INSERT INTO orders (username, fullname, address, email, total, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-  $stmt->bind_param("ssssd", $username, $fullname, $address, $email, $total);
-  $stmt->execute();
-  $stmt->close();
-} else {
-  $cartData = [];
 }
-
-$conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +62,6 @@ $conn->close();
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       font-family: 'Poppins', sans-serif;
     }
-
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
@@ -84,12 +69,10 @@ $conn->close();
       align-items: center;
       gap: 0.5rem;
     }
-
     ul {
       padding: 0;
       list-style: none;
     }
-
     li {
       margin-bottom: 1rem;
       padding: 1rem;
@@ -97,21 +80,18 @@ $conn->close();
       display: flex;
       justify-content: space-between;
     }
-
     .summary {
       font-size: 1.2rem;
       margin-top: 2rem;
       font-weight: bold;
       text-align: right;
     }
-
     .confirmation-buttons {
       display: flex;
       justify-content: center;
       gap: 2rem;
       margin-top: 2.5rem;
     }
-
     .confirmation-buttons a {
       text-decoration: none;
       background-color: #075eb6;
@@ -121,7 +101,6 @@ $conn->close();
       font-weight: 600;
       transition: background-color 0.3s ease;
     }
-
     .confirmation-buttons a:hover {
       background-color: #054a8e;
     }
@@ -152,7 +131,8 @@ $conn->close();
     <h3>Order Summary:</h3>
 
     <?php
-    if (!empty($cartData)) {
+    $total = 0;
+    if (is_array($cartData)) {
       echo "<ul>";
       foreach ($cartData as $item) {
         $name = htmlspecialchars($item['name']);
@@ -160,6 +140,7 @@ $conn->close();
         $qty  = (int)$item['quantity'];
         $price = (float)$item['price'];
         $subtotal = $qty * $price;
+        $total += $subtotal;
         echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
       }
       echo "</ul>";
