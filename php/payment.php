@@ -1,80 +1,78 @@
 <?php
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
 session_start();
+
+// Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: login.php");
+  header("Location: login.php?redirect=payment.php");
   exit;
 }
 
-// Database connection
 $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['cart_data'])) {
-  $user_id = $_SESSION['user_id'];
-  $cart = json_decode($_POST['cart_data'], true);
+$userId = $_SESSION['user_id'];
+$cart = json_decode($_POST['cart'] ?? '[]', true);
 
-  // Create order
-  $order_sql = "INSERT INTO orders (user_id, order_date) VALUES (?, NOW())";
-  $stmt = $conn->prepare($order_sql);
-  $stmt->bind_param("i", $user_id);
+if (empty($cart)) {
+  die("Cart is empty.");
+}
+
+$conn->begin_transaction();
+
+try {
+  // Insert new order
+  $stmt = $conn->prepare("INSERT INTO orders (user_id, order_date) VALUES (?, NOW())");
+  $stmt->bind_param("i", $userId);
   $stmt->execute();
-  $order_id = $stmt->insert_id;
+  $orderId = $stmt->insert_id;
   $stmt->close();
 
-  // Insert order items and update stock
-  foreach ($cart as $item) {
-    $product_id = $item['id'];
-    $quantity = $item['quantity'];
-    $price = $item['price'];
+  $itemStmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+  $updateStock = $conn->prepare("UPDATE products SET stock = stock - ? WHERE product_name = ? AND stock >= ?");
 
-    // Insert into order_items
-    $item_sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
-    $item_stmt = $conn->prepare($item_sql);
-    $item_stmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
-    $item_stmt->execute();
-    $item_stmt->close();
+  foreach ($cart as $item) {
+    $name = $item['name'];
+    $size = $item['size'];
+    $quantity = (int)$item['quantity'];
+    $price = (float)$item['price'];
+
+    $itemStmt->bind_param("issid", $orderId, $name, $size, $quantity, $price);
+    $itemStmt->execute();
 
     // Update stock
-    $stock_sql = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
-    $stock_stmt = $conn->prepare($stock_sql);
-    $stock_stmt->bind_param("iii", $quantity, $product_id, $quantity);
-    $stock_stmt->execute();
-    $stock_stmt->close();
+    $updateStock->bind_param("isi", $quantity, $name, $quantity);
+    $updateStock->execute();
   }
 
+  $itemStmt->close();
+  $updateStock->close();
+
+  // Simulate successful payment
+  $paymentStmt = $conn->prepare("INSERT INTO threadline_payments (user_id, order_id, amount, payment_date) VALUES (?, ?, ?, NOW())");
+  $totalAmount = array_reduce($cart, fn($sum, $item) => $sum + $item['price'] * $item['quantity'], 0);
+  $paymentStmt->bind_param("iid", $userId, $orderId, $totalAmount);
+  $paymentStmt->execute();
+  $paymentStmt->close();
+
+  $conn->commit();
   $conn->close();
-  echo "<h2>✅ Payment successful! Your order has been placed.</h2>";
-  echo "<script>localStorage.removeItem('cart');</script>";
-  exit;
+
+  echo "<script>
+    localStorage.removeItem('cart');
+    alert('Payment successful! Your order has been placed.');
+    window.location.href = 'codeForBothJackets.php';
+  </script>";
+
+} catch (Exception $e) {
+  $conn->rollback();
+  $conn->close();
+  die("Payment failed: " . $e->getMessage());
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Payment - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-  <div class="payment-container">
-    <h2>Enter Payment Details</h2>
-    <form method="POST" id="payment-form">
-      <input type="text" name="cardholder" placeholder="Cardholder Name" required><br>
-      <input type="text" name="cardnumber" placeholder="Card Number" required><br>
-      <input type="text" name="expiry" placeholder="MM/YY" required><br>
-      <input type="text" name="cvv" placeholder="CVV" required><br>
-      <input type="hidden" name="cart_data" id="cart_data_field">
-      <button type="submit">Pay Now</button>
-    </form>
-  </div>
-
-  <script>
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    document.getElementById('cart_data_field').value = JSON.stringify(cart);
-  </script>
-</body>
-</html>
