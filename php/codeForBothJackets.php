@@ -37,12 +37,16 @@ if (isset($_SESSION['user_id'])) {
   <title>Shop - ThreadLine</title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2rem;
-      margin-top: 2rem;
-      padding: 0 2rem;
     }
 
     .product-link {
@@ -103,30 +107,32 @@ if (isset($_SESSION['user_id'])) {
     </ul>
   </nav>
 
-  <main style="padding: 2rem;">
+  <main>
     <h1 style="text-align:center;">Our Products</h1>
-    <div class="product-grid">
-      <?php
-      $sql = "SELECT * FROM products";
-      $result = $conn->query($sql);
+    <div class="container">
+      <div class="product-grid">
+        <?php
+        $sql = "SELECT * FROM products";
+        $result = $conn->query($sql);
 
-      if ($result->num_rows > 0):
-        while ($product = $result->fetch_assoc()):
-      ?>
-        <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
-          <div class="product-box">
-            <img src="<?= $product['image_front'] ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
-            <h3><?= htmlspecialchars($product['product_name']) ?></h3>
-            <p>$<?= number_format($product['price'], 2) ?></p>
-            <button>View Product</button>
-          </div>
-        </a>
-      <?php
-        endwhile;
-      else:
-        echo "<p>No products available.</p>";
-      endif;
-      ?>
+        if ($result->num_rows > 0):
+          while ($product = $result->fetch_assoc()):
+        ?>
+          <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
+            <div class="product-box">
+              <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
+              <h3><?= htmlspecialchars($product['product_name']) ?></h3>
+              <p>$<?= number_format($product['price'], 2) ?></p>
+              <button>View Product</button>
+            </div>
+          </a>
+        <?php
+          endwhile;
+        else:
+          echo "<p>No products available.</p>";
+        endif;
+        ?>
+      </div>
     </div>
   </main>
 </body>
