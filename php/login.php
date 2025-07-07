@@ -108,4 +108,13 @@ $conn->close();
 // Show login form
 echo <<<HTML
   <h2>Login to ThreadLine</h2>
-  <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margi
+  <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: auto;">
+    <input type="email" name="email" placeholder="Email" required style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" name="password" placeholder="Password" required style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px;" />
+    <button type="submit" style="padding: 0.75rem; background-color: #075eb6; color: white; border: none; font-weight: bold; font-size: 1rem; border-radius: 6px; cursor: pointer;">Login</button>
+  </form>
+</div>
+</body>
+</html>
+HTML;
+?>
