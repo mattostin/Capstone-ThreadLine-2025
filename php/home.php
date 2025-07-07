@@ -11,22 +11,16 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 <head>
   <meta charset="UTF-8" />
   <title>Welcome - ThreadLine</title>
-
-  <!-- Google Font: Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
-
   <style>
-    * {
-      font-family: 'Poppins', sans-serif;
-    }
-
     body {
       margin: 0;
       background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
       background-repeat: no-repeat;
       background-attachment: fixed;
       min-height: 100vh;
+      font-family: 'Lilita One', cursive;
       color: white;
     }
 
@@ -35,13 +29,13 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       justify-content: space-between;
       align-items: center;
       padding: 1.2rem 2rem;
+      background: transparent;
     }
 
     .logo {
       font-size: 1.8rem;
       color: white;
       text-decoration: none;
-      font-weight: 600;
     }
 
     .nav-links {
@@ -50,13 +44,15 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       gap: 1.5rem;
     }
 
-    .nav-links li,
+    .nav-links li {
+      font-size: 1rem;
+    }
+
     .nav-links li a {
       color: white;
-      font-weight: 600;
       text-decoration: none;
+      font-weight: bold;
       transition: 0.3s;
-      font-size: 1rem;
     }
 
     .nav-links li a:hover {
@@ -74,20 +70,20 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .hero h1 {
-      font-size: 2.75rem;
+      font-size: 3.2rem;
       margin-bottom: 1rem;
-      font-weight: 600;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
     }
 
     .hero p {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       margin-bottom: 2rem;
       max-width: 600px;
     }
 
     .shop-button {
       padding: 1rem 2.2rem;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       background: white;
       color: #075eb6;
       border: none;
@@ -107,6 +103,18 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Hidden 1px clickable pixel in bottom left */
+    .secret-pixel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      background: red;
+      z-index: 9999;
+      opacity: 0.95;
+    }
   </style>
 </head>
 <body>
@@ -125,5 +133,8 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <p>Check out our latest drops — from clean jackets to everyday comfort. Your style starts here.</p>
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
+
+  <!-- Secret 1px red clickable button -->
+  <a href="/php/codeForBothJackets.php" class="secret-pixel"></a>
 </body>
 </html>
