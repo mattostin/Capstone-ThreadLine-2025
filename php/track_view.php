@@ -10,9 +10,18 @@ if ($conn->connect_error) {
     exit("DB connection failed");
 }
 
-$userId = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
-$productId = isset($_POST['product_id']) ? intval($_POST['product_id']) : null;
-$duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0;
+// Read raw JSON input (works with sendBeacon)
+$rawData = file_get_contents("php://input");
+$data = json_decode($rawData, true);
+
+if (!$data) {
+    http_response_code(400);
+    exit("No JSON data received");
+}
+
+$userId = isset($data['user_id']) ? intval($data['user_id']) : null;
+$productId = isset($data['product_id']) ? intval($data['product_id']) : null;
+$duration = isset($data['duration_seconds']) ? intval($data['duration_seconds']) : 0;
 
 if ($productId && $duration > 0) {
     $stmt = $conn->prepare("
