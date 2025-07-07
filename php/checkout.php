@@ -76,12 +76,17 @@ if (session_status() === PHP_SESSION_NONE) {
   <div class="checkout-container">
     <h2>Shopping Cart</h2>
     <div id="cartContainer"></div>
+
     <div style="text-align:right;">
-      <?php if (!isset($_SESSION['username'])): ?>
-        <a href="/php/guest_checkout.php"><button class="btn-checkout">Continue as Guest</button></a>
-      <?php else: ?>
-        <a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>
-      <?php endif; ?>
+      <?php
+      if (isset($_SESSION['username'])) {
+        echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>';
+      } elseif (isset($_SESSION['guest']) && $_SESSION['guest'] === true) {
+        echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed as Guest</button></a>';
+      } else {
+        echo '<a href="/php/guest_checkout.php"><button class="btn-checkout">Continue as Guest</button></a>';
+      }
+      ?>
     </div>
   </div>
 
