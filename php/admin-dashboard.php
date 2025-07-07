@@ -57,19 +57,16 @@ $mostViewedProduct = $conn->query("
       margin: 0;
       padding: 2rem;
     }
-
     h1 {
       font-family: 'Lilita One', cursive;
       font-size: 2.5rem;
       margin-bottom: 2rem;
     }
-
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
     }
-
     .card {
       background-color: rgba(255, 255, 255, 0.1);
       padding: 2rem;
@@ -77,31 +74,26 @@ $mostViewedProduct = $conn->query("
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       text-align: center;
     }
-
     .card h2 {
       font-size: 2rem;
       margin: 0;
     }
-
     .card p {
       margin-top: 1rem;
       font-size: 1.1rem;
       color: #ddd;
     }
-
     a.back-btn {
       color: white;
       text-decoration: underline;
       margin-top: 2rem;
       display: inline-block;
     }
-
     h2.section-title {
       margin-top: 4rem;
       font-size: 1.8rem;
       font-weight: 600;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -110,21 +102,17 @@ $mostViewedProduct = $conn->query("
       border-radius: 10px;
       overflow: hidden;
     }
-
     thead {
       background-color: rgba(255,255,255,0.15);
     }
-
     th, td {
       padding: 1rem;
       text-align: left;
       color: white;
     }
-
     td {
       border-top: 1px solid rgba(255,255,255,0.1);
     }
-
     td:last-child, th:last-child {
       text-align: right;
     }
@@ -229,6 +217,6 @@ $mostViewedProduct = $conn->query("
     </tbody>
   </table>
 
-  <a href="home.php" class="back-btn">← Back to Home</a>
+  <a href="admin-home.php" class="back-btn">← Back to Admin Home</a>
 </body>
 </html>
