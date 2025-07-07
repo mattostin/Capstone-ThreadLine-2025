@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+session_start();
+$productId = 2; // White Shorts product ID (update if needed)
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,13 +79,13 @@
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(item => item.id === 3 && item.size === selectedSize);
+        const existingIndex = cart.findIndex(item => item.id === 2 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
         } else {
           cart.push({
-            id: 3,
+            id: 2,
             name: "White Shorts",
             price: 35,
             quantity: quantity,
@@ -136,5 +139,23 @@
       </form>
     </div>
   </main>
+
+  <!-- ✅ JavaScript View Tracking Logic -->
+  <script>
+    const startTime = Date.now();
+
+    window.addEventListener("beforeunload", function () {
+      const durationSeconds = Math.round((Date.now() - startTime) / 1000);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/track_view.php", false);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      const productId = <?= $productId ?>;
+      const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
+
+      xhr.send(`user_id=${userId}&product_id=${productId}&duration=${durationSeconds}`);
+    });
+  </script>
 </body>
 </html>

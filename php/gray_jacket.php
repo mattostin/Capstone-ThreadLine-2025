@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+session_start();
+$productId = 1; // Gray Jacket product ID
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +73,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: transparent; /* ✅ Removed blue bar */
+      background-color: transparent;
     }
 
     .logo {
@@ -114,13 +117,13 @@
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(item => item.id === 2 && item.size === selectedSize);
+        const existingIndex = cart.findIndex(item => item.id === 1 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
         } else {
           cart.push({
-            id: 2,
+            id: 1,
             name: "Gray Jacket",
             price: 55,
             quantity: quantity,
@@ -176,5 +179,23 @@
       </form>
     </div>
   </main>
+
+  <!-- ✅ JavaScript View Tracker -->
+  <script>
+    const startTime = Date.now();
+
+    window.addEventListener("beforeunload", function () {
+      const durationSeconds = Math.round((Date.now() - startTime) / 1000);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "track_view.php", false);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      const productId = <?= $productId ?>;
+      const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
+
+      xhr.send(`user_id=${userId}&product_id=${productId}&duration=${durationSeconds}`);
+    });
+  </script>
 </body>
 </html>

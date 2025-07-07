@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+session_start();
+$productId = 3; // Green Shorts product ID — update if yours is different
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,5 +164,23 @@
       </form>
     </div>
   </main>
+
+  <!-- ✅ JavaScript View Tracker -->
+  <script>
+    const startTime = Date.now();
+
+    window.addEventListener("beforeunload", function () {
+      const durationSeconds = Math.round((Date.now() - startTime) / 1000);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "track_view.php", false);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      const productId = <?= $productId ?>;
+      const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
+
+      xhr.send(`user_id=${userId}&product_id=${productId}&duration=${durationSeconds}`);
+    });
+  </script>
 </body>
 </html>
