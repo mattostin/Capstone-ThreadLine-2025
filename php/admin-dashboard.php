@@ -41,8 +41,6 @@ $mostViewedProduct = $conn->query("
   ORDER BY views DESC
   LIMIT 1
 ")->fetch_assoc();
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -102,6 +100,33 @@ $conn->close();
       margin-top: 4rem;
       font-size: 1.8rem;
       font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      color: white;
+    }
+
+    td {
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    td:last-child, th:last-child {
+      text-align: right;
     }
   </style>
 </head>
@@ -172,6 +197,24 @@ $conn->close();
     </div>
   </div>
 
-  <a href="home.php" class="back-btn">← Back to Home</a>
-</body>
-</html>
+  <h2 class="section-title">🧵 All Products Overview</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th style="text-align: right;">Price</th>
+        <th style="text-align: right;">Stock</th>
+        <th style="text-align: right;">Views</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      $productResult = $conn->query("
+        SELECT 
+          p.product_name,
+          p.price,
+          p.stock,
+          (SELECT COUNT(*) FROM site_analytics sa WHERE sa.product_id = p.id) AS views
+        FROM products p
+      ");
+      while ($row = $productResult->fet
