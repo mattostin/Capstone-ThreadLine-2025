@@ -1,10 +1,9 @@
 <?php
 session_start();
-require_once "config.php"; // if you have a db config file
+require_once "config.php"; // uses the $conn from config.php
 
 $productId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); // or just use $conn from config.php
 $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
 $stmt->bind_param("i", $productId);
 $stmt->execute();
@@ -55,8 +54,8 @@ if (!$product) {
   <main>
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="<?= $product['image_front'] ?>" alt="<?= $product['product_name'] ?> Front">
-        <img src="<?= $product['image_back'] ?>" alt="<?= $product['product_name'] ?> Back">
+        <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Front">
+        <img src="<?= htmlspecialchars($product['image_back']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Back">
       </div>
       <p><?= htmlspecialchars($product['product_name']) ?></p>
       <strong>$<?= number_format($product['price'], 2) ?></strong>
