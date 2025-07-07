@@ -11,11 +11,36 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch metrics
+// Product metrics
 $totalProducts = $conn->query("SELECT COUNT(*) as total FROM products")->fetch_assoc()['total'];
 $outOfStock = $conn->query("SELECT COUNT(*) as total FROM products WHERE stock = 0")->fetch_assoc()['total'];
 $lowStock = $conn->query("SELECT COUNT(*) as total FROM products WHERE stock BETWEEN 1 AND 2")->fetch_assoc()['total'];
 $inventoryValue = $conn->query("SELECT SUM(price * stock) as total FROM products")->fetch_assoc()['total'];
+
+// User metrics
+$totalUsers = $conn->query("SELECT COUNT(*) as total FROM users")->fetch_assoc()['total'];
+$loggedInUsers = $conn->query("SELECT COUNT(*) as total FROM users WHERE is_logged_in = 1")->fetch_assoc()['total'];
+
+// Order metrics
+$totalOrders = $conn->query("SELECT COUNT(*) as total FROM orders")->fetch_assoc()['total'];
+$totalRevenue = $conn->query("SELECT SUM(price * quantity) as total FROM order_items")->fetch_assoc()['total'];
+
+// Site analytics
+$totalPageviews = $conn->query("SELECT COUNT(*) as total FROM site_analytics")->fetch_assoc()['total'];
+$avgSessionTime = $conn->query("SELECT AVG(duration_seconds) as avg FROM site_analytics")->fetch_assoc()['avg'];
+$activeUsers24h = $conn->query("
+  SELECT COUNT(DISTINCT user_id) as count
+  FROM site_analytics
+  WHERE timestamp >= NOW() - INTERVAL 1 DAY
+")->fetch_assoc()['count'];
+$mostViewedProduct = $conn->query("
+  SELECT p.product_name, COUNT(*) as views
+  FROM site_analytics sa
+  JOIN products p ON sa.product_id = p.id
+  GROUP BY sa.product_id
+  ORDER BY views DESC
+  LIMIT 1
+")->fetch_assoc();
 
 $conn->close();
 ?>
@@ -72,11 +97,18 @@ $conn->close();
       margin-top: 2rem;
       display: inline-block;
     }
+
+    h2.section-title {
+      margin-top: 4rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <h1>🛠️ Admin Dashboard</h1>
 
+  <h2 class="section-title">📦 Product Stats</h2>
   <div class="dashboard-grid">
     <div class="card">
       <h2><?= $totalProducts ?></h2>
@@ -93,6 +125,50 @@ $conn->close();
     <div class="card">
       <h2>$<?= number_format($inventoryValue, 2) ?></h2>
       <p>Total Inventory Value</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">👤 User Activity</h2>
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2><?= $totalUsers ?></h2>
+      <p>Registered Users</p>
+    </div>
+    <div class="card">
+      <h2><?= $loggedInUsers ?></h2>
+      <p>Currently Logged In</p>
+    </div>
+    <div class="card">
+      <h2><?= $activeUsers24h ?></h2>
+      <p>Active in Last 24h</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">🧾 Orders & Revenue</h2>
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2><?= $totalOrders ?></h2>
+      <p>Total Orders</p>
+    </div>
+    <div class="card">
+      <h2>$<?= number_format($totalRevenue, 2) ?></h2>
+      <p>Total Revenue</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">📈 Site Analytics</h2>
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2><?= $totalPageviews ?></h2>
+      <p>Total Page Views</p>
+    </div>
+    <div class="card">
+      <h2><?= round($avgSessionTime, 1) ?>s</h2>
+      <p>Avg. Session Duration</p>
+    </div>
+    <div class="card">
+      <h2><?= $mostViewedProduct['product_name'] ?></h2>
+      <p>Most Viewed Product (<?= $mostViewedProduct['views'] ?> views)</p>
     </div>
   </div>
 
