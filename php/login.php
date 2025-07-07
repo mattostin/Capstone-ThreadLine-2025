@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $updateStmt->close();
 
             if ($is_admin == 1) {
-                header("Location: admin_dashboard.php");
+                header("Location: admin-dashboard.php");
                 exit;
             } else {
                 header("Location: $redirect");
