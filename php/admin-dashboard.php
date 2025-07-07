@@ -96,6 +96,6 @@ $conn->close();
     </div>
   </div>
 
-  <a href="index.php" class="back-btn">← Back to Home</a>
+  <a href="home.php" class="back-btn">← Back to Home</a>
 </body>
 </html>
