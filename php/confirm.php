@@ -6,12 +6,11 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Get posted values (in production, use actual $_POST)
-$fullname  = htmlspecialchars($_POST['fullname'] ?? "Guest");
-$address   = htmlspecialchars($_POST['address'] ?? "N/A");
-$zip       = htmlspecialchars($_POST['zip'] ?? "00000");
-$email     = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
-$cartData  = json_decode($_POST['cart'] ?? '[]', true);
+$fullname = htmlspecialchars($_POST['fullname'] ?? "Guest");
+$address  = htmlspecialchars($_POST['address'] ?? "N/A");
+$zip      = htmlspecialchars($_POST['zip'] ?? "00000");
+$email    = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
+$cartData = json_decode($_POST['cart'] ?? '[]', true);
 
 // Connect to database
 $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
@@ -19,32 +18,56 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Update stock for each item in cart
-if (is_array($cartData)) {
-  foreach ($cartData as $item) {
-    $productName = $item['name'];
-    $quantity = (int)$item['quantity'];
+// Check stock availability
+$outOfStockItems = [];
+foreach ($cartData as $item) {
+  $productName = $item['name'];
+  $quantity = (int)$item['quantity'];
 
-    // Get the product ID and stock
-    $stmt = $conn->prepare("SELECT id, stock FROM products WHERE product_name = ?");
-    $stmt->bind_param("s", $productName);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $product = $result->fetch_assoc();
+  $stmt = $conn->prepare("SELECT stock FROM products WHERE product_name = ?");
+  $stmt->bind_param("s", $productName);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $product = $result->fetch_assoc();
+  $stmt->close();
 
-    if ($product && $product['stock'] >= $quantity) {
-      $productId = $product['id'];
+  if (!$product || $product['stock'] < $quantity) {
+    $outOfStockItems[] = $productName;
+  }
+}
 
-      // Deduct the stock
-      $updateStmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
-      $updateStmt->bind_param("ii", $quantity, $productId);
-      $updateStmt->execute();
-      $updateStmt->close();
-    }
-    $stmt->close();
+if (!empty($outOfStockItems)) {
+  echo "<h2 style='text-align:center;margin-top:4rem;font-family:Poppins,sans-serif;color:red;'>❌ Out of Stock</h2>";
+  echo "<p style='text-align:center;font-family:Poppins,sans-serif;'>The following item(s) are no longer available in the quantity you selected:</p><ul style='text-align:center;font-family:Poppins,sans-serif;list-style:none;'>";
+  foreach ($outOfStockItems as $item) {
+    echo "<li><strong>$item</strong></li>";
+  }
+  echo "</ul><p style='text-align:center;font-family:Poppins,sans-serif;'><a href='/php/codeForBothJackets.php'>← Go back to Shop</a></p>";
+  exit;
+}
+
+// All items in stock: proceed with deduction
+foreach ($cartData as $item) {
+  $productName = $item['name'];
+  $quantity = (int)$item['quantity'];
+
+  $stmt = $conn->prepare("SELECT id FROM products WHERE product_name = ?");
+  $stmt->bind_param("s", $productName);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $product = $result->fetch_assoc();
+  $stmt->close();
+
+  if ($product) {
+    $productId = $product['id'];
+    $updateStmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
+    $updateStmt->bind_param("ii", $quantity, $productId);
+    $updateStmt->execute();
+    $updateStmt->close();
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,9 +88,6 @@ if (is_array($cartData)) {
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
     ul {
       padding: 0;
@@ -76,9 +96,9 @@ if (is_array($cartData)) {
     li {
       margin-bottom: 1rem;
       padding: 1rem;
-      border-radius: 8px;
       display: flex;
       justify-content: space-between;
+      border-radius: 8px;
     }
     .summary {
       font-size: 1.2rem;
@@ -111,47 +131,31 @@ if (is_array($cartData)) {
     <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
-          <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
-        <?php endif; ?>
-        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="/php/logout.php">Logout</a></li>
-      <?php else: ?>
-        <li><a href="/php/login.php">Login</a></li>
-        <li><a href="/php/signup.php">Signup</a></li>
-      <?php endif; ?>
+      <li><a href="/php/logout.php">Logout</a></li>
     </ul>
   </header>
 
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
-    <p>Thank you, <strong><?= $fullname ?></strong>! Your order has been successfully placed and will be shipped to:</p>
+    <p>Thank you, <strong><?= $fullname ?></strong>! Your order will be shipped to:</p>
     <p><?= $address ?><br><?= $zip ?></p>
     <h3>Order Summary:</h3>
-
     <?php
     $total = 0;
-    if (is_array($cartData)) {
-      echo "<ul>";
-      foreach ($cartData as $item) {
-        $name = htmlspecialchars($item['name']);
-        $size = htmlspecialchars($item['size']);
-        $qty  = (int)$item['quantity'];
-        $price = (float)$item['price'];
-        $subtotal = $qty * $price;
-        $total += $subtotal;
-        echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
-      }
-      echo "</ul>";
-      echo "<div class='summary'>Total Paid: $" . number_format($total, 2) . "</div>";
-    } else {
-      echo "<p>❌ Error reading cart.</p>";
+    echo "<ul>";
+    foreach ($cartData as $item) {
+      $name = htmlspecialchars($item['name']);
+      $size = htmlspecialchars($item['size']);
+      $qty  = (int)$item['quantity'];
+      $price = (float)$item['price'];
+      $subtotal = $qty * $price;
+      $total += $subtotal;
+      echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
     }
+    echo "</ul>";
+    echo "<div class='summary'>Total Paid: $" . number_format($total, 2) . "</div>";
     ?>
-
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong><?= $email ?></strong>.</p>
-
     <div class="confirmation-buttons">
       <a href="/php/codeForBothJackets.php">Continue Shopping</a>
       <a href="/php/logout.php">Logout</a>
