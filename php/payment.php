@@ -1,190 +1,80 @@
 <?php
-// Force HTTPS
-if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
-    $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    header("Location: $redirect");
-    exit();
-}
-
-// Secure session settings
-session_set_cookie_params([
-  'secure' => true,
-  'httponly' => true,
-  'samesite' => 'Strict'
-]);
 session_start();
-
-// 🚨 Block access if not logged in
-if (!isset($_SESSION['username'])) {
-  header("Location: ../php/login.php?redirect=payment.php");
-  exit();
+if (!isset($_SESSION['user_id'])) {
+  header("Location: login.php");
+  exit;
 }
 
-// CSRF token
-if (empty($_SESSION['csrf_token'])) {
-  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+// Database connection
+$conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
 }
-$csrf_token = $_SESSION['csrf_token'];
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['cart_data'])) {
+  $user_id = $_SESSION['user_id'];
+  $cart = json_decode($_POST['cart_data'], true);
+
+  // Create order
+  $order_sql = "INSERT INTO orders (user_id, order_date) VALUES (?, NOW())";
+  $stmt = $conn->prepare($order_sql);
+  $stmt->bind_param("i", $user_id);
+  $stmt->execute();
+  $order_id = $stmt->insert_id;
+  $stmt->close();
+
+  // Insert order items and update stock
+  foreach ($cart as $item) {
+    $product_id = $item['id'];
+    $quantity = $item['quantity'];
+    $price = $item['price'];
+
+    // Insert into order_items
+    $item_sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+    $item_stmt = $conn->prepare($item_sql);
+    $item_stmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
+    $item_stmt->execute();
+    $item_stmt->close();
+
+    // Update stock
+    $stock_sql = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
+    $stock_stmt = $conn->prepare($stock_sql);
+    $stock_stmt->bind_param("iii", $quantity, $product_id, $quantity);
+    $stock_stmt->execute();
+    $stock_stmt->close();
+  }
+
+  $conn->close();
+  echo "<h2>✅ Payment successful! Your order has been placed.</h2>";
+  echo "<script>localStorage.removeItem('cart');</script>";
+  exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Payment - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    .payment-container {
-      max-width: 700px;
-      margin: 4rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #ffffffdd;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
-    }
-
-    h2 {
-      margin-bottom: 2rem;
-      font-size: 2rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      display: block;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    select {
-      padding: 0.65rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      width: 100%;
-    }
-
-    .flex-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .flex-row > div {
-      flex: 1;
-      min-width: 120px;
-    }
-
-    button[type="submit"] {
-      background-color: #007bff;
-      color: white;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 1rem;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <header class="navbar">
-    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-<?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
-      <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
-<?php endif; ?>
-      <li><a href="/php/logout.php">Logout</a></li>
-    </ul>
-  </header>
-
-  <main class="payment-container">
-    <h2>Payment and Billing</h2>
-    <form action="../php/confirm.php" method="post">
-      <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-
-      <div>
-        <label for="fullname">Full Name</label>
-        <input type="text" id="fullname" name="fullname" required>
-      </div>
-
-      <div>
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address" required>
-      </div>
-
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-
-      <div>
-        <label for="card">Credit Card Number</label>
-        <input type="text" id="card" name="card" required>
-      </div>
-
-      <div class="flex-row">
-        <div>
-          <label for="expiryMonth">Exp. Month</label>
-          <select id="expiryMonth" name="expiryMonth" required>
-            <option value="" disabled selected>MM</option>
-            <?php for ($i = 1; $i <= 12; $i++): ?>
-              <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
-            <?php endfor; ?>
-          </select>
-        </div>
-
-        <div>
-          <label for="expiryYear">Exp. Year</label>
-          <select id="expiryYear" name="expiryYear" required>
-            <option value="" disabled selected>YYYY</option>
-            <?php
-              $year = date('Y');
-              for ($i = 0; $i < 10; $i++) {
-                echo "<option value='".($year + $i)."'>".($year + $i)."</option>";
-              }
-            ?>
-          </select>
-        </div>
-
-        <div>
-          <label for="cvv">CVV</label>
-          <input type="text" id="cvv" name="cvv" maxlength="4" required>
-        </div>
-
-        <div>
-          <label for="zip">ZIP Code</label>
-          <input type="text" id="zip" name="zip" maxlength="10" required>
-        </div>
-      </div>
-
-      <button type="submit">Submit Payment</button>
+  <div class="payment-container">
+    <h2>Enter Payment Details</h2>
+    <form method="POST" id="payment-form">
+      <input type="text" name="cardholder" placeholder="Cardholder Name" required><br>
+      <input type="text" name="cardnumber" placeholder="Card Number" required><br>
+      <input type="text" name="expiry" placeholder="MM/YY" required><br>
+      <input type="text" name="cvv" placeholder="CVV" required><br>
+      <input type="hidden" name="cart_data" id="cart_data_field">
+      <button type="submit">Pay Now</button>
     </form>
-  </main>
+  </div>
 
   <script>
-    document.querySelector("form").addEventListener("submit", function () {
-      const cart = localStorage.getItem("cart");
-      if (cart) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "cart";
-        input.value = cart;
-        this.appendChild(input);
-      }
-    });
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    document.getElementById('cart_data_field').value = JSON.stringify(cart);
   </script>
 </body>
 </html>
