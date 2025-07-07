@@ -1,6 +1,6 @@
 <?php
 session_start();
-$productId = 2; // White Shorts product ID (update if needed)
+$productId = 2; // White Shorts product ID
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -147,14 +147,19 @@ $productId = 2; // White Shorts product ID (update if needed)
     window.addEventListener("beforeunload", function () {
       const durationSeconds = Math.round((Date.now() - startTime) / 1000);
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/track_view.php", false);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
       const productId = <?= $productId ?>;
       const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
 
-      xhr.send(`user_id=${userId}&product_id=${productId}&duration=${durationSeconds}`);
+      const data = JSON.stringify({
+        user_id: userId,
+        product_id: productId,
+        duration_seconds: durationSeconds
+      });
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/track_view.php", false);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(data);
     });
   </script>
 </body>
