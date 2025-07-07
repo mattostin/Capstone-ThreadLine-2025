@@ -132,7 +132,7 @@
         navigator.sendBeacon("/php/track_view.php", JSON.stringify({
           user_id: userId,
           product_id: productId,
-          page_visited: pageVisited,
+          page_visited: pageVisited, // ✅ CORRECT key
           session_start: sessionStart,
           session_end: sessionEnd,
           duration_seconds: durationSeconds
