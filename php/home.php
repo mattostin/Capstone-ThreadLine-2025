@@ -11,16 +11,20 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 <head>
   <meta charset="UTF-8" />
   <title>Welcome - ThreadLine</title>
+
+  <!-- Google Font: Lilita One -->
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
+
   <style>
     body {
       margin: 0;
-      font-family: 'Lilita One', sans-serif;
+      font-family: 'Lilita One', cursive;
       background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
       background-repeat: no-repeat;
       background-attachment: fixed;
       min-height: 100vh;
-      color: #fff;
+      color: white;
     }
 
     .navbar {
@@ -32,8 +36,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .logo {
-      font-family: 'Lilita One', cursive;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       color: white;
       text-decoration: none;
     }
@@ -44,10 +47,15 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       gap: 1.5rem;
     }
 
-    .nav-links li a, .nav-links li {
+    .nav-links li {
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links li a {
       color: white;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: bold;
       transition: 0.3s;
     }
 
@@ -66,25 +74,27 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .hero h1 {
-      font-size: 3rem;
+      font-size: 3.2rem;
       margin-bottom: 1rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
     }
 
     .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2.5rem;
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
     }
 
     .shop-button {
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
+      padding: 1rem 2.2rem;
+      font-size: 1.2rem;
       background: white;
       color: #075eb6;
       border: none;
       border-radius: 12px;
       text-decoration: none;
       font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transition: all 0.3s ease;
     }
 
@@ -112,7 +122,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 
   <section class="hero">
     <h1>Welcome back, <?= $username ?> 👋</h1>
-    <p>Check out our newest drops and exclusive styles just for you.</p>
+    <p>Check out our latest drops — from clean jackets to everyday comfort. Your style starts here.</p>
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
 </body>
