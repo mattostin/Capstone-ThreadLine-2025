@@ -176,8 +176,8 @@ $productId = 3; // Unique product ID for Green Shorts
   <main class="product-fullscreen">
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="../images/green-front.png" alt="Green Shorts Front">
-        <img src="../images/green-back.png" alt="Green Shorts Back">
+        <img src="../images/greenShortFront.png" alt="Green Shorts Front">
+        <img src="../images/greenShortBack.png" alt="Green Shorts Back">
       </div>
       <p>Men's Softness Sport Shorts - Green</p>
       <strong>$35</strong>
