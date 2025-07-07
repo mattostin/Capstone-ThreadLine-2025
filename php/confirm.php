@@ -6,14 +6,53 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Dummy data for testing — replace with $_POST[...] in production
-$fullname  = "Matthew Ostin";
-$address   = "25092 anvil circle";
-$zip       = "92653";
-$email     = "mattostin14@gmail.com";
-$cartData = [
-  ["name" => "Gray Jacket", "size" => "L", "quantity" => 1, "price" => 55.00]
-];
+// 🚫 Require login
+if (!isset($_SESSION['username'])) {
+  header("Location: login.php");
+  exit;
+}
+
+// ✅ Sanitize & get form data
+$fullname = htmlspecialchars($_POST['fullname'] ?? '');
+$address = htmlspecialchars($_POST['address'] ?? '');
+$zip = htmlspecialchars($_POST['zip'] ?? '');
+$email = htmlspecialchars($_POST['email'] ?? '');
+$cartJson = $_POST['cart'] ?? '[]';
+$cartData = json_decode($cartJson, true);
+$total = 0;
+
+// ✅ Connect to DB
+$conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
+if ($conn->connect_error) {
+  die("DB Connection failed: " . $conn->connect_error);
+}
+
+// ✅ Reduce inventory stock
+if (is_array($cartData)) {
+  foreach ($cartData as $item) {
+    $product_id = (int) $item['id'];
+    $size = $conn->real_escape_string($item['size']);
+    $qty = (int) $item['quantity'];
+    $price = (float) $item['price'];
+    $total += $qty * $price;
+
+    $stmt = $conn->prepare("UPDATE inventory SET stock = stock - ? WHERE product_id = ? AND size = ?");
+    $stmt->bind_param("iis", $qty, $product_id, $size);
+    $stmt->execute();
+    $stmt->close();
+  }
+
+  // ✅ Insert order record (optional)
+  $username = $conn->real_escape_string($_SESSION['username']);
+  $stmt = $conn->prepare("INSERT INTO orders (username, fullname, address, email, total, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+  $stmt->bind_param("ssssd", $username, $fullname, $address, $email, $total);
+  $stmt->execute();
+  $stmt->close();
+} else {
+  $cartData = [];
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -109,8 +148,7 @@ $cartData = [
     <h3>Order Summary:</h3>
 
     <?php
-    $total = 0;
-    if (is_array($cartData)) {
+    if (!empty($cartData)) {
       echo "<ul>";
       foreach ($cartData as $item) {
         $name = htmlspecialchars($item['name']);
@@ -118,7 +156,6 @@ $cartData = [
         $qty  = (int)$item['quantity'];
         $price = (float)$item['price'];
         $subtotal = $qty * $price;
-        $total += $subtotal;
         echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
       }
       echo "</ul>";
