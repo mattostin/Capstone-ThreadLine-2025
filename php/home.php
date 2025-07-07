@@ -107,9 +107,6 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Secret red pixel link */
-    
   </style>
 </head>
 <body>
@@ -118,6 +115,9 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+      <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+        <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
+      <?php endif; ?>
       <li>Hi, <?= $username ?></li>
       <li><a href="/php/logout.php">Logout</a></li>
     </ul>
@@ -128,6 +128,5 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <p>Check out our latest drops — from clean jackets to everyday comfort. Your style starts here.</p>
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
-
 </body>
 </html>

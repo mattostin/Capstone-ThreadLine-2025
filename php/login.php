@@ -46,6 +46,14 @@ echo <<<HTML
   <ul class="nav-links">
     <li><a href="../html/index.html">Home</a></li>
     <li><a href="codeForBothJackets.php">Shop</a></li>
+HTML;
+
+// ✅ Conditionally show dashboard if admin is already logged in
+if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
+  echo '<li><a href="admin-dashboard.php">Dashboard</a></li>';
+}
+
+echo <<<HTML
     <li><a href="signup.php">Signup</a></li>
   </ul>
 </nav>
@@ -81,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
             $_SESSION["is_admin"] = $is_admin;
+            $_SESSION["email"] = $email;
 
             // ✅ Update tracking info
             $now = date('Y-m-d H:i:s');

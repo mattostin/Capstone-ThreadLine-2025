@@ -62,7 +62,6 @@ $cartData = [
       text-align: right;
     }
 
-    /* 🔵 BUTTONS CONTAINER STYLE */
     .confirmation-buttons {
       display: flex;
       justify-content: center;
@@ -70,7 +69,6 @@ $cartData = [
       margin-top: 2.5rem;
     }
 
-    /* 🔵 BUTTON STYLE */
     .confirmation-buttons a {
       text-decoration: none;
       background-color: #075eb6;
@@ -81,19 +79,20 @@ $cartData = [
       transition: background-color 0.3s ease;
     }
 
-    /* 🔵 BUTTON HOVER EFFECT */
     .confirmation-buttons a:hover {
       background-color: #054a8e;
     }
   </style>
 </head>
 <body>
-  <!-- ✅ NAVIGATION BAR -->
   <header class="navbar">
     <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+          <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
+        <?php endif; ?>
         <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
         <li><a href="/php/logout.php">Logout</a></li>
       <?php else: ?>
@@ -103,7 +102,6 @@ $cartData = [
     </ul>
   </header>
 
-  <!-- ✅ CONFIRMATION MESSAGE -->
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong><?= $fullname ?></strong>! Your order has been successfully placed and will be shipped to:</p>
@@ -132,7 +130,6 @@ $cartData = [
 
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong><?= $email ?></strong>.</p>
 
-    <!-- 🔵 BUTTONS IN HTML -->
     <div class="confirmation-buttons">
       <a href="/php/codeForBothJackets.php">Continue Shopping</a>
       <a href="/php/logout.php">Logout</a>

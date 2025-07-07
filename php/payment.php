@@ -103,6 +103,9 @@ $csrf_token = $_SESSION['csrf_token'];
     <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+<?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+      <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
+<?php endif; ?>
       <li><a href="/php/logout.php">Logout</a></li>
     </ul>
   </header>

@@ -45,6 +45,13 @@ echo <<<HTML
   <ul class="nav-links">
     <li><a href="/html/index.html">Home</a></li>
     <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+HTML;
+
+if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
+  echo '<li><a href="/php/admin-dashboard.php">Dashboard</a></li>';
+}
+
+echo <<<HTML
     <li><a href="/php/login.php">Login</a></li>
     <li><a href="/php/signup.php">Signup</a></li>
   </ul>
