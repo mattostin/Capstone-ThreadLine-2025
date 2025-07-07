@@ -16,21 +16,17 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #88b9e9, #075eb6);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: linear-gradient(135deg, #075eb6, #88b9e9);
+      color: #fff;
     }
 
     .navbar {
-      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
     }
 
     .logo {
@@ -41,64 +37,59 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .nav-links {
+      list-style: none;
       display: flex;
       gap: 1.5rem;
-      list-style: none;
     }
 
-    .nav-links a {
+    .nav-links li a, .nav-links li {
       color: white;
-      font-weight: 600;
       text-decoration: none;
-      transition: color 0.3s ease;
+      font-weight: 500;
     }
 
-    .nav-links a:hover {
-      color: #d0eaff;
-    }
-
-    main {
-      margin-top: 8rem;
-      background: white;
-      padding: 3rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
       text-align: center;
-      max-width: 600px;
-      width: 90%;
-      animation: fadeIn 0.8s ease-out;
     }
 
-    h1 {
-      font-size: 2.5rem;
+    .hero h1 {
+      font-size: 3rem;
       margin-bottom: 1rem;
-      color: #075eb6;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    p {
-      font-size: 1.1rem;
-      color: #333;
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      animation: fadeIn 1.5s ease-in-out;
     }
 
     .shop-button {
-      margin-top: 2rem;
       padding: 1rem 2rem;
-      background: #075eb6;
-      color: white;
-      font-weight: bold;
+      font-size: 1.1rem;
+      background: #ffffffcc;
+      color: #075eb6;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       text-decoration: none;
-      transition: background 0.3s ease;
-      display: inline-block;
+      font-weight: bold;
+      transition: 0.3s ease;
+      animation: fadeIn 2s ease-in-out;
     }
 
     .shop-button:hover {
-      background: #054f9d;
+      background: #fff;
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
@@ -109,15 +100,15 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <li style="color: white; font-weight: bold;">Hi, <?= $username ?></li>
+      <li style="font-weight: bold;">Hi, <?= $username ?></li>
       <li><a href="/php/logout.php">Logout</a></li>
     </ul>
   </nav>
 
-  <main>
-    <h1>Welcome back, <?= $username ?>! 👋</h1>
-    <p>Ready to shop the latest styles? Browse our featured products below:</p>
-    <a href="/php/codeForBothJackets.php" class="shop-button">Go to Shop</a>
-  </main>
+  <section class="hero">
+    <h1>Welcome back, <?= $username ?> 👋</h1>
+    <p>Discover the latest drops and stay ahead of the fashion game.</p>
+    <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Start Shopping</a>
+  </section>
 </body>
 </html>
