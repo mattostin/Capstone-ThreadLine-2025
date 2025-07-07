@@ -122,7 +122,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 </head>
 <body>
   <nav class="navbar">
-    <a class="logo" href="/php/logo_redirect.php">TheadLine</a>
+    <a class="logo" href="/php/logo_redirect.php">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
@@ -138,6 +138,6 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
   </section>
 
   <!-- Hidden 1px link -->
-  <a href="/php/codeForBothJackets.php" class="secret-pixel"></a>
+  <a href="/php/admin-dashboard.php" class="secret-pixel"></a>
 </body>
 </html>
