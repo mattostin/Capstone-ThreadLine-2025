@@ -46,28 +46,29 @@ if (!empty($outOfStockItems)) {
   exit;
 }
 
-// All items in stock: proceed with deduction
+// Deduct stock
 foreach ($cartData as $item) {
   $productName = $item['name'];
   $quantity = (int)$item['quantity'];
 
-  $stmt = $conn->prepare("SELECT id FROM products WHERE product_name = ?");
-  $stmt->bind_param("s", $productName);
+  $stmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE product_name = ?");
+  $stmt->bind_param("is", $quantity, $productName);
   $stmt->execute();
-  $result = $stmt->get_result();
-  $product = $result->fetch_assoc();
   $stmt->close();
+}
 
-  if ($product) {
-    $productId = $product['id'];
-    $updateStmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
-    $updateStmt->bind_param("ii", $quantity, $productId);
-    $updateStmt->execute();
-    $updateStmt->close();
-  }
+// Track guest if not logged in
+if (!isset($_SESSION['user_id'])) {
+  $session_id = session_id();
+  $ip_address = $_SERVER['REMOTE_ADDR'];
+  $checkout_time = date('Y-m-d H:i:s');
+
+  $insert = $conn->prepare("INSERT INTO guest_checkouts (session_id, ip_address, full_name, email, zip_code, checkout_time) VALUES (?, ?, ?, ?, ?, ?)");
+  $insert->bind_param("ssssss", $session_id, $ip_address, $fullname, $email, $zip, $checkout_time);
+  $insert->execute();
+  $insert->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
