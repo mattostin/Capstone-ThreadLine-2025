@@ -45,6 +45,11 @@ if (isset($_SESSION['user_id'])) {
       padding: 0 2rem;
     }
 
+    .product-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
     .product-box {
       background-color: #fff;
       padding: 1rem;
@@ -52,6 +57,11 @@ if (isset($_SESSION['user_id'])) {
       text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       font-family: 'Poppins', sans-serif;
+      transition: transform 0.2s ease;
+    }
+
+    .product-box:hover {
+      transform: scale(1.02);
     }
 
     .product-box img {
@@ -103,16 +113,14 @@ if (isset($_SESSION['user_id'])) {
       if ($result->num_rows > 0):
         while ($product = $result->fetch_assoc()):
       ?>
-        <div class="product-box">
-          <a href="product.php?id=<?= $product['id'] ?>">
+        <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
+          <div class="product-box">
             <img src="<?= $product['image_front'] ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
-          </a>
-          <h3><?= htmlspecialchars($product['product_name']) ?></h3>
-          <p>$<?= number_format($product['price'], 2) ?></p>
-          <a href="product.php?id=<?= $product['id'] ?>">
+            <h3><?= htmlspecialchars($product['product_name']) ?></h3>
+            <p>$<?= number_format($product['price'], 2) ?></p>
             <button>View Product</button>
-          </a>
-        </div>
+          </div>
+        </a>
       <?php
         endwhile;
       else:
