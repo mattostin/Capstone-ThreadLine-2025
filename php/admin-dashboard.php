@@ -217,4 +217,18 @@ $mostViewedProduct = $conn->query("
           (SELECT COUNT(*) FROM site_analytics sa WHERE sa.product_id = p.id) AS views
         FROM products p
       ");
-      while ($row = $productResult->fet
+      while ($row = $productResult->fetch_assoc()):
+      ?>
+        <tr>
+          <td><?= htmlspecialchars($row['product_name']) ?></td>
+          <td style="text-align: right;">$<?= number_format($row['price'], 2) ?></td>
+          <td style="text-align: right;"><?= $row['stock'] ?></td>
+          <td style="text-align: right;"><?= $row['views'] ?></td>
+        </tr>
+      <?php endwhile; $conn->close(); ?>
+    </tbody>
+  </table>
+
+  <a href="home.php" class="back-btn">← Back to Home</a>
+</body>
+</html>
