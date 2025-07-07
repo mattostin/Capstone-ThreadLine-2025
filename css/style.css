@@ -62,8 +62,9 @@ html, body {
 }
 
 .hero h1 {
-  font-family: 'Lilita One', cursive;
+  font-family: 'Poppins', sans-serif;
   font-size: 4rem;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 
