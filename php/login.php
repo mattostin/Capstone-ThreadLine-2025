@@ -24,7 +24,7 @@ $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
-// ✅ Always redirect to shop after login
+// ✅ Default redirect for regular users
 $redirect = "/php/codeForBothJackets.php";
 
 // HTML Header
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT id, username, password FROM users WHERE email = ?";
+    $sql = "SELECT id, username, password, is_admin FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
@@ -74,14 +74,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows === 1) {
-        $stmt->bind_result($id, $username, $hashed_password);
+        $stmt->bind_result($id, $username, $hashed_password, $is_admin);
         $stmt->fetch();
 
         if (password_verify($password, $hashed_password)) {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
+            $_SESSION["is_admin"] = $is_admin;
 
-            // ✅ Update activity tracking info
+            // ✅ Update tracking info
             $now = date('Y-m-d H:i:s');
             $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -91,8 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $updateStmt->execute();
             $updateStmt->close();
 
-            header("Location: $redirect");
-            exit;
+            if ($is_admin == 1) {
+                header("Location: admin_dashboard.php");
+                exit;
+            } else {
+                header("Location: $redirect");
+                exit;
+            }
         } else {
             echo "<h2>❌ Invalid email or password.</h2>";
         }
