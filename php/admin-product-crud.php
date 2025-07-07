@@ -55,76 +55,76 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
   <link rel="stylesheet" href="css/style.css">
   <style>
     .admin-container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffffdd;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    font-family: 'Poppins', sans-serif;
-  }
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #ffffffdd;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      font-family: 'Poppins', sans-serif;
+    }
 
-  form input, form button {
-    padding: 0.75rem;
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-    width: 100%;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
+    form input, form button {
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-  form button {
-    background-color: #075eb6;
-    color: white;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
+    form button {
+      background-color: #075eb6;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  form button:hover {
-    background-color: #054a8e;
-  }
+    form button:hover {
+      background-color: #054a8e;
+    }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 2rem;
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
 
-  th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
-  }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+    }
 
-  .actions {
-    display: flex;
-    gap: 0.5rem;
-  }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
 
-  .actions .delete {
-    background-color: #e53e3e;
-    color: white;
-  }
+    .actions .delete {
+      background-color: #e53e3e;
+      color: white;
+    }
 
-  .actions .edit {
-    background-color: #3182ce;
-    color: white;
-  }
+    .actions .edit {
+      background-color: #3182ce;
+      color: white;
+    }
 
-  .actions button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+    .actions button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  h1, h2 {
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
+    h1, h2 {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body class="admin-page">
@@ -169,7 +169,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
               <button class="edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
             </td>
           </tr>
-          <tr id="edit-<?= $p['id'] ?>" class="edit-form">
+          <tr id="edit-<?= $p['id'] ?>" class="edit-form" style="display:none">
             <td colspan="5">
               <form method="POST">
                 <input type="hidden" name="action" value="edit">
