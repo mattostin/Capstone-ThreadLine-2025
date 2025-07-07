@@ -49,7 +49,6 @@ $cartData = [
 
     li {
       margin-bottom: 1rem;
-      background: #f3f3f3;
       padding: 1rem;
       border-radius: 8px;
       display: flex;
