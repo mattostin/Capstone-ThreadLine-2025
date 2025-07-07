@@ -17,7 +17,7 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
 }
 $_SESSION['LAST_ACTIVITY'] = time();
 
-// Update last_activity in DB
+// Update last_activity in the DB
 if (isset($_SESSION['user_id'])) {
   date_default_timezone_set('America/Los_Angeles');
   $conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
@@ -39,47 +39,7 @@ if (isset($_SESSION['user_id'])) {
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
   <link rel="stylesheet" href="/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #075eb6;
-    }
-
-    .logo {
-      font-family: 'Lilita One', cursive;
-      font-size: 1.5rem;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .nav-links li a, .nav-links li span {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .nav-links li a:hover {
-      text-decoration: underline;
-    }
-
     .checkout-container {
       max-width: 1200px;
       margin: 4rem auto;
@@ -115,16 +75,13 @@ if (isset($_SESSION['user_id'])) {
     #clear-cart-btn, #payment-btn {
       margin-top: 2rem;
       padding: 0.75rem 1.5rem;
+      background-color: #e74c3c;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
-    }
-
-    #clear-cart-btn {
-      background-color: #e74c3c;
-      color: white;
       margin-right: 1rem;
     }
 
@@ -134,7 +91,6 @@ if (isset($_SESSION['user_id'])) {
 
     #payment-btn {
       background-color: #075eb6;
-      color: white;
     }
 
     #payment-btn:hover {
@@ -156,6 +112,7 @@ if (isset($_SESSION['user_id'])) {
       margin-top: 2rem;
     }
   </style>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -209,7 +166,7 @@ if (isset($_SESSION['user_id'])) {
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
       <li><a href="/php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
-        <li><span>Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></span></li>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
         <li><a href="/php/logout.php">Logout</a></li>
       <?php else: ?>
         <li><a href="/php/login.php">Login</a></li>
