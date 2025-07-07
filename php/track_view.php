@@ -10,7 +10,6 @@ if ($conn->connect_error) {
     exit("DB connection failed");
 }
 
-// Read raw JSON input (for sendBeacon)
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
 
@@ -21,14 +20,16 @@ if (!$data) {
 
 $userId = isset($data['user_id']) ? intval($data['user_id']) : null;
 $productId = isset($data['product_id']) ? intval($data['product_id']) : null;
-$duration = isset($data['duration']) ? intval($data['duration']) : 0;
+$pageVisited = isset($data['page']) ? $data['page'] : null;
+$duration = isset($data['duration_seconds']) ? intval($data['duration_seconds']) : 0;
 
 if ($productId && $duration > 0) {
     $stmt = $conn->prepare("
-        INSERT INTO site_analytics (user_id, product_id, duration_seconds, timestamp)
-        VALUES (?, ?, ?, NOW())
+        INSERT INTO site_analytics 
+        (user_id, page_visited, product_id, session_start, session_end, duration_seconds, timestamp)
+        VALUES (?, ?, ?, NOW(), NOW(), ?, NOW())
     ");
-    $stmt->bind_param("iii", $userId, $productId, $duration);
+    $stmt->bind_param("isii", $userId, $pageVisited, $productId, $duration);
     $stmt->execute();
 }
 

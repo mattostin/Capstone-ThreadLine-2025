@@ -140,26 +140,20 @@ $productId = 2; // White Shorts product ID
     </div>
   </main>
 
-  <!-- ✅ JavaScript View Tracking Logic -->
+  <!-- ✅ JS Tracker Logic -->
   <script>
     const startTime = Date.now();
 
     window.addEventListener("beforeunload", function () {
       const durationSeconds = Math.round((Date.now() - startTime) / 1000);
-
-      const productId = <?= $productId ?>;
-      const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
-
-      const data = JSON.stringify({
-        user_id: userId,
-        product_id: productId,
+      const payload = {
+        user_id: <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>,
+        product_id: <?= $productId ?>,
+        page: "White Shorts",
         duration_seconds: durationSeconds
-      });
+      };
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/track_view.php", false);
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.send(data);
+      navigator.sendBeacon("../php/track_view.php", JSON.stringify(payload));
     });
   </script>
 </body>
