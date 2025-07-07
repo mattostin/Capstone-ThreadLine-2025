@@ -121,4 +121,21 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
               <input type="number" step="0.01" name="price" value="<?= $p['price'] ?>">
               <input type="number" name="stock" value="<?= $p['stock'] ?>">
               <input type="text" name="available_sizes" value="<?= htmlspecialchars($p['available_sizes']) ?>">
-              <input type="text" name="image_front" value="<?= htmlspecialchars($p['im]()_
+              <input type="text" name="image_front" value="<?= htmlspecialchars($p['image_front']) ?>">
+              <input type="text" name="image_back" value="<?= htmlspecialchars($p['image_back']) ?>">
+              <button type="submit">Save Changes</button>
+            </form>
+          </td>
+        </tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
+
+  <script>
+    function toggleEdit(id) {
+      const row = document.getElementById('edit-' + id);
+      row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+    }
+  </script>
+</body>
+</html>
