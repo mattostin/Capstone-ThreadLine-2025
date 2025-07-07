@@ -7,18 +7,15 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Basic headers for protection
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: no-referrer");
 header("X-XSS-Protection: 1; mode=block");
 
-// CSRF token validation
 if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
   die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
 }
 
-// Validate presence of required fields
 $required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
 foreach ($required as $field) {
   if (empty($_POST[$field])) {
@@ -26,7 +23,6 @@ foreach ($required as $field) {
   }
 }
 
-// Sanitize inputs
 $fullname  = htmlspecialchars(trim($_POST['fullname']));
 $address   = htmlspecialchars(trim($_POST['address']));
 $email     = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
@@ -37,7 +33,6 @@ $cvv      = preg_replace('/\D/', '', $_POST['cvv']);
 $zip      = htmlspecialchars(trim($_POST['zip']));
 $cartData = json_decode($_POST['cart'], true);
 
-// Validate card number (basic check length)
 if (strlen($card) < 13 || strlen($card) > 19) {
   die("<h2>❌ Invalid card number.</h2>");
 }
@@ -49,7 +44,7 @@ if (strlen($card) < 13 || strlen($card) > 19) {
   <meta charset="UTF-8" />
   <title>Order Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lilita+One&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -65,7 +60,7 @@ if (strlen($card) < 13 || strlen($card) > 19) {
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: #075eb6;
+      background-color: transparent;
     }
 
     .logo {
@@ -99,6 +94,7 @@ if (strlen($card) < 13 || strlen($card) > 19) {
       background-color: #ffffffdd;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
     }
 
     h2 {
