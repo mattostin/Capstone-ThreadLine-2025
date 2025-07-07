@@ -14,8 +14,8 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// 🚨 Block access if not logged in
-if (!isset($_SESSION['username'])) {
+// ✅ Allow access for logged-in users or guests
+if (!isset($_SESSION['username']) && !isset($_SESSION['guest'])) {
   header("Location: ../php/login.php?redirect=payment.php");
   exit();
 }
@@ -103,7 +103,9 @@ $csrf_token = $_SESSION['csrf_token'];
     <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <li><a href="/php/logout.php">Logout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <li><a href="/php/logout.php">Logout</a></li>
+      <?php endif; ?>
     </ul>
   </header>
 
