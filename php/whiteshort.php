@@ -9,7 +9,53 @@ $productId = 2; // White Shorts product ID
   <title>White Shorts - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    /* (no changes to your styles) */
+    .product-detail-box {
+      max-width: 800px;
+      margin: 5rem auto;
+      padding: 2rem;
+      background-color: #f4f9ff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
+    }
+    .product-detail-images {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+    .product-detail-images img {
+      max-width: 250px;
+      height: auto;
+      object-fit: contain;
+    }
+    .size-selector {
+      margin: 0.5rem 0 1rem;
+    }
+    .size-btn {
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border: 1px solid #333;
+      background-color: white;
+      cursor: pointer;
+    }
+    .size-btn.selected {
+      background-color: #007bff;
+      color: white;
+    }
+    #addToCartForm input[type="number"] {
+      width: 60px;
+      padding: 0.3rem;
+      margin-right: 1rem;
+    }
+    #addToCartForm button {
+      background-color: #005bbb;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
