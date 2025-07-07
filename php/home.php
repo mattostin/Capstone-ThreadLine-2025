@@ -12,13 +12,13 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
   <meta charset="UTF-8" />
   <title>Welcome - ThreadLine</title>
 
-  <!-- Google Font: Lilita One -->
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
 
   <style>
     * {
-      font-family: 'Lilita One', cursive;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
@@ -41,21 +41,22 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       font-size: 1.8rem;
       color: white;
       text-decoration: none;
+      font-weight: 600;
     }
 
     .nav-links {
       list-style: none;
       display: flex;
       gap: 1.5rem;
-      font-size: 1rem;
     }
 
     .nav-links li,
     .nav-links li a {
       color: white;
+      font-weight: 600;
       text-decoration: none;
-      font-weight: bold;
       transition: 0.3s;
+      font-size: 1rem;
     }
 
     .nav-links li a:hover {
@@ -73,20 +74,20 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .hero h1 {
-      font-size: 3.2rem;
+      font-size: 2.75rem;
       margin-bottom: 1rem;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
     }
 
     .hero p {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       margin-bottom: 2rem;
       max-width: 600px;
     }
 
     .shop-button {
       padding: 1rem 2.2rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       background: white;
       color: #075eb6;
       border: none;
