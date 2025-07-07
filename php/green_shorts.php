@@ -1,6 +1,6 @@
 <?php
 session_start();
-$productId = 4; // Green Shorts product ID
+$productId = 3; // Unique product ID for Green Shorts
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,91 @@ $productId = 4; // Green Shorts product ID
   <title>Green Shorts - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    /* Leave all your existing styles untouched */
+    .product-fullscreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .product-detail-box {
+      background-color: #ffffffdd;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .product-detail-images {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .product-detail-images img {
+      width: 300px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    form {
+      margin-top: 1rem;
+    }
+
+    .size-selector {
+      display: flex;
+      gap: 1rem;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .size-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #333;
+      background: white;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .size-btn.selected {
+      background: #075eb6;
+      color: white;
+    }
+
+    #quantity {
+      width: 60px;
+      padding: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: transparent;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .navbar .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -33,13 +117,13 @@ $productId = 4; // Green Shorts product ID
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(item => item.id === 4 && item.size === selectedSize);
+        const existingIndex = cart.findIndex(item => item.id === 3 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
         } else {
           cart.push({
-            id: 4,
+            id: 3,
             name: "Green Shorts",
             price: 35,
             quantity: quantity,
@@ -53,7 +137,7 @@ $productId = 4; // Green Shorts product ID
 
       // ✅ Modern Analytics Tracking
       const sessionStart = Date.now();
-      const productId = 4;
+      const productId = 3;
       const pageVisited = "Green Shorts";
       const userId = <?= isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null' ?>;
 
@@ -98,7 +182,7 @@ $productId = 4; // Green Shorts product ID
         <img src="../images/greenShortFront.png" alt="Green Shorts Front">
         <img src="../images/greenShortBack.png" alt="Green Shorts Back">
       </div>
-      <p>Men’s Everyday Shorts - Green</p>
+      <p>Men's Softness Sport Shorts - Green</p>
       <strong>$35</strong>
 
       <form id="addToCartForm">
