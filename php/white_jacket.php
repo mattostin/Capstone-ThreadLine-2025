@@ -1,4 +1,5 @@
 <?php session_start(); ?>
+<?php $productId = 1; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +122,7 @@
       // === Analytics tracking logic ===
       const sessionStart = Date.now();
       const productId = 1;
-      const pageVisited = "white-jacket";
+      const pageVisited = "White Jacket";
       const userId = <?= isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null' ?>;
 
       window.addEventListener("beforeunload", () => {
