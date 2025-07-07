@@ -109,15 +109,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     /* Secret red pixel link */
-    .secret-pixel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 1px;
-      height: 1px;
-      background: red;
-      z-index: 9999;
-    }
+    
   </style>
 </head>
 <body>
@@ -137,7 +129,5 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
 
-  <!-- Hidden 1px link -->
-  <a href="/php/admin-dashboard.php" class="secret-pixel"></a>
 </body>
 </html>
