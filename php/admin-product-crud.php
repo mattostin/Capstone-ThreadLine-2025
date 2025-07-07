@@ -55,59 +55,76 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
   <link rel="stylesheet" href="css/style.css">
   <style>
     .admin-container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffffdd;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: 'Poppins', sans-serif;
+  }
 
-    form {
-      display: grid;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
+  form input, form button {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+  form button {
+    background-color: #075eb6;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
 
-    th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #ccc;
-      vertical-align: top;
-    }
+  form button:hover {
+    background-color: #054a8e;
+  }
 
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+  }
 
-    .actions button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+  }
 
-    .actions .edit {
-      background-color: #3182ce;
-      color: white;
-    }
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
 
-    .actions .delete {
-      background-color: #e53e3e;
-      color: white;
-    }
+  .actions .delete {
+    background-color: #e53e3e;
+    color: white;
+  }
 
-    .edit-form {
-      display: none;
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 8px;
-    }
+  .actions .edit {
+    background-color: #3182ce;
+    color: white;
+  }
+
+  .actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  h1, h2 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
   </style>
 </head>
 <body class="admin-page">
