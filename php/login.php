@@ -48,7 +48,6 @@ echo <<<HTML
     <li><a href="codeForBothJackets.php">Shop</a></li>
 HTML;
 
-// ✅ Conditionally show dashboard if admin is already logged in
 if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
   echo '<li><a href="admin-dashboard.php">Dashboard</a></li>';
 }
@@ -62,19 +61,19 @@ HTML;
 
 // Check DB connection
 if ($conn->connect_error) {
-    die("<h2>❌ Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
+    die("<h2>❌ DB Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
 }
 
 // Handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email    = $_POST['email'];
+    $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
     $sql = "SELECT id, username, password, is_admin FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
-        die("<h2>❌ Query error: " . $conn->error . "</h2></div></body></html>");
+        die("<h2>❌ SQL Prepare error: " . $conn->error . "</h2></div></body></html>");
     }
 
     $stmt->bind_param("s", $email);
@@ -85,13 +84,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_result($id, $username, $hashed_password, $is_admin);
         $stmt->fetch();
 
+        // DEBUG: Output password comparison info
+        echo "<p style='color:red;'>✅ User found: {$email}</p>";
+        echo "<p style='color:red;'>Password entered: {$password}</p>";
+        echo "<p style='color:red;'>Hashed in DB: {$hashed_password}</p>";
+
         if (password_verify($password, $hashed_password)) {
             $_SESSION["user_id"] = $id;
             $_SESSION["username"] = $username;
             $_SESSION["is_admin"] = $is_admin;
             $_SESSION["email"] = $email;
 
-            // ✅ Update tracking info
             $now = date('Y-m-d H:i:s');
             $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -101,18 +104,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $updateStmt->execute();
             $updateStmt->close();
 
-            if ($is_admin == 1) {
-                header("Location: admin-dashboard.php");
-                exit;
-            } else {
-                header("Location: $redirect");
-                exit;
-            }
+            echo "<p style='color:green;'>✅ Login success. Redirecting...</p>";
+            sleep(1); // Let user see the message
+            header("Location: " . ($is_admin ? "admin-dashboard.php" : $redirect));
+            exit;
         } else {
-            echo "<h2>❌ Invalid email or password.</h2>";
+            echo "<h2 style='color:red;'>❌ Password mismatch.</h2>";
         }
     } else {
-        echo "<h2>❌ Invalid email or password.</h2>";
+        echo "<h2 style='color:red;'>❌ No user found with that email.</h2>";
     }
 
     $stmt->close();
