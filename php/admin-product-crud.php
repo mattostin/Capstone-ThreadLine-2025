@@ -1,6 +1,4 @@
 <?php
-
-
 session_start();
 
 // Ensure admin is logged in
@@ -90,6 +88,8 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
   </style>
 </head>
 <body>
+  <?php include 'navber.php'; ?>
+
   <h1>Admin Product Management</h1>
 
   <form method="POST">
