@@ -56,8 +56,8 @@ if (!$product) {
   <main>
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Front">
-        <img src="<?= htmlspecialchars($product['image_back']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Back">
+        <img src="/<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Front">
+        <img src="/<?= htmlspecialchars($product['image_back']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Back">
       </div>
       <p><?= htmlspecialchars($product['product_name']) ?></p>
       <strong>$<?= number_format($product['price'], 2) ?></strong>
