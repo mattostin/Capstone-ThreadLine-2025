@@ -6,25 +6,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
-header("X-Frame-Options: DENY");
-header("X-Content-Type-Options: nosniff");
-header("Referrer-Policy: no-referrer");
-header("X-XSS-Protection: 1; mode=block");
-
-// ❌ Commented out for testing only
-// if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-//   die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
-// }
-
-// ❌ Commented out for testing only
-// $required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
-// foreach ($required as $field) {
-//   if (empty($_POST[$field])) {
-//     die("<h2>❌ Missing field: $field. Please complete all required fields.</h2>");
-//   }
-// }
-
-// Dummy data for testing
+// Dummy data for testing only — replace with $_POST[...] later
 $fullname  = "Matthew Ostin";
 $address   = "25092 anvil circle";
 $zip       = "92653";
@@ -37,58 +19,11 @@ $cartData = [
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Order Confirmation - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lilita+One&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
-      margin: 0;
-      min-height: 100vh;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: transparent;
-    }
-
-    .logo {
-      font-family: 'Lilita One', cursive !important;
-      font-size: 1.5rem;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.25rem;
-      align-items: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-links li a,
-    .nav-links li span {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      color: white;
-      text-decoration: none;
-      background: transparent !important;
-      border: none;
-      padding: 0;
-      box-shadow: none;
-    }
-
-    .nav-links li a:hover {
-      text-decoration: underline;
-    }
-
     .confirmation-container {
       max-width: 800px;
       margin: 4rem auto;
@@ -96,6 +31,7 @@ $cartData = [
       background-color: #ffffffdd;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
     }
 
     h2 {
@@ -150,23 +86,22 @@ $cartData = [
   </style>
 </head>
 <body>
+  <!-- MATCHING NAVBAR -->
   <header class="navbar">
-    <a href="logo_redirect.php" class="logo">ThreadLine</a>
+    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
-      <li><a href="checkout.php">Checkout</a></li>
-      <?php
-      if (isset($_SESSION['username'])) {
-        $username = ucfirst(htmlspecialchars($_SESSION['username']));
-        echo "<li><span>Hi, $username</span></li>";
-        echo '<li><a href="logout.php">Logout</a></li>';
-      } else {
-        echo '<li><a href="login.php">Login</a></li>';
-        echo '<li><a href="signup.php">Signup</a></li>';
-      }
-      ?>
+      <li><a href="/php/checkout.php">Checkout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
+        <li><a href="/php/logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="/php/login.php">Login</a></li>
+        <li><a href="/php/signup.php">Signup</a></li>
+      <?php endif; ?>
     </ul>
   </header>
 
+  <!-- CONFIRMATION BOX -->
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong><?= $fullname ?></strong>! Your order has been successfully placed and will be shipped to:</p>
@@ -196,8 +131,8 @@ $cartData = [
     <p style="margin-top: 2rem;">A confirmation email has been sent to <strong><?= $email ?></strong>.</p>
 
     <div class="confirmation-buttons">
-      <a href="codeForBothJackets.php">Continue Shopping</a>
-      <a href="logout.php">Logout</a>
+      <a href="/php/codeForBothJackets.php">Continue Shopping</a>
+      <a href="/php/logout.php">Logout</a>
     </div>
   </div>
 
