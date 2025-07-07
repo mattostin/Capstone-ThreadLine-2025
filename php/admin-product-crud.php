@@ -53,15 +53,43 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
   <meta charset="UTF-8">
   <title>Admin Product Management</title>
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    .admin-container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #ffffffdd;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    body {
       font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f2f5;
+    }
+
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #111827;
+      color: white;
+      padding: 2rem;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    h1, h2 {
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
 
     form input, form button {
@@ -120,73 +148,81 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
       font-weight: bold;
       cursor: pointer;
     }
-
-    h1, h2 {
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
   </style>
 </head>
-<body class="admin-page">
-
+<body>
   <?php include 'navber.php'; ?>
 
-  <div class="admin-container">
-    <h1>Admin Product Management</h1>
+  <div class="admin-wrapper">
+    <div class="sidebar">
+      <h2>Admin Menu</h2>
+      <ul>
+        <li><a href="admin-dashboard.php" style="color:white">Dashboard</a></li>
+        <li><a href="admin-product-crud.php" style="color:white">Manage Products</a></li>
+        <li><a href="logout.php" style="color:white">Logout</a></li>
+      </ul>
+    </div>
+    <div class="main-content">
+      <div class="card">
+        <h1>Admin Product Management</h1>
 
-    <form method="POST">
-      <h2>Add New Product</h2>
-      <input type="text" name="product_name" placeholder="Product Name" required>
-      <input type="number" step="0.01" name="price" placeholder="Price" required>
-      <input type="number" name="stock" placeholder="Stock Quantity" required>
-      <input type="text" name="available_sizes" placeholder="Available Sizes (comma-separated)" required>
-      <input type="text" name="image_front" placeholder="Front Image Path" required>
-      <input type="text" name="image_back" placeholder="Back Image Path" required>
-      <input type="hidden" name="action" value="add">
-      <button type="submit">Add Product</button>
-    </form>
+        <form method="POST">
+          <h2>Add New Product</h2>
+          <input type="text" name="product_name" placeholder="Product Name" required>
+          <input type="number" step="0.01" name="price" placeholder="Price" required>
+          <input type="number" name="stock" placeholder="Stock Quantity" required>
+          <input type="text" name="available_sizes" placeholder="Available Sizes (comma-separated)" required>
+          <input type="text" name="image_front" placeholder="Front Image Path" required>
+          <input type="text" name="image_back" placeholder="Back Image Path" required>
+          <input type="hidden" name="action" value="add">
+          <button type="submit">Add Product</button>
+        </form>
+      </div>
 
-    <h2>Existing Products</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th><th>Price</th><th>Stock</th><th>Sizes</th><th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php while ($p = $products->fetch_assoc()): ?>
-          <tr id="product-<?= $p['id'] ?>">
-            <td><?= htmlspecialchars($p['product_name']) ?></td>
-            <td>$<?= number_format($p['price'], 2) ?></td>
-            <td><?= $p['stock'] ?></td>
-            <td><?= htmlspecialchars($p['available_sizes']) ?></td>
-            <td class="actions">
-              <form method="POST" class="delete-form" style="display:inline-block">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
-                <button class="delete" type="submit">Delete</button>
-              </form>
-              <button class="edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
-            </td>
-          </tr>
-          <tr id="edit-<?= $p['id'] ?>" class="edit-form" style="display:none">
-            <td colspan="5">
-              <form method="POST">
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
-                <input type="text" name="product_name" value="<?= htmlspecialchars($p['product_name']) ?>" required>
-                <input type="number" step="0.01" name="price" value="<?= $p['price'] ?>" required>
-                <input type="number" name="stock" value="<?= $p['stock'] ?>" required>
-                <input type="text" name="available_sizes" value="<?= htmlspecialchars($p['available_sizes']) ?>" required>
-                <input type="text" name="image_front" value="<?= htmlspecialchars($p['image_front']) ?>" required>
-                <input type="text" name="image_back" value="<?= htmlspecialchars($p['image_back']) ?>" required>
-                <button type="submit">Save Changes</button>
-              </form>
-            </td>
-          </tr>
-        <?php endwhile; ?>
-      </tbody>
-    </table>
+      <div class="card">
+        <h2>Existing Products</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Price</th><th>Stock</th><th>Sizes</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php while ($p = $products->fetch_assoc()): ?>
+              <tr id="product-<?= $p['id'] ?>">
+                <td><?= htmlspecialchars($p['product_name']) ?></td>
+                <td>$<?= number_format($p['price'], 2) ?></td>
+                <td><?= $p['stock'] ?></td>
+                <td><?= htmlspecialchars($p['available_sizes']) ?></td>
+                <td class="actions">
+                  <form method="POST" class="delete-form" style="display:inline-block">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                    <button class="delete" type="submit">Delete</button>
+                  </form>
+                  <button class="edit" onclick="toggleEdit(<?= $p['id'] ?>)">Edit</button>
+                </td>
+              </tr>
+              <tr id="edit-<?= $p['id'] ?>" class="edit-form" style="display:none">
+                <td colspan="5">
+                  <form method="POST">
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                    <input type="text" name="product_name" value="<?= htmlspecialchars($p['product_name']) ?>" required>
+                    <input type="number" step="0.01" name="price" value="<?= $p['price'] ?>" required>
+                    <input type="number" name="stock" value="<?= $p['stock'] ?>" required>
+                    <input type="text" name="available_sizes" value="<?= htmlspecialchars($p['available_sizes']) ?>" required>
+                    <input type="text" name="image_front" value="<?= htmlspecialchars($p['image_front']) ?>" required>
+                    <input type="text" name="image_back" value="<?= htmlspecialchars($p['image_back']) ?>" required>
+                    <button type="submit">Save Changes</button>
+                  </form>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -195,7 +231,6 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
       row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
     }
 
-    // AJAX delete
     document.querySelectorAll('.delete-form').forEach(form => {
       form.addEventListener('submit', async e => {
         e.preventDefault();
@@ -217,6 +252,5 @@ $products = $conn->query("SELECT * FROM products ORDER BY id DESC");
       });
     });
   </script>
-
 </body>
 </html>
