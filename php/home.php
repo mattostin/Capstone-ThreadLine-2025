@@ -15,7 +15,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Lilita One', sans-serif;
       background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
       background-repeat: no-repeat;
       background-attachment: fixed;
