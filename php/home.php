@@ -17,9 +17,12 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
   <link rel="stylesheet" href="/css/style.css" />
 
   <style>
+    * {
+      font-family: 'Lilita One', cursive;
+    }
+
     body {
       margin: 0;
-      font-family: 'Lilita One', cursive;
       background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -32,7 +35,6 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       justify-content: space-between;
       align-items: center;
       padding: 1.2rem 2rem;
-      background: transparent;
     }
 
     .logo {
@@ -50,7 +52,6 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
 
     .nav-links li,
     .nav-links li a {
-      font-family: 'Lilita One', cursive;
       color: white;
       text-decoration: none;
       font-weight: bold;
@@ -94,7 +95,6 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       font-weight: bold;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transition: all 0.3s ease;
-      font-family: 'Lilita One', cursive;
     }
 
     .shop-button:hover {
