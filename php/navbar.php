@@ -11,7 +11,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <?php if (isset($_SESSION['username'])): ?>
       <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+        <li><a href="admin-home.php">Admin Home</a></li>
         <li><a href="admin-dashboard.php">Dashboard</a></li>
+        <li><a href="admin-product-crud.php">Manage Products</a></li>
       <?php endif; ?>
       <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
       <li><a href="logout.php">Logout</a></li>
