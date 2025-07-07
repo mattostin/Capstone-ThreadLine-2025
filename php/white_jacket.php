@@ -117,6 +117,26 @@
         localStorage.setItem('cart', JSON.stringify(cart));
         alert("White Jacket added to cart!");
       });
+
+      // === Analytics tracking logic ===
+      const sessionStart = Date.now();
+      const productId = 1;
+      const pageVisited = "white-jacket";
+      const userId = <?= isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null' ?>;
+
+      window.addEventListener("beforeunload", () => {
+        const sessionEnd = Date.now();
+        const durationSeconds = Math.round((sessionEnd - sessionStart) / 1000);
+
+        navigator.sendBeacon("/php/track_view.php", JSON.stringify({
+          user_id: userId,
+          product_id: productId,
+          page_visited: pageVisited,
+          session_start: sessionStart,
+          session_end: sessionEnd,
+          duration_seconds: durationSeconds
+        }));
+      });
     });
   </script>
 </head>
