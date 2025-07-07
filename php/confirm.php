@@ -1,5 +1,5 @@
 <?php
-// Secure session settings
+// Secure session
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -7,7 +7,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Basic headers
+// Basic headers for protection
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: no-referrer");
@@ -18,7 +18,7 @@ if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_tok
   die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
 }
 
-// Validate required fields
+// Validate presence of required fields
 $required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
 foreach ($required as $field) {
   if (empty($_POST[$field])) {
@@ -27,30 +27,71 @@ foreach ($required as $field) {
 }
 
 // Sanitize inputs
-$fullname = htmlspecialchars(trim($_POST['fullname']));
-$address = htmlspecialchars(trim($_POST['address']));
-$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-$card = preg_replace('/\D/', '', $_POST['card']);
+$fullname  = htmlspecialchars(trim($_POST['fullname']));
+$address   = htmlspecialchars(trim($_POST['address']));
+$email     = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$card      = preg_replace('/\D/', '', $_POST['card']);
 $expiryMonth = $_POST['expiryMonth'];
-$expiryYear = $_POST['expiryYear'];
-$cvv = preg_replace('/\D/', '', $_POST['cvv']);
-$zip = htmlspecialchars(trim($_POST['zip']));
+$expiryYear  = $_POST['expiryYear'];
+$cvv      = preg_replace('/\D/', '', $_POST['cvv']);
+$zip      = htmlspecialchars(trim($_POST['zip']));
 $cartData = json_decode($_POST['cart'], true);
 
-// Card validation
+// Validate card number (basic check length)
 if (strlen($card) < 13 || strlen($card) > 19) {
   die("<h2>❌ Invalid card number.</h2>");
 }
+?>
 
-// Start HTML
-echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Order Confirmation - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #075eb6;
+    }
+
+    .logo {
+      font-family: 'Lilita One', cursive;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links li a, .nav-links li span {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
     .confirmation-container {
       max-width: 800px;
       margin: 4rem auto;
@@ -58,12 +99,14 @@ echo <<<HTML
       background-color: #ffffffdd;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
     }
 
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     ul {
@@ -107,39 +150,6 @@ echo <<<HTML
     .confirmation-buttons a:hover {
       background-color: #054a8e;
     }
-
-    /* Navbar fix */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #075eb6;
-    }
-
-    .logo {
-      font-family: 'Lilita One', cursive;
-      font-size: 1.5rem;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-    }
-
-    .nav-links li a {
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .nav-links li {
-      color: white;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -147,59 +157,55 @@ echo <<<HTML
     <a href="logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="checkout.php">Checkout</a></li>
-HTML;
-
-// Auth-dependent links
-if (isset($_SESSION['username'])) {
-  $username = ucfirst(htmlspecialchars($_SESSION['username']));
-  echo "<li>Hi, $username</li>";
-  echo '<li><a href="logout.php">Logout</a></li>';
-} else {
-  echo '<li><a href="login.php">Login</a></li>';
-  echo '<li><a href="signup.php">Signup</a></li>';
-}
-
-echo <<<HTML
+      <?php
+      if (isset($_SESSION['username'])) {
+        $username = ucfirst(htmlspecialchars($_SESSION['username']));
+        echo "<li><span>Hi, $username</span></li>";
+        echo '<li><a href="logout.php">Logout</a></li>';
+      } else {
+        echo '<li><a href="login.php">Login</a></li>';
+        echo '<li><a href="signup.php">Signup</a></li>';
+      }
+      ?>
     </ul>
   </header>
 
   <div class="confirmation-container">
     <h2>✅ Order Confirmed</h2>
-    <p>Thank you, <strong>$fullname</strong>! Your order has been successfully placed and will be shipped to:</p>
-    <p>$address<br>$zip</p>
+    <p>Thank you, <strong><?= $fullname ?></strong>! Your order has been successfully placed and will be shipped to:</p>
+    <p><?= $address ?><br><?= $zip ?></p>
     <h3>Order Summary:</h3>
-HTML;
 
-// Order Summary
-$total = 0;
-if (is_array($cartData)) {
-  echo "<ul>";
-  foreach ($cartData as $item) {
-    $name = htmlspecialchars($item['name']);
-    $size = htmlspecialchars($item['size']);
-    $qty = (int)$item['quantity'];
-    $price = (float)$item['price'];
-    $subtotal = $qty * $price;
-    $total += $subtotal;
-    echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>\$" . number_format($subtotal, 2) . "</div></li>";
-  }
-  echo "</ul>";
-  echo "<div class='summary'>Total Paid: \$" . number_format($total, 2) . "</div>";
-} else {
-  echo "<p>❌ Error reading cart.</p>";
-}
+    <?php
+    $total = 0;
+    if (is_array($cartData)) {
+      echo "<ul>";
+      foreach ($cartData as $item) {
+        $name = htmlspecialchars($item['name']);
+        $size = htmlspecialchars($item['size']);
+        $qty  = (int)$item['quantity'];
+        $price = (float)$item['price'];
+        $subtotal = $qty * $price;
+        $total += $subtotal;
+        echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
+      }
+      echo "</ul>";
+      echo "<div class='summary'>Total Paid: $" . number_format($total, 2) . "</div>";
+    } else {
+      echo "<p>❌ Error reading cart.</p>";
+    }
+    ?>
 
-echo <<<HTML
-    <p style="margin-top: 2rem;">A confirmation email has been sent to <strong>$email</strong>.</p>
+    <p style="margin-top: 2rem;">A confirmation email has been sent to <strong><?= $email ?></strong>.</p>
+
     <div class="confirmation-buttons">
       <a href="codeForBothJackets.php">Continue Shopping</a>
       <a href="logout.php">Logout</a>
     </div>
   </div>
+
   <script>
     localStorage.removeItem("cart");
   </script>
 </body>
 </html>
-HTML;
-?>
