@@ -24,7 +24,7 @@ $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 $conn = new mysqli($host, $username, $password, $database);
 
-// ✅ Default redirect for regular users
+// Redirect for regular users
 $redirect = "/php/codeForBothJackets.php";
 
 // HTML Header
@@ -59,68 +59,54 @@ echo <<<HTML
 <div class="signup-container">
 HTML;
 
-// Check DB connection
 if ($conn->connect_error) {
-    die("<h2>❌ DB Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
+  die("<h2>❌ Connection failed.</h2></div></body></html>");
 }
 
-// Handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email    = trim($_POST['email']);
-    $password = $_POST['password'];
+  $email    = $_POST['email'];
+  $password = $_POST['password'];
 
-    $sql = "SELECT id, username, password, is_admin FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
+  $sql = "SELECT id, username, password, is_admin FROM users WHERE email = ?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $stmt->store_result();
 
-    if (!$stmt) {
-        die("<h2>❌ SQL Prepare error: " . $conn->error . "</h2></div></body></html>");
+  if ($stmt->num_rows === 1) {
+    $stmt->bind_result($id, $username, $hashed_password, $is_admin);
+    $stmt->fetch();
+
+    if (password_verify($password, $hashed_password)) {
+      $_SESSION["user_id"] = $id;
+      $_SESSION["username"] = $username;
+      $_SESSION["is_admin"] = $is_admin;
+      $_SESSION["email"] = $email;
+
+      $now = date('Y-m-d H:i:s');
+      $ip = $_SERVER['REMOTE_ADDR'];
+      $updateSql = "UPDATE users SET last_activity = ?, last_login = ?, last_login_ip = ?, is_logged_in = 1 WHERE id = ?";
+      $updateStmt = $conn->prepare($updateSql);
+      $updateStmt->bind_param("sssi", $now, $now, $ip, $id);
+      $updateStmt->execute();
+      $updateStmt->close();
+
+      if ($is_admin == 1) {
+        header("Location: admin-dashboard.php");
+        exit;
+      } else {
+        header("Location: $redirect");
+        exit;
+      }
     }
+  }
 
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 1) {
-        $stmt->bind_result($id, $username, $hashed_password, $is_admin);
-        $stmt->fetch();
-
-        // DEBUG: Output password comparison info
-        echo "<p style='color:red;'>✅ User found: {$email}</p>";
-        echo "<p style='color:red;'>Password entered: {$password}</p>";
-        echo "<p style='color:red;'>Hashed in DB: {$hashed_password}</p>";
-
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION["user_id"] = $id;
-            $_SESSION["username"] = $username;
-            $_SESSION["is_admin"] = $is_admin;
-            $_SESSION["email"] = $email;
-
-            $now = date('Y-m-d H:i:s');
-            $ip = $_SERVER['REMOTE_ADDR'];
-
-            $updateSql = "UPDATE users SET last_activity = ?, last_login = ?, last_login_ip = ?, is_logged_in = 1 WHERE id = ?";
-            $updateStmt = $conn->prepare($updateSql);
-            $updateStmt->bind_param("sssi", $now, $now, $ip, $id);
-            $updateStmt->execute();
-            $updateStmt->close();
-
-            echo "<p style='color:green;'>✅ Login success. Redirecting...</p>";
-            sleep(1); // Let user see the message
-            header("Location: " . ($is_admin ? "admin-dashboard.php" : $redirect));
-            exit;
-        } else {
-            echo "<h2 style='color:red;'>❌ Password mismatch.</h2>";
-        }
-    } else {
-        echo "<h2 style='color:red;'>❌ No user found with that email.</h2>";
-    }
-
-    $stmt->close();
+  echo "<h2>❌ Invalid email or password.</h2>";
+  $stmt->close();
 }
 
 $conn->close();
 
-// Show login form
 echo <<<HTML
   <h2>Login to ThreadLine</h2>
   <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: auto;">
