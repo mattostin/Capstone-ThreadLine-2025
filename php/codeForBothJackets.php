@@ -1,142 +1,129 @@
 <?php
-// Secure session setup
-session_set_cookie_params([
-  'secure' => true,
-  'httponly' => true,
-  'samesite' => 'Strict'
-]);
-session_start();
+require_once "config.php";
 
-// Database connection
-date_default_timezone_set('America/Los_Angeles');
-$host = "localhost";
-$username = "thredqwx_admin";
-$password = "Mostin2003$";
-$database = "thredqwx_threadline";
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-// ✅ Update last_activity if logged in
-if (isset($_SESSION['user_id'])) {
-  $user_id = $_SESSION['user_id'];
-  $now = date('Y-m-d H:i:s');
-  $updateSql = "UPDATE users SET last_activity = ? WHERE id = ?";
-  $stmt = $conn->prepare($updateSql);
-  $stmt->bind_param("si", $now, $user_id);
-  $stmt->execute();
-  $stmt->close();
-}
+// Fetch all products
+$sql = "SELECT * FROM products";
+$result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Shop - ThreadLine</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>ThreadLine | Products</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #a0cfe9, #0766b5);
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    nav {
+      position: absolute;
+      right: 2rem;
+      top: 1.5rem;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 1rem 0 2rem;
+      font-size: 2rem;
+      color: #111;
     }
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2.5rem;
-      justify-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 0 2rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .product-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .product-box {
+    .product-card {
       background-color: #fff;
       padding: 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       text-align: center;
-      width: 100%;
-      max-width: 250px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-family: 'Poppins', sans-serif;
-      transition: transform 0.2s ease;
     }
 
-    .product-box:hover {
-      transform: scale(1.02);
-    }
-
-    .product-box img {
+    .product-card img {
       width: 100%;
       height: 200px;
       object-fit: contain;
-      margin-bottom: 1rem;
+      border-radius: 6px;
+      background-color: #f9f9f9;
     }
 
-    .product-box button {
-      background-color: #075eb6;
+    .product-card h3 {
+      margin: 0.75rem 0 0.25rem;
+    }
+
+    .product-card p {
+      margin: 0.25rem 0 1rem;
+    }
+
+    .product-link button {
+      background-color: #065fd4;
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 0.5rem;
+      transition: background-color 0.3s ease;
     }
 
-    .product-box h3 {
-      margin: 0.5rem 0;
+    .product-link button:hover {
+      background-color: #054bb5;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <a class="logo" href="<?= isset($_SESSION['username']) ? '/php/home.php' : '/html/index.html' ?>">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="checkout.php">Checkout</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
-          <li><a href="admin-dashboard.php">Dashboard</a></li>
-        <?php endif; ?>
-        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="logout.php">Logout</a></li>
-      <?php else: ?>
-        <li><a href="login.php">Login</a></li>
-        <li><a href="signup.php">Signup</a></li>
-      <?php endif; ?>
-    </ul>
-  </nav>
+  <header>
+    ThreadLine
+    <nav>
+      <a href="checkout.php">Checkout</a>
+      <a href="login.php">Login</a>
+      <a href="signup.html">Signup</a>
+    </nav>
+  </header>
+
+  <h2>Our Products</h2>
 
   <main>
-    <h1 style="text-align:center;">Our Products</h1>
-    <div class="container">
-      <div class="product-grid">
-        <?php
-        $sql = "SELECT * FROM products";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0):
-          while ($product = $result->fetch_assoc()):
-        ?>
-          <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
-            <div class="product-box">
-              <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
-              <h3><?= htmlspecialchars($product['product_name']) ?></h3>
-              <p>$<?= number_format($product['price'], 2) ?></p>
+    <div class="product-grid">
+      <?php if ($result && $result->num_rows > 0): ?>
+        <?php while ($product = $result->fetch_assoc()): ?>
+          <div class="product-card">
+            <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
+            <h3><?= htmlspecialchars($product['product_name']) ?></h3>
+            <p>$<?= number_format($product['price'], 2) ?></p>
+            <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
               <button>View Product</button>
-            </div>
-          </a>
-        <?php
-          endwhile;
-        else:
-          echo "<p>No products available.</p>";
-        endif;
-        ?>
-      </div>
+            </a>
+          </div>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <p style="text-align: center;">No products available.</p>
+      <?php endif; ?>
     </div>
   </main>
 </body>
