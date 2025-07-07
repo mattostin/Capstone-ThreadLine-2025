@@ -119,7 +119,6 @@
         alert("White Jacket added to cart!");
       });
 
-      // === Analytics tracking logic ===
       const sessionStart = Date.now();
       const productId = 1;
       const pageVisited = "White Jacket";
@@ -132,7 +131,7 @@
         navigator.sendBeacon("/php/track_view.php", JSON.stringify({
           user_id: userId,
           product_id: productId,
-          page_visited: pageVisited, // ✅ CORRECT key
+          page_visited: pageVisited,
           session_start: sessionStart,
           session_end: sessionEnd,
           duration_seconds: durationSeconds
@@ -148,6 +147,9 @@
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
       <li><a href="/php/checkout.php">Checkout</a></li>
       <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+          <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
+        <?php endif; ?>
         <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
         <li><a href="/php/logout.php">Logout</a></li>
       <?php else: ?>
