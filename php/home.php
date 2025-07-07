@@ -73,6 +73,7 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     }
 
     .hero h1 {
+    font-family: 'Lilita One', cursive;
       font-size: 3.2rem;
       margin-bottom: 1rem;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
