@@ -124,7 +124,7 @@ if (isset($_SESSION['user_id'])) {
         ?>
           <a href="product.php?id=<?= $product['id'] ?>" class="product-link">
             <div class="product-box">
-              <img src="<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
+              <img src="/<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
               <h3><?= htmlspecialchars($product['product_name']) ?></h3>
               <p>$<?= number_format($product['price'], 2) ?></p>
               <button>View Product</button>
