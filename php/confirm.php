@@ -1,3 +1,41 @@
+<?php
+session_set_cookie_params([
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
+session_start();
+
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: no-referrer");
+header("X-XSS-Protection: 1; mode=block");
+
+// ❌ Commented out for testing only
+// if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+//   die("<h2>❌ Invalid CSRF token. Please go back and try again.</h2>");
+// }
+
+// ❌ Commented out for testing only
+// $required = ['fullname', 'address', 'email', 'card', 'expiryMonth', 'expiryYear', 'cvv', 'zip', 'cart'];
+// foreach ($required as $field) {
+//   if (empty($_POST[$field])) {
+//     die("<h2>❌ Missing field: $field. Please complete all required fields.</h2>");
+//   }
+// }
+
+// Dummy data for testing
+$fullname  = "Matthew Ostin";
+$address   = "25092 anvil circle";
+$zip       = "92653";
+$email     = "mattostin14@gmail.com";
+$cartData = [
+  ["name" => "Gray Jacket", "size" => "L", "quantity" => 1, "price" => 55.00]
+];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Order Confirmation - ThreadLine</title>
@@ -111,3 +149,60 @@
     }
   </style>
 </head>
+<body>
+  <header class="navbar">
+    <a href="logo_redirect.php" class="logo">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="checkout.php">Checkout</a></li>
+      <?php
+      if (isset($_SESSION['username'])) {
+        $username = ucfirst(htmlspecialchars($_SESSION['username']));
+        echo "<li><span>Hi, $username</span></li>";
+        echo '<li><a href="logout.php">Logout</a></li>';
+      } else {
+        echo '<li><a href="login.php">Login</a></li>';
+        echo '<li><a href="signup.php">Signup</a></li>';
+      }
+      ?>
+    </ul>
+  </header>
+
+  <div class="confirmation-container">
+    <h2>✅ Order Confirmed</h2>
+    <p>Thank you, <strong><?= $fullname ?></strong>! Your order has been successfully placed and will be shipped to:</p>
+    <p><?= $address ?><br><?= $zip ?></p>
+    <h3>Order Summary:</h3>
+
+    <?php
+    $total = 0;
+    if (is_array($cartData)) {
+      echo "<ul>";
+      foreach ($cartData as $item) {
+        $name = htmlspecialchars($item['name']);
+        $size = htmlspecialchars($item['size']);
+        $qty  = (int)$item['quantity'];
+        $price = (float)$item['price'];
+        $subtotal = $qty * $price;
+        $total += $subtotal;
+        echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
+      }
+      echo "</ul>";
+      echo "<div class='summary'>Total Paid: $" . number_format($total, 2) . "</div>";
+    } else {
+      echo "<p>❌ Error reading cart.</p>";
+    }
+    ?>
+
+    <p style="margin-top: 2rem;">A confirmation email has been sent to <strong><?= $email ?></strong>.</p>
+
+    <div class="confirmation-buttons">
+      <a href="codeForBothJackets.php">Continue Shopping</a>
+      <a href="logout.php">Logout</a>
+    </div>
+  </div>
+
+  <script>
+    localStorage.removeItem("cart");
+  </script>
+</body>
+</html>
