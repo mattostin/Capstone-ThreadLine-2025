@@ -1,5 +1,5 @@
 <?php
-// Secure session
+// Secure session setup
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -36,76 +36,90 @@ if (isset($_SESSION['user_id'])) {
   <meta charset="UTF-8">
   <title>Shop - ThreadLine</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+      padding: 0 2rem;
+    }
+
+    .product-box {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .product-box img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .product-box h3 {
+      margin: 0.5rem 0;
+    }
+
+    .product-box button {
+      background-color: #075eb6;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-
-<?php
-// ✅ Updated Navbar
-?>
-<nav class="navbar">
-  <a class="logo" href="logo_redirect.php">ThreadLine</a>
-  <ul class="nav-links">
-    <li><a href="checkout.php">Checkout</a></li>
-    <?php if (isset($_SESSION['username'])): ?>
-      <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
-        <li><a href="admin-dashboard.php">Dashboard</a></li>
+  <nav class="navbar">
+    <a class="logo" href="<?= isset($_SESSION['username']) ? '/php/home.php' : '/html/index.html' ?>">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="checkout.php">Checkout</a></li>
+      <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+          <li><a href="admin-dashboard.php">Dashboard</a></li>
+        <?php endif; ?>
+        <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
+        <li><a href="logout.php">Logout</a></li>
+      <?php else: ?>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="signup.php">Signup</a></li>
       <?php endif; ?>
-      <li style="color: white; font-weight: bold;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-      <li><a href="logout.php">Logout</a></li>
-    <?php else: ?>
-      <li><a href="login.php">Login</a></li>
-      <li><a href="signup.php">Signup</a></li>
-    <?php endif; ?>
-  </ul>
-</nav>
+    </ul>
+  </nav>
 
-<main>
-  <h1 style="text-align: center;">Our Featured Clothing</h1>
-  <section class="product-grid">
-    <!-- White Jacket -->
-    <a href="/php/white_jacket.php" class="product-box-link">
-      <div class="product-box">
-        <div class="product-images bg-white">
-          <img src="/images/white-frontt.png" alt="White Jacket Front">
-          <img src="/images/white-back.png" alt="White Jacket Back">
-        </div>
-        <p>Men's Softness Sport Jacket - White<br>$55</p>
-      </div>
-    </a>
+  <main style="padding: 2rem;">
+    <h1 style="text-align:center;">Our Products</h1>
+    <div class="product-grid">
+      <?php
+      $sql = "SELECT * FROM products";
+      $result = $conn->query($sql);
 
-    <!-- Gray Jacket -->
-    <a href="/php/gray_jacket.php" class="product-box-link">
-      <div class="product-box">
-        <div class="product-images bg-gray">
-          <img src="/images/gray-front.png" alt="Gray Jacket Front">
-          <img src="/images/gray-back.png" alt="Gray Jacket Back">
+      if ($result->num_rows > 0):
+        while ($product = $result->fetch_assoc()):
+      ?>
+        <div class="product-box">
+          <a href="product.php?id=<?= $product['id'] ?>">
+            <img src="<?= $product['image_front'] ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
+          </a>
+          <h3><?= htmlspecialchars($product['product_name']) ?></h3>
+          <p>$<?= number_format($product['price'], 2) ?></p>
+          <a href="product.php?id=<?= $product['id'] ?>">
+            <button>View Product</button>
+          </a>
         </div>
-        <p>Men's Softness Sport Jacket - Gray<br>$55</p>
-      </div>
-    </a>
-
-    <!-- White Shorts -->
-    <a href="/php/whiteshort.php" class="product-box-link">
-      <div class="product-box">
-        <div class="product-images bg-white">
-          <img src="/images/whiteShortFront.png" alt="White Short Front">
-          <img src="/images/whiteShortBack.png" alt="White Short Back">
-        </div>
-        <p>Men's Everyday Shorts - White <br>$55</p>
-      </div>
-    </a>
-
-    <!-- Green Shorts -->
-    <a href="/php/green_shorts.php" class="product-box-link">
-      <div class="product-box">
-        <div class="product-images bg-green">
-          <img src="/images/greenShortFront.png" alt="Green Shorts Front">
-          <img src="/images/greenShortBack.png" alt="Green Shorts Back">
-        </div>
-        <p>Men’s Everyday Shorts - Green<br>$35</p>
-      </div>
-    </a>
-  </section>
-</main>
+      <?php
+        endwhile;
+      else:
+        echo "<p>No products available.</p>";
+      endif;
+      ?>
+    </div>
+  </main>
 </body>
 </html>
