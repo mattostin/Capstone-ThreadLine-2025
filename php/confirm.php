@@ -22,18 +22,17 @@ if ($conn->connect_error) {
 $outOfStockItems = [];
 foreach ($cartData as $item) {
   $productName = $item['name'];
-  $size = $item['size'] ?? '';
   $quantity = (int)$item['quantity'];
 
-  $stmt = $conn->prepare("SELECT stock FROM products WHERE product_name = ? AND size = ?");
-  $stmt->bind_param("ss", $productName, $size);
+  $stmt = $conn->prepare("SELECT stock FROM products WHERE product_name = ?");
+  $stmt->bind_param("s", $productName);
   $stmt->execute();
   $result = $stmt->get_result();
   $product = $result->fetch_assoc();
   $stmt->close();
 
   if (!$product || $product['stock'] < $quantity) {
-    $outOfStockItems[] = "$productName (Size: $size)";
+    $outOfStockItems[] = $productName;
   }
 }
 
@@ -50,11 +49,10 @@ if (!empty($outOfStockItems)) {
 // All items in stock: proceed with deduction
 foreach ($cartData as $item) {
   $productName = $item['name'];
-  $size = $item['size'] ?? '';
   $quantity = (int)$item['quantity'];
 
-  $stmt = $conn->prepare("SELECT id FROM products WHERE product_name = ? AND size = ?");
-  $stmt->bind_param("ss", $productName, $size);
+  $stmt = $conn->prepare("SELECT id FROM products WHERE product_name = ?");
+  $stmt->bind_param("s", $productName);
   $stmt->execute();
   $result = $stmt->get_result();
   $product = $result->fetch_assoc();
@@ -147,12 +145,11 @@ foreach ($cartData as $item) {
     echo "<ul>";
     foreach ($cartData as $item) {
       $name = htmlspecialchars($item['name']);
-      $size = htmlspecialchars($item['size']);
       $qty  = (int)$item['quantity'];
       $price = (float)$item['price'];
       $subtotal = $qty * $price;
       $total += $subtotal;
-      echo "<li><div>$name (Size: $size, Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
+      echo "<li><div>$name (Qty: $qty)</div><div>$" . number_format($subtotal, 2) . "</div></li>";
     }
     echo "</ul>";
     echo "<div class='summary'>Total Paid: $" . number_format($total, 2) . "</div>";
