@@ -1,12 +1,12 @@
 <?php
 session_start();
-$productId = 3; // Unique product ID for Green Shorts
+$productId = 1; // Gray Jacket product ID
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Green Shorts - ThreadLine</title>
+  <title>Gray Jacket - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     .product-fullscreen {
@@ -117,28 +117,28 @@ $productId = 3; // Unique product ID for Green Shorts
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(item => item.id === 3 && item.size === selectedSize);
+        const existingIndex = cart.findIndex(item => item.id === 1 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
         } else {
           cart.push({
-            id: 3,
-            name: "Green Shorts",
-            price: 35,
+            id: 1,
+            name: "Gray Jacket",
+            price: 55,
             quantity: quantity,
             size: selectedSize
           });
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert("Green Shorts added to cart!");
+        alert("Gray Jacket added to cart!");
       });
 
       // ✅ Modern Analytics Tracking
       const sessionStart = Date.now();
-      const productId = 3;
-      const pageVisited = "Green Shorts";
+      const productId = 1;
+      const pageVisited = "Gray Jacket";
       const userId = <?= isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null' ?>;
 
       window.addEventListener("beforeunload", () => {
@@ -176,11 +176,11 @@ $productId = 3; // Unique product ID for Green Shorts
   <main class="product-fullscreen">
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="../images/green-front.png" alt="Green Shorts Front">
-        <img src="../images/green-back.png" alt="Green Shorts Back">
+        <img src="../images/gray-front.png" alt="Gray Jacket Front">
+        <img src="../images/gray-back.png" alt="Gray Jacket Back">
       </div>
-      <p>Men's Softness Sport Shorts - Green</p>
-      <strong>$35</strong>
+      <p>Men's Softness Sport Jacket - Gray</p>
+      <strong>$55</strong>
 
       <form id="addToCartForm">
         <label style="font-size: 1.4rem;">Size:</label>

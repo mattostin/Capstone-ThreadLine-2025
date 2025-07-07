@@ -1,6 +1,6 @@
 <?php
 session_start();
-$productId = 3; // Green Shorts product ID — update if yours is different
+$productId = 3; // Unique product ID for Green Shorts
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +68,21 @@ $productId = 3; // Green Shorts product ID — update if yours is different
       margin-top: 0.4rem;
     }
 
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: transparent;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
     .navbar .nav-links {
       display: flex;
       list-style: none;
@@ -102,13 +117,13 @@ $productId = 3; // Green Shorts product ID — update if yours is different
         }
 
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingIndex = cart.findIndex(item => item.id === 4 && item.size === selectedSize);
+        const existingIndex = cart.findIndex(item => item.id === 3 && item.size === selectedSize);
 
         if (existingIndex > -1) {
           cart[existingIndex].quantity += quantity;
         } else {
           cart.push({
-            id: 4,
+            id: 3,
             name: "Green Shorts",
             price: 35,
             quantity: quantity,
@@ -119,12 +134,32 @@ $productId = 3; // Green Shorts product ID — update if yours is different
         localStorage.setItem('cart', JSON.stringify(cart));
         alert("Green Shorts added to cart!");
       });
+
+      // ✅ Modern Analytics Tracking
+      const sessionStart = Date.now();
+      const productId = 3;
+      const pageVisited = "Green Shorts";
+      const userId = <?= isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null' ?>;
+
+      window.addEventListener("beforeunload", () => {
+        const sessionEnd = Date.now();
+        const durationSeconds = Math.round((sessionEnd - sessionStart) / 1000);
+
+        navigator.sendBeacon("track_view.php", JSON.stringify({
+          user_id: userId,
+          product_id: productId,
+          page_visited: pageVisited,
+          session_start: sessionStart,
+          session_end: sessionEnd,
+          duration_seconds: durationSeconds
+        }));
+      });
     });
   </script>
 </head>
 <body>
   <header class="navbar">
-    <a href="<?= isset($_SESSION['username']) ? 'home.php' : '../html/index.html' ?>" class="logo">ThreadLine</a>
+    <a href="logo_redirect.php" class="logo">ThreadLine</a>
     <ul class="nav-links">
       <li><a href="codeForBothJackets.php">Shop</a></li>
       <li><a href="checkout.php">Checkout</a></li>
@@ -141,10 +176,10 @@ $productId = 3; // Green Shorts product ID — update if yours is different
   <main class="product-fullscreen">
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="../images/greenShortFront.png" alt="Green Shorts Front">
-        <img src="../images/greenShortBack.png" alt="Green Shorts Back">
+        <img src="../images/green-front.png" alt="Green Shorts Front">
+        <img src="../images/green-back.png" alt="Green Shorts Back">
       </div>
-      <p>Men's Everyday Shorts - Green</p>
+      <p>Men's Softness Sport Shorts - Green</p>
       <strong>$35</strong>
 
       <form id="addToCartForm">
@@ -164,23 +199,5 @@ $productId = 3; // Green Shorts product ID — update if yours is different
       </form>
     </div>
   </main>
-
-  <!-- ✅ JavaScript View Tracker -->
-  <script>
-    const startTime = Date.now();
-
-    window.addEventListener("beforeunload", function () {
-      const durationSeconds = Math.round((Date.now() - startTime) / 1000);
-
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "track_view.php", false);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-      const productId = <?= $productId ?>;
-      const userId = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
-
-      xhr.send(`user_id=${userId}&product_id=${productId}&duration=${durationSeconds}`);
-    });
-  </script>
 </body>
 </html>
