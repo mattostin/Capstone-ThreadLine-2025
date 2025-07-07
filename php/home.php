@@ -16,7 +16,10 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #075eb6, #88b9e9);
+      background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
       color: #fff;
     }
 
@@ -24,14 +27,13 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
+      padding: 1.2rem 2rem;
+      background: transparent;
     }
 
     .logo {
       font-family: 'Lilita One', cursive;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       color: white;
       text-decoration: none;
     }
@@ -45,7 +47,12 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     .nav-links li a, .nav-links li {
       color: white;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
     }
 
     .hero {
@@ -53,43 +60,41 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 4rem 2rem;
       text-align: center;
+      padding: 6rem 2rem 3rem;
+      animation: fadeIn 1s ease-out;
     }
 
     .hero h1 {
       font-size: 3rem;
       margin-bottom: 1rem;
-      animation: fadeIn 1s ease-in-out;
     }
 
     .hero p {
       font-size: 1.2rem;
-      margin-bottom: 2rem;
-      animation: fadeIn 1.5s ease-in-out;
+      margin-bottom: 2.5rem;
     }
 
     .shop-button {
       padding: 1rem 2rem;
       font-size: 1.1rem;
-      background: #ffffffcc;
+      background: white;
       color: #075eb6;
       border: none;
       border-radius: 12px;
       text-decoration: none;
       font-weight: bold;
-      transition: 0.3s ease;
-      animation: fadeIn 2s ease-in-out;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
     }
 
     .shop-button:hover {
-      background: #fff;
+      background: #f0f0f0;
       transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
@@ -100,15 +105,15 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <ul class="nav-links">
       <li><a href="/php/checkout.php">Checkout</a></li>
       <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <li style="font-weight: bold;">Hi, <?= $username ?></li>
+      <li>Hi, <?= $username ?></li>
       <li><a href="/php/logout.php">Logout</a></li>
     </ul>
   </nav>
 
   <section class="hero">
     <h1>Welcome back, <?= $username ?> 👋</h1>
-    <p>Discover the latest drops and stay ahead of the fashion game.</p>
-    <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Start Shopping</a>
+    <p>Check out our newest drops and exclusive styles just for you.</p>
+    <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
 </body>
 </html>
