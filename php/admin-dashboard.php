@@ -1,103 +1,143 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
-    header("Location: /php/login.php");
-    exit();
+if (!isset($_SESSION['username'])) {
+    header("Location: /html/index.html");
+    exit;
 }
-
-// Connect to DB
-$conn = new mysqli("localhost", "USERNAME", "PASSWORD", "DATABASE");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
-
-// Metrics Queries
-$totalOrders = $conn->query("SELECT COUNT(*) AS count FROM orders")->fetch_assoc()['count'];
-$totalRevenue = $conn->query("SELECT SUM(total_price) AS revenue FROM orders")->fetch_assoc()['revenue'] ?? 0;
-$topProducts = $conn->query("SELECT product_name, SUM(quantity) AS sold FROM order_items GROUP BY product_name ORDER BY sold DESC LIMIT 5");
-$activeUsers = $conn->query("SELECT COUNT(*) AS active FROM users WHERE last_activity >= NOW() - INTERVAL 7 DAY")->fetch_assoc()['active'];
-$stockLow = $conn->query("SELECT COUNT(*) AS low FROM products WHERE stock < 5")->fetch_assoc()['low'];
+$username = ucfirst(htmlspecialchars($_SESSION['username']));
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Dashboard - ThreadLine</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>Welcome - ThreadLine</title>
+
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+
   <style>
-    body {
+    * {
       font-family: 'Poppins', sans-serif;
-      background: #f4f7fc;
+    }
+
+    body {
       margin: 0;
-      padding: 2rem;
+      background: linear-gradient(to bottom, #1071977a 0%, #88b9e9 50%, #075eb6 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: white;
     }
-    .dashboard {
-      max-width: 1200px;
-      margin: auto;
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
+
+    .logo {
+      font-size: 1.8rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    .nav-links {
+      list-style: none;
+      display: flex;
       gap: 1.5rem;
     }
-    .card {
+
+    .nav-links li,
+    .nav-links li a {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 3rem;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .shop-button {
+      padding: 1rem 2.2rem;
+      font-size: 1.1rem;
       background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .card h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-    .card p {
-      font-size: 1.8rem;
       color: #075eb6;
+      border: none;
+      border-radius: 12px;
+      text-decoration: none;
       font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
     }
-    .top-products ul {
-      list-style: none;
-      padding: 0;
+
+    .shop-button:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
     }
-    .top-products li {
-      margin-bottom: 0.4rem;
-      font-weight: 500;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Secret red pixel link */
+    .secret-pixel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      background: red;
+      z-index: 9999;
     }
   </style>
 </head>
 <body>
-  <div class="dashboard">
-    <h1>📊 Admin Dashboard</h1>
-    <div class="grid">
-      <div class="card">
-        <h2>Total Orders</h2>
-        <p><?= $totalOrders ?></p>
-      </div>
-      <div class="card">
-        <h2>Total Revenue</h2>
-        <p>$<?= number_format($totalRevenue, 2) ?></p>
-      </div>
-      <div class="card">
-        <h2>Active Users (7d)</h2>
-        <p><?= $activeUsers ?></p>
-      </div>
-      <div class="card">
-        <h2>Low Inventory Products</h2>
-        <p><?= $stockLow ?></p>
-      </div>
-      <div class="card top-products">
-        <h2>Top 5 Products</h2>
-        <ul>
-          <?php while ($row = $topProducts->fetch_assoc()): ?>
-            <li><?= htmlspecialchars($row['product_name']) ?> - <?= $row['sold'] ?> sold</li>
-          <?php endwhile; ?>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <nav class="navbar">
+    <a class="logo" href="/php/logo_redirect.php">ThreadLine</a>
+    <ul class="nav-links">
+      <li><a href="/php/checkout.php">Checkout</a></li>
+      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+      <li>Hi, <?= $username ?></li>
+      <li><a href="/php/logout.php">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>Welcome back, <?= $username ?> 👋</h1>
+    <p>Check out our latest drops — from clean jackets to everyday comfort. Your style starts here.</p>
+    <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
+  </section>
+
+  <!-- Hidden 1px red pixel link to admin dashboard -->
+  <a href="/php/admin-dashboard.php" class="secret-pixel" aria-hidden="true" tabindex="-1"></a>
 </body>
 </html>
