@@ -132,7 +132,7 @@ $mostViewedProduct = $conn->query("
 
   <h1>🛠️ Admin Dashboard</h1>
 
-  <h2 class="section-title">📦 Product Stats</h2>
+  <h2 class="section-title"> Product Stats</h2>
   <div class="dashboard-grid">
     <div class="card"><h2><?= $totalProducts ?></h2><p>Total Products</p></div>
     <div class="card"><h2><?= $outOfStock ?></h2><p>Out of Stock</p></div>
@@ -140,27 +140,27 @@ $mostViewedProduct = $conn->query("
     <div class="card"><h2>$<?= number_format($inventoryValue, 2) ?></h2><p>Total Inventory Value</p></div>
   </div>
 
-  <h2 class="section-title">👤 User Activity</h2>
+  <h2 class="section-title"> User Activity</h2>
   <div class="dashboard-grid">
     <div class="card"><h2><?= $totalUsers ?></h2><p>Registered Users</p></div>
     <div class="card"><h2><?= $loggedInUsers ?></h2><p>Currently Logged In</p></div>
     <div class="card"><h2><?= $activeUsers24h ?></h2><p>Active in Last 24h</p></div>
   </div>
 
-  <h2 class="section-title">🧾 Orders & Revenue</h2>
+  <h2 class="section-title"> Orders & Revenue</h2>
   <div class="dashboard-grid">
     <div class="card"><h2><?= $totalOrders ?></h2><p>Total Orders</p></div>
     <div class="card"><h2>$<?= number_format($totalRevenue, 2) ?></h2><p>Total Revenue</p></div>
   </div>
 
-  <h2 class="section-title">📈 Site Analytics</h2>
+  <h2 class="section-title"> Site Analytics</h2>
   <div class="dashboard-grid">
     <div class="card"><h2><?= $totalPageviews ?></h2><p>Total Page Views</p></div>
     <div class="card"><h2><?= round($avgSessionTime, 1) ?>s</h2><p>Avg. Session Duration</p></div>
     <div class="card"><h2><?= $mostViewedProduct['product_name'] ?></h2><p>Most Viewed Product (<?= $mostViewedProduct['views'] ?> views)</p></div>
   </div>
 
-  <h2 class="section-title">🧵 All Products Overview</h2>
+  <h2 class="section-title"> All Products Overview</h2>
   <table>
     <thead>
       <tr>

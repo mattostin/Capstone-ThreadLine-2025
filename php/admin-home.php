@@ -118,7 +118,7 @@ $factLines = [
 
   <!-- Admin Home Snapshot -->
   <main style="text-align: center;">
-    <h1>Welcome Back, Admin 👑</h1>
+    <h1>Welcome Back, Admin </h1>
     <p style="font-size: 1.2rem;">Here’s a quick snapshot of your store’s performance today.</p>
 
     <div class="summary-box">
