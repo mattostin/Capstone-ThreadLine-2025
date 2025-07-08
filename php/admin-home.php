@@ -9,9 +9,19 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Real-time data
-$activeUsers = $conn->query("SELECT COUNT(DISTINCT user_id) as total FROM site_analytics WHERE timestamp >= NOW() - INTERVAL 10 MINUTE")->fetch_assoc()['total'];
-$topProductToday = $conn->query("
+// Safe default values
+$activeUsers = 0;
+$topProductLine = "No product views today yet.";
+$todayRevenue = 0.00;
+
+// Get active users (last 10 mins)
+$result = $conn->query("SELECT COUNT(DISTINCT user_id) as total FROM site_analytics WHERE timestamp >= NOW() - INTERVAL 10 MINUTE");
+if ($result && $row = $result->fetch_assoc()) {
+  $activeUsers = $row['total'];
+}
+
+// Get top product today
+$result = $conn->query("
   SELECT p.product_name, COUNT(*) as views
   FROM site_analytics sa
   JOIN products p ON sa.product_id = p.id
@@ -19,17 +29,25 @@ $topProductToday = $conn->query("
   GROUP BY sa.product_id
   ORDER BY views DESC
   LIMIT 1
-")->fetch_assoc();
-$todayRevenue = $conn->query("
+");
+if ($result && $row = $result->fetch_assoc()) {
+  $topProductLine = "Top product today: <strong>{$row['product_name']}</strong> ({$row['views']} views)";
+}
+
+// Get today's revenue
+$result = $conn->query("
   SELECT SUM(price * quantity) as revenue
   FROM orders o
   JOIN order_items oi ON o.id = oi.order_id
   WHERE DATE(o.order_date) = CURDATE()
-")->fetch_assoc()['revenue'] ?? 0.00;
+");
+if ($result && $row = $result->fetch_assoc()) {
+  $todayRevenue = $row['revenue'] ?? 0.00;
+}
 
 $factLines = [
   "Active users in the last 10 minutes: <strong>$activeUsers</strong>",
-  $topProductToday ? "Top product today: <strong>{$topProductToday['product_name']}</strong> ({$topProductToday['views']} views)" : "No product views today yet.",
+  $topProductLine,
   "Today's revenue so far: <strong>$" . number_format($todayRevenue, 2) . "</strong>"
 ];
 ?>
@@ -79,8 +97,7 @@ $factLines = [
   </style>
 </head>
 <body>
-  <!-- ThreadLine Navbar -->
-  <?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
+  <!-- Navbar -->
   <nav class="navbar">
     <a class="logo" href="logo_redirect.php">ThreadLine</a>
     <ul class="nav-links">
@@ -99,7 +116,7 @@ $factLines = [
     </ul>
   </nav>
 
-  <!-- Admin Welcome -->
+  <!-- Admin Home Snapshot -->
   <main style="text-align: center;">
     <h1>Welcome Back, Admin 👑</h1>
     <p style="font-size: 1.2rem;">Here’s a quick snapshot of your store’s performance today.</p>
