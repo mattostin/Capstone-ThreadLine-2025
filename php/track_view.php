@@ -10,7 +10,6 @@ if ($conn->connect_error) {
     exit("DB connection failed");
 }
 
-// Get the raw POST data
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
 
@@ -19,13 +18,13 @@ if (!$data) {
     exit("No JSON data received");
 }
 
-// Extract values safely
-$userId = isset($data['user_id']) ? intval($data['user_id']) : null;
-$productId = isset($data['product_id']) ? intval($data['product_id']) : null;
+// Sanitize and extract values
+$userId      = isset($data['user_id']) ? intval($data['user_id']) : null;
+$productId   = isset($data['product_id']) ? intval($data['product_id']) : null; // nullable
 $pageVisited = isset($data['page_visited']) ? $data['page_visited'] : null;
-$duration = isset($data['duration_seconds']) ? intval($data['duration_seconds']) : 0;
+$duration    = isset($data['duration_seconds']) ? intval($data['duration_seconds']) : 0;
 
-if ($productId && $duration > 0 && $pageVisited !== null) {
+if ($pageVisited !== null) {
     $stmt = $conn->prepare("
         INSERT INTO site_analytics 
         (user_id, page_visited, product_id, session_start, session_end, duration_seconds, timestamp)
