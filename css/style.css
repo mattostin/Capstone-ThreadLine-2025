@@ -20,7 +20,6 @@ html, body {
   background-attachment: fixed;
   color: #111;
   overflow-x: hidden;
-  overflow-y: scroll; /* ✅ Keeps scrollbar space consistent on all pages */
 }
 
 /* NAVBAR */
@@ -30,9 +29,7 @@ html, body {
   align-items: center;
   padding: 1rem 2rem;
   background: transparent;
-  max-width: 1200px;        /* ✅ Prevent navbar from stretching too far */
-  margin: 0 auto;           /* ✅ Center navbar */
-  flex-wrap: nowrap;        /* ✅ Prevent wrapping unless manually adjusted */
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -47,7 +44,7 @@ html, body {
   list-style: none;
   display: flex;
   gap: 2rem;
-  flex-wrap: nowrap;       /* ✅ Prevent navbar items from jumping lines */
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -287,3 +284,4 @@ footer {
     margin: 3rem 1rem;
   }
 }
+
