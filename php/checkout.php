@@ -73,6 +73,14 @@ if (session_status() === PHP_SESSION_NONE) {
   </style>
 </head>
 <body>
+  <script>
+    // Clear cart if flagged by sessionStorage
+    if (sessionStorage.getItem("clearCartOnLogin") === "true") {
+      localStorage.removeItem("cart");
+      sessionStorage.removeItem("clearCartOnLogin");
+    }
+  </script>
+
   <div class="checkout-container">
     <h2>Shopping Cart</h2>
     <div id="cartContainer"></div>
