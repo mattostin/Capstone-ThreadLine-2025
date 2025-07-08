@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
 
 // Redirect to admin home if user is admin
 if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
-    header("Location: /php/admin_home.php");
+    header("Location: /php/admin-home.php");
     exit;
 }
 
