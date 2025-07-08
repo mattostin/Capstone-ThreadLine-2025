@@ -1,9 +1,17 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['username'])) {
     header("Location: /html/index.html");
     exit;
 }
+
+// Redirect to admin home if user is admin
+if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
+    header("Location: /php/admin_home.php");
+    exit;
+}
+
 $username = ucfirst(htmlspecialchars($_SESSION['username']));
 ?>
 <!DOCTYPE html>
