@@ -79,6 +79,12 @@ if (session_status() === PHP_SESSION_NONE) {
       border-radius: 5px;
       font-size: 1rem;
       cursor: pointer;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-top: 1rem;
     }
   </style>
@@ -98,11 +104,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <h2>Shopping Cart</h2>
     <div id="cartContainer"></div>
 
-    <div style="text-align:right; margin-top: 1rem;">
+    <div class="action-row">
       <button class="btn-clear" onclick="clearCart()">Clear Cart</button>
-    </div>
-
-    <div style="text-align:right; margin-top: 1rem;">
       <?php
       if (isset($_SESSION['username'])) {
         echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>';
