@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
   <meta charset="UTF-8" />
   <title>Checkout - ThreadLine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -70,30 +70,11 @@ if (session_status() === PHP_SESSION_NONE) {
       font-size: 1rem;
       cursor: pointer;
     }
-
-    .btn-clear {
-      background: #888;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
-
-  <?php include 'navbar.php'; ?>
-
   <script>
+    // Clear cart if flagged by sessionStorage
     if (sessionStorage.getItem("clearCartOnLogin") === "true") {
       localStorage.removeItem("cart");
       sessionStorage.removeItem("clearCartOnLogin");
@@ -104,8 +85,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <h2>Shopping Cart</h2>
     <div id="cartContainer"></div>
 
-    <div class="action-row">
-      <button class="btn-clear" onclick="clearCart()">Clear Cart</button>
+    <div style="text-align:right;">
       <?php
       if (isset($_SESSION['username'])) {
         echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>';
@@ -145,11 +125,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
       html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
       container.innerHTML = html;
-    }
-
-    function clearCart() {
-      localStorage.removeItem('cart');
-      renderCart();
     }
 
     renderCart();
