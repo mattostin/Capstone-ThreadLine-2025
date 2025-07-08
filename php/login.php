@@ -91,13 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $updateStmt->execute();
       $updateStmt->close();
 
-      if ($is_admin == 1) {
-        header("Location: admin-dashboard.php");
-        exit;
-      } else {
-        header("Location: $redirect");
-        exit;
-      }
+      // ✅ Clear localStorage cart and redirect via JS
+      $target = $is_admin == 1 ? "admin-dashboard.php" : $redirect;
+      echo "<script>
+              localStorage.removeItem('cart');
+              window.location.href = '$target';
+            </script>";
+      exit;
     }
   }
 

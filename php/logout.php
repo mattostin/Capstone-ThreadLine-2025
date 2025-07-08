@@ -32,7 +32,10 @@ if (isset($_SESSION['user_id'])) {
 session_unset();
 session_destroy();
 
-// Redirect to homepage
-header("Location: ../html/index.html");
+// Output script to clear cart and redirect
+echo '<script>
+  localStorage.removeItem("cart");
+  window.location.href = "../html/index.html";
+</script>';
 exit;
 ?>
