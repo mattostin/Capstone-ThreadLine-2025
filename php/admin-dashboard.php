@@ -130,7 +130,7 @@ $mostViewedProduct = $conn->query("
 <body>
   <?php include 'navbar.php'; ?>
 
-  <h1>🛠️ Admin Dashboard</h1>
+  <h1>Admin Dashboard</h1>
 
   <h2 class="section-title"> Product Stats</h2>
   <div class="dashboard-grid">
