@@ -70,11 +70,24 @@ if (session_status() === PHP_SESSION_NONE) {
       font-size: 1rem;
       cursor: pointer;
     }
+
+    .btn-clear {
+      background: #666;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-right: 1rem;
+    }
   </style>
 </head>
 <body>
+
+  <?php include 'navbar.php'; ?>
+
   <script>
-    // Clear cart if flagged by sessionStorage
     if (sessionStorage.getItem("clearCartOnLogin") === "true") {
       localStorage.removeItem("cart");
       sessionStorage.removeItem("clearCartOnLogin");
@@ -85,16 +98,20 @@ if (session_status() === PHP_SESSION_NONE) {
     <h2>Shopping Cart</h2>
     <div id="cartContainer"></div>
 
-    <div style="text-align:right;">
-      <?php
-      if (isset($_SESSION['username'])) {
-        echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>';
-      } elseif (isset($_SESSION['guest']) && $_SESSION['guest'] === true) {
-        echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed as Guest</button></a>';
-      } else {
-        echo '<a href="/php/guest_checkout.php"><button class="btn-checkout">Continue as Guest</button></a>';
-      }
-      ?>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button class="btn-clear" onclick="clearCart()">Clear Cart</button>
+
+      <div>
+        <?php
+        if (isset($_SESSION['username'])) {
+          echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed to Payment</button></a>';
+        } elseif (isset($_SESSION['guest']) && $_SESSION['guest'] === true) {
+          echo '<a href="/php/payment.php"><button class="btn-checkout">Proceed as Guest</button></a>';
+        } else {
+          echo '<a href="/php/guest_checkout.php"><button class="btn-checkout">Continue as Guest</button></a>';
+        }
+        ?>
+      </div>
     </div>
   </div>
 
@@ -125,6 +142,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
       html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
       container.innerHTML = html;
+    }
+
+    function clearCart() {
+      localStorage.removeItem('cart');
+      renderCart();
     }
 
     renderCart();
