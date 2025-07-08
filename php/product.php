@@ -114,5 +114,19 @@ if (!$product) {
       alert("<?= $product['product_name'] ?> added to cart!");
     });
   </script>
+
+  <!-- ✅ TRACK VIEW SCRIPT -->
+  <script>
+    let startTime = Date.now();
+    window.addEventListener("beforeunload", function () {
+      const duration = Math.round((Date.now() - startTime) / 1000);
+      navigator.sendBeacon("/track_view.php", JSON.stringify({
+        user_id: <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>,
+        page_visited: window.location.pathname,
+        product_id: <?= $productId ?>,
+        duration_seconds: duration
+      }));
+    });
+  </script>
 </body>
 </html>
