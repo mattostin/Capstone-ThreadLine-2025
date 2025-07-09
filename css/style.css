@@ -285,3 +285,14 @@ footer {
   }
 }
 
+.size-btn:hover {
+  background-color: #075eb6;
+  color: white;
+  border-color: #075eb6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#addToCartForm button:hover {
+  background-color: #054a8e;
+  transition: background-color 0.3s ease;
+}
