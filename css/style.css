@@ -285,6 +285,7 @@ footer {
   }
 }
 
+/* HOVER EFFECTS FOR SIZE & CART BUTTONS */
 .size-btn:hover {
   background-color: #075eb6;
   color: white;
