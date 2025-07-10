@@ -23,16 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $frontImgName = basename($_FILES['image_front']['name']);
     $backImgName = basename($_FILES['image_back']['name']);
 
-    $frontTarget = "../uploads/" . $frontImgName;
-    $backTarget = "../uploads/" . $backImgName;
+    $frontTargetPath = "../images/uploads/" . $frontImgName;
+    $backTargetPath = "../images/uploads/" . $backImgName;
 
-    move_uploaded_file($_FILES['image_front']['tmp_name'], $frontTarget);
-    move_uploaded_file($_FILES['image_back']['tmp_name'], $backTarget);
+    $dbFrontPath = "images/uploads/" . $frontImgName;
+    $dbBackPath = "images/uploads/" . $backImgName;
+
+    move_uploaded_file($_FILES['image_front']['tmp_name'], $frontTargetPath);
+    move_uploaded_file($_FILES['image_back']['tmp_name'], $backTargetPath);
 
     $stmt = $conn->prepare("INSERT INTO products (product_name, price, stock, available_sizes, image_front, image_back) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sdisss", $productName, $price, $stock, $sizes, $frontImgName, $backImgName);
+    $stmt->bind_param("sdisss", $productName, $price, $stock, $sizes, $dbFrontPath, $dbBackPath);
     $stmt->execute();
     $stmt->close();
+
     header("Location: ../php/admin-product-crud.php");
     exit;
   }
@@ -42,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $stmt->bind_param("sdisssi", $_POST['product_name'], $_POST['price'], $_POST['stock'], $_POST['available_sizes'], $_POST['image_front'], $_POST['image_back'], $_POST['product_id']);
     $stmt->execute();
     $stmt->close();
+
     header("Location: ../php/admin-product-crud.php");
     exit;
   }
@@ -51,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $stmt->bind_param("i", $_POST['product_id']);
     $stmt->execute();
     $stmt->close();
+
     echo json_encode(['success' => true]);
     exit;
   }
