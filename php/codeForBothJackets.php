@@ -116,7 +116,8 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
       <div class="product-grid">
         <?php
-        $sql = "SELECT * FROM products";
+        // ✅ Sort by position field
+        $sql = "SELECT * FROM products ORDER BY position ASC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0):
