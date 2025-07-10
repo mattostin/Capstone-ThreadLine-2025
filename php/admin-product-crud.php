@@ -1,5 +1,5 @@
 <?php
-session_start();//
+session_start();
 
 if (!isset($_SESSION['email']) || $_SESSION['email'] !== 'admin@threadline.com') {
   header("Location: login.php");
@@ -21,15 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $sizes = $_POST['available_sizes'];
 
     $frontImgName = basename($_FILES['image_front']['name']);
-    $frontTarget = '../uploads/' . $frontImgName;
-    move_uploaded_file($_FILES['image_front']['tmp_name'], $frontTarget);
-
     $backImgName = basename($_FILES['image_back']['name']);
-    $backTarget = '../uploads/' . $backImgName;
+
+    $frontTarget = "../uploads/" . $frontImgName;
+    $backTarget = "../uploads/" . $backImgName;
+
+    move_uploaded_file($_FILES['image_front']['tmp_name'], $frontTarget);
     move_uploaded_file($_FILES['image_back']['tmp_name'], $backTarget);
 
     $stmt = $conn->prepare("INSERT INTO products (product_name, price, stock, available_sizes, image_front, image_back) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sdisss", $productName, $price, $stock, $sizes, $frontTarget, $backTarget);
+    $stmt->bind_param("sdisss", $productName, $price, $stock, $sizes, $frontImgName, $backImgName);
     $stmt->execute();
     $stmt->close();
     header("Location: ../php/admin-product-crud.php");
