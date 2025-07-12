@@ -12,21 +12,17 @@ header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: no-referrer");
 header("X-XSS-Protection: 1; mode=block");
 
-// Enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database connection settings
 $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 
-// Connect to MySQL
 $conn = new mysqli($host, $username, $password, $database);
 
-// HTML header
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -56,36 +52,24 @@ echo <<<HTML
     <li><a href="/php/signup.php">Signup</a></li>
   </ul>
 </nav>
-<div class="signup-container">
-  <form method="POST" action="">
-    <label for="first_name">First Name:</label>
-    <input type="text" name="first_name" required /><br><br>
 
-    <label for="last_name">Last Name:</label>
-    <input type="text" name="last_name" required /><br><br>
-
-    <label for="username">Username:</label>
-    <input type="text" name="username" required /><br><br>
-
-    <label for="email">Email:</label>
-    <input type="email" name="email" required /><br><br>
-
-    <label for="dob">Date of Birth:</label>
-    <input type="date" name="dob" required /><br><br>
-
-    <label for="password">Password:</label>
-    <input type="password" name="password" required /><br><br>
-
-    <button type="submit">Sign Up</button>
+<div class="signup-container" style="max-width: 400px; margin: 6rem auto; background: #e4f1fb; padding: 2rem; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); text-align: center;">
+  <h2 style="font-family: 'Lilita One', cursive; font-size: 1.7rem; margin-bottom: 1.5rem; color: #075eb6;">Sign up for ThreadLine</h2>
+  <form method="POST" action="" style="display: flex; flex-direction: column; gap: 1rem;">
+    <input type="text" name="first_name" placeholder="First Name" required />
+    <input type="text" name="last_name" placeholder="Last Name" required />
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="date" name="dob" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit" style="background-color: #075eb6; color: white; border: none; padding: 0.75rem; border-radius: 8px; font-weight: bold; cursor: pointer;">Sign Up</button>
   </form>
 HTML;
 
-// Check connection
 if ($conn->connect_error) {
   die("<h2>❌ Connection failed: " . $conn->connect_error . "</h2></div></body></html>");
 }
 
-// Handle form
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $first_name = $_POST['first_name'];
   $last_name  = $_POST['last_name'];
@@ -107,10 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $stmt->bind_param("ssssss", $first_name, $last_name, $username, $email, $dob, $hashed_password);
 
   if ($stmt->execute()) {
-    echo "<h2>✅ Account Created Successfully</h2>";
+    echo "<p style='color: green; font-weight: bold; margin-top: 1rem;'>✅ Account Created Successfully</p>";
     echo "<p><a href='login.php' style='color: #075eb6; font-weight: bold;'>Click here to log in</a></p>";
   } else {
-    echo "<h2>❌ Error: " . $stmt->error . "</h2>";
+    echo "<p style='color: red; font-weight: bold; margin-top: 1rem;'>❌ Error: " . $stmt->error . "</p>";
   }
 
   $stmt->close();
@@ -121,7 +105,7 @@ $conn->close();
 echo <<<HTML
 </div>
 <footer>
-  <p>© 2025 ThreadLine. All rights reserved.</p>
+  <p style="text-align: center; margin-top: 2rem;">© 2025 ThreadLine. All rights reserved.</p>
 </footer>
 </body>
 </html>
