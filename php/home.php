@@ -136,5 +136,11 @@ $username = ucfirst(htmlspecialchars($_SESSION['username']));
     <p>Check out our latest drops — from clean jackets to everyday comfort. Your style starts here.</p>
     <a href="/php/codeForBothJackets.php" class="shop-button">🛍️ Go to Shop</a>
   </section>
+<script>
+  window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
+  window.productId = null;
+</script>
+<script src="/javascript/tracker.js"></script>
+
 </body>
 </html>
