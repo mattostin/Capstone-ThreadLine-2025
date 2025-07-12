@@ -151,5 +151,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
     renderCart();
   </script>
+<script>
+  window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
+  window.productId = null;
+</script>
+<script src="/javascript/tracker.js"></script>
+
 </body>
 </html>
