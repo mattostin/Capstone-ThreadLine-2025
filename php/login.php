@@ -115,11 +115,6 @@ echo <<<HTML
     <button type="submit" style="padding: 0.75rem; background-color: #075eb6; color: white; border: none; font-weight: bold; font-size: 1rem; border-radius: 6px; cursor: pointer;">Login</button>
   </form>
 </div>
-<script>
-  window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
-  window.productId = null;
-</script>
-<script src="/javascript/tracker.js"></script>
 </body>
 </html>
 HTML;
