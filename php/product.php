@@ -26,12 +26,41 @@ if (!$product) {
   <style>
     .product-detail-box { max-width: 800px; margin: 5rem auto; padding: 2rem; background: #f4f9ff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; }
     .product-detail-images { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
-    .product-detail-images img { max-width: 250px; object-fit: contain; }
+    .product-detail-images img { max-width: 250px; object-fit: contain; cursor: pointer; }
     .size-selector { margin: 0.5rem 0 1rem; }
     .size-btn { padding: 0.5rem 1rem; margin-right: 0.5rem; border: 1px solid #333; background: white; cursor: pointer; }
     .size-btn.selected { background: #007bff; color: white; }
     #addToCartForm input[type="number"] { width: 60px; padding: 0.3rem; margin-right: 1rem; }
     #addToCartForm button { background: #005bbb; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 10px;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -56,8 +85,8 @@ if (!$product) {
   <main>
     <div class="product-detail-box">
       <div class="product-detail-images">
-        <img src="/<?= htmlspecialchars($product['image_front']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Front">
-        <img src="/<?= htmlspecialchars($product['image_back']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?> Back">
+        <img src="/<?= htmlspecialchars($product['image_front']) ?>" alt="Front" data-large="/<?= htmlspecialchars($product['image_front']) ?>">
+        <img src="/<?= htmlspecialchars($product['image_back']) ?>" alt="Back" data-large="/<?= htmlspecialchars($product['image_back']) ?>">
       </div>
       <p><?= htmlspecialchars($product['product_name']) ?></p>
       <strong>$<?= number_format($product['price'], 2) ?></strong>
@@ -77,7 +106,14 @@ if (!$product) {
     </div>
   </main>
 
+  <!-- Image Modal -->
+  <div id="imgModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImg" />
+  </div>
+
   <script>
+    // Cart logic
     let selectedSize = "";
     document.querySelectorAll('.size-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -113,6 +149,21 @@ if (!$product) {
       localStorage.setItem('cart', JSON.stringify(cart));
       alert("<?= $product['product_name'] ?> added to cart!");
     });
+
+    // Modal logic
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const closeBtn = document.querySelector(".close");
+
+    document.querySelectorAll(".product-detail-images img").forEach(img => {
+      img.addEventListener("click", () => {
+        modal.style.display = "block";
+        modalImg.src = img.dataset.large;
+      });
+    });
+
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
   </script>
 
   <!-- ✅ TRACK VIEW SCRIPT -->
