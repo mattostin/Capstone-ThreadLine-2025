@@ -53,16 +53,16 @@ echo <<<HTML
   </ul>
 </nav>
 
-<div class="signup-container" style="max-width: 400px; margin: 6rem auto; background: #e4f1fb; padding: 2rem; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); text-align: center;">
-  <h2 style="font-family: 'Lilita One', cursive; font-size: 1.7rem; margin-bottom: 1.5rem; color: #075eb6;">Sign up for ThreadLine</h2>
-  <form method="POST" action="" style="display: flex; flex-direction: column; gap: 1rem;">
+<div class="signup-container">
+  <h2>Sign up for ThreadLine</h2>
+  <form method="POST" action="" class="signup-form">
     <input type="text" name="first_name" placeholder="First Name" required />
     <input type="text" name="last_name" placeholder="Last Name" required />
     <input type="text" name="username" placeholder="Username" required />
     <input type="email" name="email" placeholder="Email" required />
     <input type="date" name="dob" required />
     <input type="password" name="password" placeholder="Password" required />
-    <button type="submit" style="background-color: #075eb6; color: white; border: none; padding: 0.75rem; border-radius: 8px; font-weight: bold; cursor: pointer;">Sign Up</button>
+    <button type="submit">Sign Up</button>
   </form>
 HTML;
 
