@@ -21,8 +21,11 @@ $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
-
 $conn = new mysqli($host, $username, $password, $database);
+
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 
 // HTML & Navbar
 echo <<<HTML
@@ -39,12 +42,27 @@ echo <<<HTML
 </head>
 <body>
 <nav class="navbar">
-  <div class="logo">ThreadLine</div>
+  <a class="logo" href="/php/codeForBothJackets.php">ThreadLine</a>
   <ul class="nav-links">
+HTML;
+
+if (isset($_SESSION['username'])) {
+  echo "<li><a href='checkout.php'>Checkout</a></li>";
+  if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
+    echo "<li><a href='admin-dashboard.php'>Dashboard</a></li>";
+  }
+  echo "<li style='color: white; font-weight: bold;'>Hi, " . htmlspecialchars($_SESSION['username']) . "</li>";
+  echo "<li><a href='logout.php'>Logout</a></li>";
+} else {
+  echo <<<HTML
     <li><a href="/html/index.html">Home</a></li>
     <li><a href="/php/codeForBothJackets.php">Shop</a></li>
     <li><a href="/php/login.php">Login</a></li>
     <li><a href="/php/signup.php">Signup</a></li>
+HTML;
+}
+
+echo <<<HTML
   </ul>
 </nav>
 
@@ -59,25 +77,25 @@ echo <<<HTML
 </div>
 HTML;
 
-// Handle login
+// ✅ Handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $email = $_POST['email'];
   $password = $_POST['password'];
 
-  $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
+  $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
   $stmt->bind_param("s", $email);
   $stmt->execute();
   $stmt->store_result();
 
   if ($stmt->num_rows === 1) {
-    $stmt->bind_result($user_id, $hashed_password);
+    $stmt->bind_result($user_id, $username, $hashed_password);
     $stmt->fetch();
 
     if (password_verify($password, $hashed_password)) {
       $_SESSION['user_id'] = $user_id;
+      $_SESSION['username'] = $username;
       $_SESSION['email'] = $email;
 
-      // ✅ Update last_activity
       $updateStmt = $conn->prepare("UPDATE users SET last_activity = NOW() WHERE id = ?");
       $updateStmt->bind_param("i", $user_id);
       $updateStmt->execute();
