@@ -117,13 +117,18 @@ if (!$product) {
 
   <!-- ✅ TRACK VIEW SCRIPT -->
   <script>
-    let startTime = Date.now();
+    const startTime = Date.now();
+
     window.addEventListener("beforeunload", function () {
-      const duration = Math.round((Date.now() - startTime) / 1000);
+      const endTime = Date.now();
+      const duration = Math.round((endTime - startTime) / 1000);
+
       navigator.sendBeacon("/php/track_view.php", JSON.stringify({
         user_id: <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>,
         page_visited: window.location.pathname,
         product_id: <?= $productId ?>,
+        session_start: new Date(startTime).toISOString().slice(0, 19).replace("T", " "),
+        session_end: new Date(endTime).toISOString().slice(0, 19).replace("T", " "),
         duration_seconds: duration
       }));
     });
