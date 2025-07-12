@@ -1,5 +1,5 @@
 <?php
-// Secure session and headers
+// ✅ Secure session and headers
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -12,22 +12,19 @@ header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: no-referrer");
 header("X-XSS-Protection: 1; mode=block");
 
-date_default_timezone_set('America/Los_Angeles');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// DB connection
+// Database
 $host = "localhost";
 $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
+
 $conn = new mysqli($host, $username, $password, $database);
 
-// Redirect for regular users
-$redirect = "/php/codeForBothJackets.php";
-
-// HTML Header
+// HTML & Navbar
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -38,83 +35,72 @@ echo <<<HTML
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 <nav class="navbar">
-  <a class="logo" href="logo_redirect.php">ThreadLine</a>
+  <div class="logo">ThreadLine</div>
   <ul class="nav-links">
-    <li><a href="../html/index.html">Home</a></li>
-    <li><a href="codeForBothJackets.php">Shop</a></li>
-HTML;
-
-if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com') {
-  echo '<li><a href="admin-dashboard.php">Dashboard</a></li>';
-}
-
-echo <<<HTML
-    <li><a href="signup.php">Signup</a></li>
+    <li><a href="/html/index.html">Home</a></li>
+    <li><a href="/php/codeForBothJackets.php">Shop</a></li>
+    <li><a href="/php/login.php">Login</a></li>
+    <li><a href="/php/signup.php">Signup</a></li>
   </ul>
 </nav>
-<div class="signup-container">
+
+<div class="signup-container" style="max-width: 420px; margin: 6rem auto; padding: 2.5rem 2rem;">
+  <h2 style="font-family: 'Lilita One', cursive; font-size: 2rem; margin-bottom: 1.5rem; color: #075eb6;">Login to ThreadLine</h2>
+  <form method="POST" action="" class="signup-form" style="gap: 1.2rem;">
+    <input type="email" name="email" placeholder="Email" required style="padding: 0.9rem;" />
+    <input type="password" name="password" placeholder="Password" required style="padding: 0.9rem;" />
+    <button type="submit">Login</button>
+  </form>
+  <p style="margin-top: 1.2rem; font-size: 0.95rem;">Don’t have an account? <a href="signup.php" style="color: #075eb6; font-weight: bold;">Click here to sign up</a></p>
+</div>
 HTML;
 
-if ($conn->connect_error) {
-  die("<h2>❌ Connection failed.</h2></div></body></html>");
-}
-
+// Handle login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $email    = $_POST['email'];
+  $email = $_POST['email'];
   $password = $_POST['password'];
 
-  $sql = "SELECT id, username, password, is_admin FROM users WHERE email = ?";
-  $stmt = $conn->prepare($sql);
+  $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
   $stmt->bind_param("s", $email);
   $stmt->execute();
   $stmt->store_result();
 
   if ($stmt->num_rows === 1) {
-    $stmt->bind_result($id, $username, $hashed_password, $is_admin);
+    $stmt->bind_result($user_id, $hashed_password);
     $stmt->fetch();
 
     if (password_verify($password, $hashed_password)) {
-      $_SESSION["user_id"] = $id;
-      $_SESSION["username"] = $username;
-      $_SESSION["is_admin"] = $is_admin;
-      $_SESSION["email"] = $email;
+      $_SESSION['user_id'] = $user_id;
+      $_SESSION['email'] = $email;
 
-      $now = date('Y-m-d H:i:s');
-      $ip = $_SERVER['REMOTE_ADDR'];
-      $updateSql = "UPDATE users SET last_activity = ?, last_login = ?, last_login_ip = ?, is_logged_in = 1 WHERE id = ?";
-      $updateStmt = $conn->prepare($updateSql);
-      $updateStmt->bind_param("sssi", $now, $now, $ip, $id);
+      // ✅ Update last_activity
+      $updateStmt = $conn->prepare("UPDATE users SET last_activity = NOW() WHERE id = ?");
+      $updateStmt->bind_param("i", $user_id);
       $updateStmt->execute();
       $updateStmt->close();
 
-      // ✅ Clear localStorage cart and redirect via JS
-      $target = $is_admin == 1 ? "admin-dashboard.php" : $redirect;
-      echo "<script>
-              localStorage.removeItem('cart');
-              window.location.href = '$target';
-            </script>";
+      header("Location: codeForBothJackets.php");
       exit;
+    } else {
+      echo "<p style='color: red; text-align: center;'>Incorrect password. Please try again.</p>";
     }
+  } else {
+    echo "<p style='color: red; text-align: center;'>No account found with that email.</p>";
   }
 
-  echo "<h2>❌ Invalid email or password.</h2>";
   $stmt->close();
 }
 
 $conn->close();
 
 echo <<<HTML
-  <h2>Login to ThreadLine</h2>
-  <form method="post" action="login.php" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: auto;">
-    <input type="email" name="email" placeholder="Email" required style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px;" />
-    <input type="password" name="password" placeholder="Password" required style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px;" />
-    <button type="submit" style="padding: 0.75rem; background-color: #075eb6; color: white; border: none; font-weight: bold; font-size: 1rem; border-radius: 6px; cursor: pointer;">Login</button>
-  </form>
-</div>
+<footer>
+  <p style="text-align: center; margin-top: 2rem;">© 2025 ThreadLine. All rights reserved.</p>
+</footer>
 </body>
 </html>
 HTML;
