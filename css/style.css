@@ -22,7 +22,9 @@ html, body {
   overflow-x: hidden;
 }
 
-/* NAVBAR */
+/* ===== NAVIGATION BAR ===== */
+/* Layout and spacing for top navbar */
+
 .navbar {
   display: flex;
   justify-content: space-between;
