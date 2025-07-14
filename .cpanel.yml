@@ -1,3 +1,8 @@
+# 🛠️ Deployment Section:
+# This block sets the deployment path and copies all project files
+# from the current working directory to the live public_html folder.
+# Used for uploading the site to the production server.
+
 deployment:
   tasks:
     - export DEPLOYPATH=/home/thredqwx/public_html
