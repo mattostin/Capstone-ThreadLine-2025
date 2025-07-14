@@ -96,8 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['username'] = $username;
       $_SESSION['email'] = $email;
 
-      $updateStmt = $conn->prepare("UPDATE users SET last_activity = NOW() WHERE id = ?");
-      $updateStmt->bind_param("i", $user_id);
+      // ✅ Update last_activity, last_login, and last_login_ip
+      $ip_address = $_SERVER['REMOTE_ADDR'];
+      $updateStmt = $conn->prepare("UPDATE users SET last_activity = NOW(), last_login = NOW(), last_login_ip = ? WHERE id = ?");
+      $updateStmt->bind_param("si", $ip_address, $user_id);
       $updateStmt->execute();
       $updateStmt->close();
 
