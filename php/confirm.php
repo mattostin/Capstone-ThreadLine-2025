@@ -78,15 +78,15 @@ $stmt->execute();
 $order_id = $stmt->insert_id;
 $stmt->close();
 
-// Order items
+// ✅ Insert Order Items WITH SIZE
 foreach ($cartData as $item) {
-  $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, quantity, price) VALUES (?, ?, ?, ?)");
-  $stmt->bind_param("isid", $order_id, $item['name'], $item['quantity'], $item['price']);
+  $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
   $stmt->execute();
   $stmt->close();
 }
 
-// ⬇️ INSERT INTO `threadline_payments`
+// ⬇️ Insert into threadline_payments
 $created_at = date('Y-m-d H:i:s');
 $stmt = $conn->prepare("INSERT INTO threadline_payments (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip, created_at, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssiissi", $fullname, $address, $email, $cardLast4, $expMonth, $expYear, $cvv, $zip, $created_at, $order_id);
