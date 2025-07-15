@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Los_Angeles');
+
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -8,7 +10,6 @@ session_start();
 
 // Sanitize input
 
-date_default_timezone_set('America/Los_Angeles');
 $fullname = htmlspecialchars($_POST['fullname'] ?? "Guest");
 $address  = htmlspecialchars($_POST['address'] ?? "N/A");
 $zip      = htmlspecialchars($_POST['zip'] ?? "00000");
