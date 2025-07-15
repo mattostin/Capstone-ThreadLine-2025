@@ -1,12 +1,4 @@
 <?php
-// Force HTTPS
-if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
-    $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    header("Location: $redirect");
-    exit();
-}
-
-// Secure session settings
 session_set_cookie_params([
   'secure' => true,
   'httponly' => true,
@@ -14,182 +6,113 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// ✅ Allow access for logged-in users or guests
-if (!isset($_SESSION['username']) && !isset($_SESSION['guest'])) {
-  header("Location: ../php/login.php?redirect=payment.php");
-  exit();
+// Sanitize input
+$fullname = htmlspecialchars($_POST['fullname'] ?? "Guest");
+$address  = htmlspecialchars($_POST['address'] ?? "N/A");
+$zip      = htmlspecialchars($_POST['zip'] ?? "00000");
+$email    = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
+$cardLast4 = htmlspecialchars($_POST['card_last4'] ?? "0000");
+$expMonth = htmlspecialchars($_POST['expiry_month'] ?? "01");
+$expYear  = htmlspecialchars($_POST['expiry_year'] ?? "1970");
+$cvv      = htmlspecialchars($_POST['cvv'] ?? "000");
+$cartData = json_decode($_POST['cart'] ?? '[]', true);
+
+// DB connection
+$conn = new mysqli("localhost", "thredqwx_admin", "Mostin2003$", "thredqwx_threadline");
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
 }
 
-// CSRF token
-if (empty($_SESSION['csrf_token'])) {
-  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+// Check stock
+$outOfStockItems = [];
+foreach ($cartData as $item) {
+  $stmt = $conn->prepare("SELECT stock FROM products WHERE product_name = ?");
+  $stmt->bind_param("s", $item['name']);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $product = $result->fetch_assoc();
+  if (!$product || $product['stock'] < (int)$item['quantity']) {
+    $outOfStockItems[] = $item['name'];
+  }
+  $stmt->close();
 }
-$csrf_token = $_SESSION['csrf_token'];
+
+if (!empty($outOfStockItems)) {
+  echo "<h2 style='text-align:center;color:red;'>❌ Out of Stock</h2>";
+  foreach ($outOfStockItems as $item) {
+    echo "<p style='text-align:center;'>$item</p>";
+  }
+  echo "<p style='text-align:center;'><a href='/php/codeForBothJackets.php'>← Go back</a></p>";
+  exit;
+}
+
+// Deduct stock
+foreach ($cartData as $item) {
+  $stmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE product_name = ?");
+  $stmt->bind_param("is", $item['quantity'], $item['name']);
+  $stmt->execute();
+  $stmt->close();
+}
+
+// Guest tracking
+if (!isset($_SESSION['user_id'])) {
+  $session_id = session_id();
+  $ip_address = $_SERVER['REMOTE_ADDR'];
+  $checkout_time = date('Y-m-d H:i:s');
+  $stmt = $conn->prepare("INSERT INTO guest_checkouts (session_id, ip_address, full_name, email, zip_code, checkout_time) VALUES (?, ?, ?, ?, ?, ?)");
+  $stmt->bind_param("ssssss", $session_id, $ip_address, $fullname, $email, $zip, $checkout_time);
+  $stmt->execute();
+  $stmt->close();
+}
+
+// Orders
+$user_id = $_SESSION['user_id'] ?? null;
+$order_date = date('Y-m-d H:i:s');
+$total = 0;
+foreach ($cartData as $item) {
+  $total += (float)$item['price'] * (int)$item['quantity'];
+}
+$stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4, total, created_at, order_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("isssssss", $user_id, $fullname, $address, $email, $cardLast4, $total, $order_date, $order_date);
+$stmt->execute();
+$order_id = $stmt->insert_id;
+$stmt->close();
+
+// ✅ Insert Order Items WITH SIZE
+foreach ($cartData as $item) {
+  $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
+  $stmt->execute();
+  $stmt->close();
+}
+
+// ⬇️ Insert into threadline_payments
+$created_at = date('Y-m-d H:i:s');
+$stmt = $conn->prepare("INSERT INTO threadline_payments (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip, created_at, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("sssssiissi", $fullname, $address, $email, $cardLast4, $expMonth, $expYear, $cvv, $zip, $created_at, $order_id);
+$stmt->execute();
+$stmt->close();
+
+$conn->close();
 ?>
+
+<!-- ✅ Confirmation Page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Payment - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    .payment-container {
-      max-width: 700px;
-      margin: 4rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #ffffffdd;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      font-family: 'Poppins', sans-serif;
-    }
-
-    h2 {
-      margin-bottom: 2rem;
-      font-size: 2rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      display: block;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    select {
-      padding: 0.65rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      width: 100%;
-    }
-
-    .flex-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .flex-row > div {
-      flex: 1;
-      min-width: 120px;
-    }
-
-    button[type="submit"] {
-      background-color: #007bff;
-      color: white;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 1rem;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Order Confirmed</title>
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <header class="navbar">
-    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <li><a href="/php/logout.php">Logout</a></li>
-      <?php endif; ?>
-    </ul>
-  </header>
-
-  <main class="payment-container">
-    <h2>Payment and Billing</h2>
-    <form action="../php/confirm.php" method="post">
-      <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-
-      <div>
-        <label for="fullname">Full Name</label>
-        <input type="text" id="fullname" name="fullname" required>
-      </div>
-
-      <div>
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address" required>
-      </div>
-
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-
-      <div>
-        <label for="card">Credit Card Number</label>
-        <input type="text" id="card" name="card" required>
-      </div>
-
-      <div class="flex-row">
-        <div>
-          <label for="expiryMonth">Exp. Month</label>
-          <select id="expiryMonth" name="expiryMonth" required>
-            <option value="" disabled selected>MM</option>
-            <?php for ($i = 1; $i <= 12; $i++): ?>
-              <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
-            <?php endfor; ?>
-          </select>
-        </div>
-
-        <div>
-          <label for="expiryYear">Exp. Year</label>
-          <select id="expiryYear" name="expiryYear" required>
-            <option value="" disabled selected>YYYY</option>
-            <?php
-              $year = date('Y');
-              for ($i = 0; $i < 10; $i++) {
-                echo "<option value='".($year + $i)."'>".($year + $i)."</option>";
-              }
-            ?>
-          </select>
-        </div>
-
-        <div>
-          <label for="cvv">CVV</label>
-          <input type="text" id="cvv" name="cvv" maxlength="4" required>
-        </div>
-
-        <div>
-          <label for="zip">ZIP Code</label>
-          <input type="text" id="zip" name="zip" maxlength="10" required>
-        </div>
-      </div>
-
-      <button type="submit">Submit Payment</button>
-    </form>
-  </main>
-
-  <script>
-    document.querySelector("form").addEventListener("submit", function () {
-      const cart = localStorage.getItem("cart");
-      if (cart) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "cart";
-        input.value = cart;
-        this.appendChild(input);
-      }
-    });
-  </script>
-
-  <script>
-    window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
-    window.productId = null;
-  </script>
-  <script src="/javascript/tracker.js"></script>
+  <div style="max-width:800px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;font-family:'Poppins',sans-serif;">
+    <h2>✅ Order Confirmed</h2>
+    <p>Thank you, <strong><?= $fullname ?></strong>!</p>
+    <p>We’ll ship your items to:<br><?= $address ?>, <?= $zip ?></p>
+    <p><strong>Order Total:</strong> $<?= number_format($total, 2) ?></p>
+    <p><strong>Confirmation sent to:</strong> <?= $email ?></p>
+    <a href="/php/codeForBothJackets.php">← Back to Shop</a>
+  </div>
+  <script>localStorage.removeItem('cart');</script>
 </body>
 </html>
