@@ -1,14 +1,13 @@
 
+<?php
 /*
   File: admin_dashboard.php
   Project: ThreadLine E-Commerce Platform
   Description: Admin dashboard that displays product, user, order,
                revenue, and site-analytics metrics pulled from MySQL.
                Only accessible to the designated admin account.
+*/
 
-
-
-<?php
 session_start();
 
 // Ensure admin is logged in
