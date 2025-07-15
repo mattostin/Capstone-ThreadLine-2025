@@ -9,7 +9,6 @@ session_set_cookie_params([
 session_start();
 
 // Sanitize input
-
 $fullname = htmlspecialchars($_POST['fullname'] ?? "Guest");
 $address  = htmlspecialchars($_POST['address'] ?? "N/A");
 $zip      = htmlspecialchars($_POST['zip'] ?? "00000");
@@ -111,9 +110,11 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <title>Order Confirmed</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <?php include 'navbar.php'; ?>
+
   <div style="max-width:800px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;font-family:'Poppins',sans-serif;">
     <h2>✅ Order Confirmed</h2>
     <p>Thank you, <strong><?= $fullname ?></strong>!</p>
@@ -122,6 +123,7 @@ $conn->close();
     <p><strong>Confirmation sent to:</strong> <?= $email ?></p>
     <a href="/php/codeForBothJackets.php">← Back to Shop</a>
   </div>
+
   <script>localStorage.removeItem('cart');</script>
 </body>
 </html>
