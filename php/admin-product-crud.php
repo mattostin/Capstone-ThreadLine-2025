@@ -23,15 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $frontImgName = basename($_FILES['image_front']['name']);
     $backImgName = basename($_FILES['image_back']['name']);
 
-    $frontTarget = "../images/uploads/" . $frontImgName;
-    $backTarget = "../images/uploads/" . $backImgName;
+    $frontImgPath = 'images/uploads/' . $frontImgName;
+    $backImgPath = 'images/uploads/' . $backImgName;
 
-    move_uploaded_file($_FILES['image_front']['tmp_name'], $frontTarget);
-    move_uploaded_file($_FILES['image_back']['tmp_name'], $backTarget);
+    move_uploaded_file($_FILES['image_front']['tmp_name'], '../' . $frontImgPath);
+    move_uploaded_file($_FILES['image_back']['tmp_name'], '../' . $backImgPath);
 
     $stmt = $conn->prepare("INSERT INTO products (product_name, price, stock, available_sizes, image_front, image_back, position) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $position = (int)$conn->query("SELECT IFNULL(MAX(position), 0) + 1 AS next FROM products")->fetch_assoc()['next'];
-    $stmt->bind_param("sdisssi", $productName, $price, $stock, $sizes, $frontImgName, $backImgName, $position);
+    $stmt->bind_param("sdisssi", $productName, $price, $stock, $sizes, $frontImgPath, $backImgPath, $position);
     $stmt->execute();
     $stmt->close();
     header("Location: ../php/admin-product-crud.php");
