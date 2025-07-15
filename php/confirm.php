@@ -15,7 +15,6 @@ $zip      = htmlspecialchars($_POST['zip'] ?? "00000");
 $email    = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
 
 $card = $_POST['card'] ?? "0000";
-// Extract last 4 digits of the card number, removing any non-digit characters
 $cardLast4 = substr(preg_replace('/\D/', '', $card), -4);
 
 $expMonth = htmlspecialchars($_POST['expiryMonth'] ?? "01");
@@ -30,11 +29,11 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Check stock
+// ✅ Check stock by product ID
 $outOfStockItems = [];
 foreach ($cartData as $item) {
-  $stmt = $conn->prepare("SELECT stock FROM products WHERE product_name = ?");
-  $stmt->bind_param("s", $item['name']);
+  $stmt = $conn->prepare("SELECT stock FROM products WHERE id = ?");
+  $stmt->bind_param("i", $item['id']);
   $stmt->execute();
   $result = $stmt->get_result();
   $product = $result->fetch_assoc();
@@ -53,15 +52,15 @@ if (!empty($outOfStockItems)) {
   exit;
 }
 
-// Deduct stock
+// ✅ Deduct stock by product ID
 foreach ($cartData as $item) {
-  $stmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE product_name = ?");
-  $stmt->bind_param("is", $item['quantity'], $item['name']);
+  $stmt = $conn->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
+  $stmt->bind_param("ii", $item['quantity'], $item['id']);
   $stmt->execute();
   $stmt->close();
 }
 
-// Guest tracking
+// ✅ Guest tracking
 if (!isset($_SESSION['user_id'])) {
   $session_id = session_id();
   $ip_address = $_SERVER['REMOTE_ADDR'];
@@ -72,7 +71,7 @@ if (!isset($_SESSION['user_id'])) {
   $stmt->close();
 }
 
-// Orders
+// ✅ Orders
 $user_id = $_SESSION['user_id'] ?? null;
 $order_date = date('Y-m-d H:i:s');
 $total = 0;
@@ -86,7 +85,7 @@ $stmt->execute();
 $order_id = $stmt->insert_id;
 $stmt->close();
 
-// Insert Order Items WITH SIZE
+// ✅ Order Items
 foreach ($cartData as $item) {
   $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
   $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
@@ -94,7 +93,7 @@ foreach ($cartData as $item) {
   $stmt->close();
 }
 
-// Insert into threadline_payments
+// ✅ Payments
 $created_at = date('Y-m-d H:i:s');
 $stmt = $conn->prepare("INSERT INTO threadline_payments (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip, created_at, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssiissi", $fullname, $address, $email, $cardLast4, $expMonth, $expYear, $cvv, $zip, $created_at, $order_id);
