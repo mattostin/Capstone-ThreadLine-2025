@@ -11,10 +11,15 @@ $fullname = htmlspecialchars($_POST['fullname'] ?? "Guest");
 $address  = htmlspecialchars($_POST['address'] ?? "N/A");
 $zip      = htmlspecialchars($_POST['zip'] ?? "00000");
 $email    = htmlspecialchars($_POST['email'] ?? "noemail@example.com");
-$cardLast4 = htmlspecialchars($_POST['card_last4'] ?? "0000");
-$expMonth = htmlspecialchars($_POST['expiry_month'] ?? "01");
-$expYear  = htmlspecialchars($_POST['expiry_year'] ?? "1970");
+
+$card = $_POST['card'] ?? "0000";
+// Extract last 4 digits of the card number, removing any non-digit characters
+$cardLast4 = substr(preg_replace('/\D/', '', $card), -4);
+
+$expMonth = htmlspecialchars($_POST['expiryMonth'] ?? "01");
+$expYear  = htmlspecialchars($_POST['expiryYear'] ?? "1970");
 $cvv      = htmlspecialchars($_POST['cvv'] ?? "000");
+
 $cartData = json_decode($_POST['cart'] ?? '[]', true);
 
 // DB connection
@@ -72,13 +77,14 @@ $total = 0;
 foreach ($cartData as $item) {
   $total += (float)$item['price'] * (int)$item['quantity'];
 }
+
 $stmt = $conn->prepare("INSERT INTO orders (user_id, fullname, address, email, card_last4, total, created_at, order_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("isssssss", $user_id, $fullname, $address, $email, $cardLast4, $total, $order_date, $order_date);
 $stmt->execute();
 $order_id = $stmt->insert_id;
 $stmt->close();
 
-// ✅ Insert Order Items WITH SIZE
+// Insert Order Items WITH SIZE
 foreach ($cartData as $item) {
   $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
   $stmt->bind_param("issid", $order_id, $item['name'], $item['size'], $item['quantity'], $item['price']);
@@ -86,7 +92,7 @@ foreach ($cartData as $item) {
   $stmt->close();
 }
 
-// ⬇️ Insert into threadline_payments
+// Insert into threadline_payments
 $created_at = date('Y-m-d H:i:s');
 $stmt = $conn->prepare("INSERT INTO threadline_payments (fullname, address, email, card_last4, expiry_month, expiry_year, cvv, zip, created_at, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssiissi", $fullname, $address, $email, $cardLast4, $expMonth, $expYear, $cvv, $zip, $created_at, $order_id);
