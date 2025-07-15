@@ -129,7 +129,7 @@ if (session_status() === PHP_SESSION_NONE) {
       let total = 0;
 
       cart.forEach(item => {
-        const subtotal = item.quantity * item.price + 15;
+        const subtotal = item.quantity * item.price + 5;
         total += subtotal;
         html += `<tr>
           <td>${item.name}</td>
