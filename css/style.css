@@ -338,8 +338,9 @@ footer {
 
 @font-face {
   font-family: 'Moon Walk';
-  src: url('../Moon Walk.otf') format('otf'),
-       url('../Moon Walk.ttf') format('ttf');
+  src: url('../Moon Walk.otf') format('opentype'),
+       url('../Moon Walk.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+
