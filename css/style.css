@@ -332,10 +332,8 @@ footer {
 
 @font-face {
   font-family: 'Moon Walk';
-  src: url('../Moon Walk.otf') format('opentype'),
-       url('../Moon Walk.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+  src: url('../MoonWalk.otf') format('opentype'),
+       url('../MoonWalk.ttf') format('truetype');
 }
 
 .threadline-title {
