@@ -112,7 +112,7 @@ if (isset($_SESSION['user_id'])) {
   </nav>
 
   <main>
-<h1 style="text-align:center; color: white;">Our Products</h1>
+<h1 class="section-title">Our Products</h1>
     <div class="container">
       <div class="product-grid">
         <?php
