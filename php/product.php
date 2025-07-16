@@ -147,7 +147,7 @@ if (!$product) {
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert("<?= $product['product_name'] ?>added to cart!");
+      alert("<?= $product['product_name']?>added to cart!");
     });
 
     // Modal logic
