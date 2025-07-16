@@ -341,3 +341,9 @@ footer {
   font-size: 32px;
   font-weight: bold;
 }
+
+.section-heading {
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+}
