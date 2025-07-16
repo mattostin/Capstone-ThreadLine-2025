@@ -191,8 +191,8 @@ footer {
   width: 140px;
   height: 180px;
   object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: none;  /* ✅ Removes border */
+  border-radius: 6px;  /* Optional: keep or remove the rounded corners */
 }
 
 /* BACKGROUND VARIANTS */
