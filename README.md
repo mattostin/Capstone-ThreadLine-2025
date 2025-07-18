@@ -51,4 +51,4 @@ Contributers:
 Matthew Ostin,
 Layan Sayyad, 
 Chritian Jennings,
-Tomi Akisanya,
+Tomi Akisanya
