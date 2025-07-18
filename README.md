@@ -4,9 +4,9 @@ Features:
 - User registration & Login
 - Admin dashboard
 - Login and logout functionality
-- active user tracking
-- responsive frontend design
-- checkout with stock verification
+- Active user tracking
+- Responsive frontend design
+- Checkout with stock verification
 
   Live Demo:
   www.Threadline.it.com
@@ -30,7 +30,7 @@ Lastly to Setup the database
 Login Credentials
 - Admin Account:
 - Email: admin@threadline.com
-- password: adminpass
+- Password: adminpass
 
   Usage instructions
   1. Navigate around the homepage to browse all products
@@ -48,7 +48,7 @@ Customization:
 - Functionality: handled in the backend
 
 Contributers:
-Matthew Ostin
-Layan Sayyad 
-Chritian Jennings
-Tomi Akisanya
+Matthew Ostin,
+Layan Sayyad, 
+Chritian Jennings,
+Tomi Akisanya,
