@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $insert = $conn->query("INSERT INTO users (first_name, last_name, username, email, password) VALUES ('$first_name', '$last_name', '$username_input', '$email', '$password_hashed')");
     if ($insert) {
-      $success = "Account created successfully. <a href='/login.php' style='color:white; text-decoration:underline;'>Log in now</a>.";
+      $success = "Account created successfully. <a href='/php/login.php' style='color:white; text-decoration:underline;'>Log in now</a>.";
     } else {
       $error = "Something went wrong. Please try again.";
     }
