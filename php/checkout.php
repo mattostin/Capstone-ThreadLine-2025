@@ -15,6 +15,10 @@ if (session_status() === PHP_SESSION_NONE) {
   <title>Checkout - ThreadLine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -29,7 +33,17 @@ if (session_status() === PHP_SESSION_NONE) {
       padding: 2rem;
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);'
+      color: #075eb6; /* Set text color */
+}
+
+.checkout-container h2,
+.checkout-container th,
+.checkout-container td,
+.checkout-container p {
+  color: #075eb6;
+}
+
     }
 
     h2 {
@@ -84,8 +98,10 @@ if (session_status() === PHP_SESSION_NONE) {
   </style>
 </head>
 <body>
+  <div class="page-wrapper">
 
-  <?php include 'navbar.php'; ?>
+  <!-- GLOBAL HEADER -->
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <script>
     if (sessionStorage.getItem("clearCartOnLogin") === "true") {
@@ -115,47 +131,57 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </div>
 
-  <script>
-    function renderCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const container = document.getElementById('cartContainer');
-
-      if (cart.length === 0) {
-        container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-        return;
-      }
-
-      let html = '<table><thead><tr><th>Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead><tbody>';
-      let total = 0;
-
-      cart.forEach(item => {
-        const subtotal = item.quantity * item.price;
-        total += subtotal;
-        html += `<tr>
-          <td>${item.name}</td>
-          <td>${item.size}</td>
-          <td>${item.quantity}</td>
-          <td>$${item.price.toFixed(2)}</td>
-          <td>$${subtotal.toFixed(2)}</td>
-        </tr>`;
-      });
-
-      html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
-      container.innerHTML = html;
-    }
-
-    function clearCart() {
-      localStorage.removeItem('cart');
-      renderCart();
-    }
-
-    renderCart();
-  </script>
 <script>
-  window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
-  window.productId = null;
+  function renderCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const container = document.getElementById('cartContainer');
+    const checkoutButtons = document.getElementById('checkoutButtons');
+
+    if (cart.length === 0) {
+      container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+      if (checkoutButtons) checkoutButtons.style.display = 'none';
+      return;
+    }
+
+    let html = '<table><thead><tr><th>Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead><tbody>';
+    let total = 0;
+
+    cart.forEach(item => {
+      const subtotal = item.quantity * item.price;
+      total += subtotal;
+      html += `<tr>
+        <td>${item.name}</td>
+        <td>${item.size}</td>
+        <td>${item.quantity}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>$${subtotal.toFixed(2)}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
+    container.innerHTML = html;
+    if (checkoutButtons) checkoutButtons.style.display = 'flex';
+  }
+
+  function clearCart() {
+    localStorage.removeItem('cart');
+    renderCart();
+  }
+
+  renderCart();
 </script>
-<script src="/javascript/tracker.js"></script>
+
+  <script>
+    window.loggedInUser = <?= isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 'null' ?>;
+    window.productId = null;
+  </script>
+  <script src="/javascript/tracker.js"></script>
+
+  <!-- GLOBAL FOOTER -->
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+
+  </div>
+
 
 </body>
 </html>
