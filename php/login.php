@@ -26,13 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (password_verify($pass, $row['password'])) {
       $_SESSION['user_id'] = $row['id'];
       $_SESSION['username'] = $row['username'];
-      header("Location: /php/product-catalog.php");
+      header("Location: /php/product-catalog.php"); // <-- Redirect to product catalog
       exit();
     } else {
       $error = "Invalid password.";
     }
-  } else {
-    $error = "User not found.";
   }
 
   $conn->close();
