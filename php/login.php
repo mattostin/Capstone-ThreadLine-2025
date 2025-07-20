@@ -3,9 +3,9 @@ session_start();
 
 // Database config
 $host = "localhost";
-$username = "Christian";
-$password = "CHRISTIAN2025*";
-$database = "threadline_db";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
 
 // Handle login
 $error = '';
