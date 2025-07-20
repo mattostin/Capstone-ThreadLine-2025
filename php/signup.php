@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Sign Up</button>
     </form>
-    <p style="margin-top: 1rem;">Already have an account? <a href="/login.php" style="color: #075eb6; font-weight: bold;">Log In</a></p>
+    <p style="margin-top: 1rem;">Already have an account? <a href="/php/login.php" style="color: #075eb6; font-weight: bold;">Log In</a></p>
   </div>
 
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
