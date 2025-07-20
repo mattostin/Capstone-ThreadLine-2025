@@ -1,8 +1,7 @@
-<?php
-
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
+<?php
     
 // Force HTTPS
 if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
