@@ -1,4 +1,9 @@
 <?php
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+
+    
 // Force HTTPS
 if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
     $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -14,7 +19,6 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// ✅ Allow access for logged-in users or guests
 if (!isset($_SESSION['username']) && !isset($_SESSION['guest'])) {
   header("Location: ../php/login.php?redirect=payment.php");
   exit();
