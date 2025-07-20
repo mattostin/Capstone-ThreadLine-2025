@@ -34,6 +34,8 @@ $csrf_token = $_SESSION['csrf_token'];
   <meta charset="UTF-8" />
   <title>Payment - ThreadLine</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     
   <style>
     .payment-container {
