@@ -1,0 +1,99 @@
+/* Mini Bootstrap-Like Utility */
+
+/* Grid System */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.col {
+  flex: 1 1 300px;
+  max-width: 300px;
+}
+
+/* Typography */
+h2, h5 {
+  font-family: 'Lilita One', cursive;
+  color: #075eb6;
+  text-align: center;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Card Style */
+.card {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+/* Button */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  background-color: #075eb6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #054a91;
+}
+
+
+.card {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-body {
+  background-color: #075eb6;
+  color: white;
+  padding: 1rem;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.card-text {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background-color: white;
+  color: #075eb6;
+  border: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.btn-primary:hover {
+  background-color: #f0f0f0;
+  color: #054a8e;
+}
