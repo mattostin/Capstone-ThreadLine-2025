@@ -71,10 +71,10 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $first_name = $_POST['first_name'];
-  $last_name  = $_POST['last_name'];
-  $username   = $_POST['username'];
-  $email      = $_POST['email'];
+  $first_name = trim($_POST['first_name']);
+  $last_name  = trim($_POST['last_name']);
+  $username   = trim($_POST['username']);
+  $email      = strtolower(trim($_POST['email']));
   $dob        = $_POST['dob'];
   $password   = $_POST['password'];
 
