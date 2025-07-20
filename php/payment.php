@@ -101,15 +101,6 @@ $csrf_token = $_SESSION['csrf_token'];
   </style>
 </head>
 <body>
-  <header class="navbar">
-    <a href="/php/logo_redirect.php" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <li><a href="/php/logout.php">Logout</a></li>
-      <?php endif; ?>
-    </ul>
-  </header>
 
   <main class="payment-container">
     <h2>Payment and Billing</h2>
