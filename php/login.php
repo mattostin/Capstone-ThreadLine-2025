@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (password_verify($pass, $row['password'])) {
       $_SESSION['user_id'] = $row['id'];
       $_SESSION['username'] = $row['username'];
-      header("Location: /php/index.php");
+      header("Location: /php/product-catalog.php");
       exit();
     } else {
       $error = "Invalid password.";
