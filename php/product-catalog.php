@@ -6,9 +6,9 @@ error_reporting(E_ALL);
 
 // Database credentials
 $host = "localhost";
-$username = "Christian";
-$password = "CHRISTIAN2025*";
-$database = "threadline_db";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
 
 // Connect to DB
 $conn = new mysqli($host, $username, $password, $database);
