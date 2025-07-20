@@ -1,5 +1,9 @@
 <?php
 
+$host = "localhost";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
 
 $error = '';
 $success = '';
