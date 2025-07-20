@@ -12,8 +12,8 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #000;
-      color: #eee;
+      background: #ffffff;
+      color: #075eb6;
       margin: 0;
       padding: 0;
     }
@@ -27,7 +27,7 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
-      border-left: 5px solid orange;
+      border-left: 5px solid #075eb6;
       padding-left: 1rem;
     }
 
@@ -52,12 +52,12 @@
     }
 
     input:focus, textarea:focus {
-      outline: 2px solid orange;
+      outline: 2px solid #075eb6;
     }
 
     button {
       width: fit-content;
-      background-color: orange;
+      background-color: #075eb6;
       color: white;
       padding: 0.75rem 1.5rem;
       font-weight: bold;
@@ -68,7 +68,7 @@
     }
 
     button:hover {
-      background-color: #e69500;
+      background-color: #054a88;
     }
   </style>
 </head>
