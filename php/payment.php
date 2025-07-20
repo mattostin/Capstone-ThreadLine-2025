@@ -33,7 +33,8 @@ $csrf_token = $_SESSION['csrf_token'];
 <head>
   <meta charset="UTF-8" />
   <title>Payment - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+    
   <style>
     .payment-container {
       max-width: 700px;
