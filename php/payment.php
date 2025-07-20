@@ -1,5 +1,4 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
 <?php
     
@@ -196,3 +195,6 @@ $csrf_token = $_SESSION['csrf_token'];
 <script src="/javascript/tracker.js"></script>
 </body>
 </html>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+
