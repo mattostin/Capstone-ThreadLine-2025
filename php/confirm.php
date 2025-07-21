@@ -48,7 +48,7 @@ if (!empty($outOfStockItems)) {
   foreach ($outOfStockItems as $item) {
     echo "<p style='text-align:center;'>$item</p>";
   }
-  echo "<p style='text-align:center;'><a href='/php/codeForBothJackets.php'>← Go back</a></p>";
+  echo "<p style='text-align:center;'><a href='/php/product-catalog.php'>← Go back</a></p>";
   exit;
 }
 
@@ -120,7 +120,7 @@ $conn->close();
     <p>We’ll ship your items to:<br><?= $address ?>, <?= $zip ?></p>
     <p><strong>Order Total:</strong> $<?= number_format($total, 2) ?></p>
     <p><strong>Confirmation sent to:</strong> <?= $email ?></p>
-    <a href="/php/codeForBothJackets.php">← Back to Shop</a>
+    <a href="/php/product-catalog.php">← Back to Shop</a>
   </div>
 
   <script>localStorage.removeItem('cart');</script>
