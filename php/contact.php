@@ -1,37 +1,41 @@
 <?php
-// DB connection settings
-$host = "localhost";
-$username = "thredqwx_admin";
-$password = "Mostin2003$";
-$database = "thredqwx_threadline";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // DB connection settings
+  $host = "localhost";
+  $username = "thredqwx_admin";
+  $password = "Mostin2003$";
+  $database = "thredqwx_threadline";
 
-// Connect to MySQL
-$conn = new mysqli($host, $user, $pass, $db);
+  // Connect to MySQL
+  $conn = new mysqli($host, $username, $password, $database);
 
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+  // Check connection
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  // Sanitize inputs
+  $name    = $conn->real_escape_string($_POST['name']);
+  $phone   = $conn->real_escape_string($_POST['phone']);
+  $email   = $conn->real_escape_string($_POST['email']);
+  $subject = $conn->real_escape_string($_POST['subject']);
+  $message = $conn->real_escape_string($_POST['message']);
+
+  // Insert into database
+  $sql = "INSERT INTO contact_requests (name, phone, email, subject, message)
+          VALUES ('$name', '$phone', '$email', '$subject', '$message')";
+
+  if ($conn->query($sql) === TRUE) {
+    echo "<script>alert('Message submitted successfully!'); window.location.href = '/contact.html';</script>";
+    exit;
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+
+  $conn->close();
 }
-
-// Sanitize inputs
-$name    = $conn->real_escape_string($_POST['name']);
-$phone   = $conn->real_escape_string($_POST['phone']);
-$email   = $conn->real_escape_string($_POST['email']);
-$subject = $conn->real_escape_string($_POST['subject']);
-$message = $conn->real_escape_string($_POST['message']);
-
-// Insert into database
-$sql = "INSERT INTO contact_requests (name, phone, email, subject, message)
-        VALUES ('$name', '$phone', '$email', '$subject', '$message')";
-
-if ($conn->query($sql) === TRUE) {
-  echo "<script>alert('Message submitted successfully!'); window.location.href = '/contact.html';</script>";
-} else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-$conn->close();
 ?>
+
 
 
 <!DOCTYPE html>
