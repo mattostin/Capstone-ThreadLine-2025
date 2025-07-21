@@ -1,3 +1,39 @@
+<?php
+// DB connection settings
+$host = 'localhost';
+$db   = 'threadline_db'; // update with your actual database name
+$user = 'your_db_user';  // update with your DB username
+$pass = 'your_db_password';  // update with your DB password
+
+// Connect to MySQL
+$conn = new mysqli($host, $user, $pass, $db);
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// Sanitize inputs
+$name    = $conn->real_escape_string($_POST['name']);
+$phone   = $conn->real_escape_string($_POST['phone']);
+$email   = $conn->real_escape_string($_POST['email']);
+$subject = $conn->real_escape_string($_POST['subject']);
+$message = $conn->real_escape_string($_POST['message']);
+
+// Insert into database
+$sql = "INSERT INTO contact_requests (name, phone, email, subject, message)
+        VALUES ('$name', '$phone', '$email', '$subject', '$message')";
+
+if ($conn->query($sql) === TRUE) {
+  echo "<script>alert('Message submitted successfully!'); window.location.href = '/contact.html';</script>";
+} else {
+  echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
