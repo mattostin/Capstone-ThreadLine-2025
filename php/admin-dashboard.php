@@ -134,7 +134,7 @@ tfoot {
     th, td {
       padding: 1rem;
       text-align: left;
-      color: white;
+      color: 075eb6;
     }
 `
     td {
@@ -143,6 +143,8 @@ tfoot {
 
     td:last-child, th:last-child {
       text-align: right;
+      color: 075eb6;
+
     }
   </style>
 </head>
