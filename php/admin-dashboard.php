@@ -201,7 +201,7 @@ tfoot {
       ");
       while ($row = $productResult->fetch_assoc()):
       ?>
-        <tr>
+        <tr color = 075eb6>
           <td><?= htmlspecialchars($row['product_name']) ?></td>
           <td style="text-align: right;">$<?= number_format($row['price'], 2) ?></td>
           <td style="text-align: right;"><?= $row['stock'] ?></td>
