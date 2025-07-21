@@ -1,3 +1,6 @@
+  <!-- GLOBAL HEADER -->
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/admin_dashboard_header.php'; ?>
+
 
 <?php
 /*
