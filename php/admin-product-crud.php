@@ -1,3 +1,5 @@
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/admin_dashboard_header.php'; ?>
+
 <?php
 session_start();
 
@@ -108,8 +110,6 @@ $products = $conn->query("SELECT * FROM products ORDER BY position ASC");
   </style>
 </head>
 <body>
-
-<?php include '../php/navbar.php'; ?>
 
 <div class="container">
   <div class="admin-card">
