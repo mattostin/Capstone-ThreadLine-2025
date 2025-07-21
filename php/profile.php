@@ -156,7 +156,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="section">
       <h2>Personal Information</h2>
-      <form>
+<form method="POST" action="">
 <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" readonly>
 <input type="text" name="firstname" value="<?= htmlspecialchars($user['first_name']) ?>">
 <input type="text" name="lastname" value="<?= htmlspecialchars($user['last_name']) ?>">
@@ -172,7 +172,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="section">
       <h2>Change Password</h2>
-      <form>
+<form method="POST" action="">
         <input type="password" name="old_password" placeholder="Old Password">
         <input type="password" name="new_password" placeholder="New Password">
         <input type="password" name="confirm_password" placeholder="Confirm New Password">
