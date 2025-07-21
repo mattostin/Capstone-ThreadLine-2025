@@ -72,12 +72,14 @@
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <!-- HERO SECTION -->
-  <section class="hero">
-    <h1>Your Brand. Your Rules.</h1>
-    <p>Welcome to ThreadLine – where custom fashion meets function.</p>
-    <a href="/php/product-catalog.php" class="btn">Shop Now</a>
-    <a href="/php/login.php" class="btn">Login / Signup</a>
-  </section>
+<section class="hero">
+  <h1>ThreadLine</h1>
+  <p>Your Brand. Your Rules.</p>
+  <p>Welcome to ThreadLine – where custom fashion meets function.</p>
+  <a href="/php/product-catalog.php" class="btn">Shop Now</a>
+  <a href="/php/login.php" class="btn">Login / Signup</a>
+</section>
+
 
   <!-- FOOTER INCLUDE -->
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
