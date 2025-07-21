@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           VALUES ('$name', '$phone', '$email', '$subject', '$message')";
 
   if ($conn->query($sql) === TRUE) {
-    echo "<script>alert('Message submitted successfully!'); window.location.href = '/contact.html';</script>";
+    echo "<script>alert('Message submitted successfully!'); window.location.href = '/php/contact.php';</script>";
     exit;
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
