@@ -161,11 +161,16 @@
     <div class="form-section">
       <h2 style="color:white; margin-top: 2rem;">Ask a Question</h2>
     
-        <form>
-  <label for="help-question" style="color:white;">Your Question</label><br>
-  <textarea id="help-question" placeholder="Type your question here..."></textarea><br>
-  <button type="submit">Submit</button>
-</form>
+   <form>
+  <div class="form-section">
+  <h2 style="color:white; margin-top: 2rem;">Ask a Question</h2>
+  <form action="/php/submit-question.php" method="post">
+    <textarea placeholder="Type your question here..."></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
+
+
+
 
       
     </div>
