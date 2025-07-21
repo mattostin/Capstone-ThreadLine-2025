@@ -62,7 +62,7 @@ $mostViewedProduct = $conn->query("
 <head>
   <meta charset="UTF-8" />
   <title>Admin Dashboard - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
 body {
   font-family: 'Poppins', sans-serif;
