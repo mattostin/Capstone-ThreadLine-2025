@@ -1,4 +1,14 @@
 <?php session_start(); ?>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap&family=Manufacturing+Consent&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css" />
+
 <header style="background: white; padding: 1rem 2rem;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <a href="/php/index.php" style="font-weight: bold; font-size: 1.5rem; color: #075eb6; text-decoration: none;">ThreadLine</a>
