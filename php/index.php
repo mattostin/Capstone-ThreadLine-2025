@@ -75,7 +75,6 @@
 <section class="hero">
   <h1>ThreadLine</h1>
   <p>Your Brand. Your Rules.</p>
-  <p>Where custom fashion meets function.</p>
   <a href="/php/product-catalog.php" class="btn">Shop Now</a>
   <a href="/php/login.php" class="btn">Login / Signup</a>
 </section>
