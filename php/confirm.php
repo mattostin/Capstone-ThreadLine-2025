@@ -113,7 +113,6 @@ $conn->close();
 </head>
 <body>
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
-  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
   <div style="max-width:800px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;font-family:'Poppins',sans-serif;">
     <h2> Order Confirmed</h2>
@@ -126,4 +125,6 @@ $conn->close();
 
   <script>localStorage.removeItem('cart');</script>
 </body>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+  
 </html>
