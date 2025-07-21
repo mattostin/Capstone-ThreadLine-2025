@@ -70,7 +70,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY position ASC");
   <link rel="stylesheet" href="../css/style.css">
   <style>
     body {
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      background: white;
       color: #fff;
       font-family: 'Poppins', sans-serif;
       margin: 0;
