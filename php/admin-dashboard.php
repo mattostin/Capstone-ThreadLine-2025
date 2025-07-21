@@ -101,6 +101,7 @@ tfoot {
     .card h2 {
       font-size: 2rem;
       margin: 0;
+      color: 075eb6;
     }
 
     .card p {
