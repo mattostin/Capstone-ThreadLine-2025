@@ -215,4 +215,7 @@ tfoot {
     </tbody>
   </table>
 </body>
+
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+  
 </html>
