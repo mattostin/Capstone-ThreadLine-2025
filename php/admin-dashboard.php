@@ -64,13 +64,28 @@ $mostViewedProduct = $conn->query("
   <title>Admin Dashboard - ThreadLine</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: white;
-      margin: 0;
-      padding: 2rem;
-    }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+table {
+  background-color: rgba(0, 0, 0, 0.2); /* fix for white background */
+}
+
+tbody td {
+  color: white !important;
+}
+
+tfoot {
+  background: transparent;
+}
+
 
     h1 {
       font-family: 'Lilita One', cursive;
