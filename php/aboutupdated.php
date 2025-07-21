@@ -50,7 +50,7 @@
    At ThreadLine, we’re all about fashion that stands out — just like the people who wear it. 
    Started by creators and designers who believe in uplifting small brands, ThreadLine is an 
    online space that puts fresh, emerging talent directly in the spotlight. We make it easy to shop 
-   affordable, stylish pieces without the generic feel of big-name retail.
+   affordable, stylish pieces without the generic and cookie-cutter feel of big-name retail.
 
      
      
