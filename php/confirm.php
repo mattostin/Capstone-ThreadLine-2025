@@ -112,10 +112,11 @@ $conn->close();
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <?php include 'navbar.php'; ?>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
   <div style="max-width:800px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;font-family:'Poppins',sans-serif;">
-    <h2>✅ Order Confirmed</h2>
+    <h2> Order Confirmed</h2>
     <p>Thank you, <strong><?= $fullname ?></strong>!</p>
     <p>We’ll ship your items to:<br><?= $address ?>, <?= $zip ?></p>
     <p><strong>Order Total:</strong> $<?= number_format($total, 2) ?></p>
