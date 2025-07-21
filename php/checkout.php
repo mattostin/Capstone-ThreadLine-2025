@@ -132,31 +132,34 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 
 <script>
-  function renderCart() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const container = document.getElementById('cartContainer');
-    const checkoutButtons = document.getElementById('checkoutButtons');
+function renderCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const container = document.getElementById('cartContainer');
 
-    if (cart.length === 0) {
-      container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-      if (checkoutButtons) checkoutButtons.style.display = 'none';
-      return;
-    }
+  if (cart.length === 0) {
+    container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+    return;
+  }
 
-    let html = '<table><thead><tr><th>Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead><tbody>';
-    let total = 0;
+  let html = '<table><thead><tr><th>Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th><th></th></tr></thead><tbody>';
+  let total = 0;
 
-    cart.forEach(item => {
-      const subtotal = item.quantity * item.price;
-      total += subtotal;
-      html += `<tr>
-        <td>${item.name}</td>
-        <td>${item.size}</td>
-        <td>${item.quantity}</td>
-        <td>$${item.price.toFixed(2)}</td>
-        <td>$${subtotal.toFixed(2)}</td>
-      </tr>`;
-    });
+  cart.forEach((item, index) => {
+    const subtotal = item.quantity * item.price;
+    total += subtotal;
+    html += `<tr>
+      <td>${item.name}</td>
+      <td>${item.size}</td>
+      <td>${item.quantity}</td>
+      <td>$${item.price.toFixed(2)}</td>
+      <td>$${subtotal.toFixed(2)}</td>
+      <td><button onclick="removeFromCart(${index})" style="background:#c00; color:#fff; border:none; padding:0.5rem 0.75rem; border-radius:4px; cursor:pointer;">Remove</button></td>
+    </tr>`;
+  });
+
+  html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
+  container.innerHTML = html;
+}
 
     html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
     container.innerHTML = html;
