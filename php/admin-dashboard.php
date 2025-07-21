@@ -70,7 +70,7 @@ table {
 }
 
 tbody td {
-  color: white !important;
+      color: 075eb6;
 }
 
 tfoot {
