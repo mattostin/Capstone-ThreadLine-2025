@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($result && $result->num_rows === 1) {
     $row = $result->fetch_assoc();
     if (password_verify($pass, $row['password'])) {
+      $_SESSION['email'] = $row['email'];
       $_SESSION['user_id'] = $row['id'];
       $_SESSION['username'] = $row['username'];
       header("Location: /php/product-catalog.php"); // <-- Redirect to product catalog
