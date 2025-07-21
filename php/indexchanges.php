@@ -31,7 +31,16 @@
   background-size: cover;
   color: #075eb6;
 }
+.hero .btn:hover {
+  background: #075eb6;
+  color: #fff;
+  transition: 0.3s;
+}
 
+.hero .btn-secondary:hover {
+  background: white;
+  color: #075eb6;
+}
 
     .hero h1 {
       font-size: 3rem;
