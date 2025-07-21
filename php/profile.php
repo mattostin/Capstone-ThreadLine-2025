@@ -151,14 +151,15 @@ if (!isset($_SESSION['user_id'])) {
     <div class="section">
       <h2>Personal Information</h2>
       <form>
-        <input type="text" name="username" placeholder="Username (cannot be changed)" readonly>
-        <input type="text" name="firstname" placeholder="First Name">
-        <input type="text" name="lastname" placeholder="Last Name">
-        <input type="email" name="email" placeholder="Email">
-        <input type="text" name="phone" placeholder="Phone Number">
-        <input type="text" name="address" placeholder="Address">
-        <input type="text" name="zip" placeholder="ZIP Code">
-        <input type="text" name="country" placeholder="Country">
+<input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" readonly>
+<input type="text" name="firstname" value="<?= htmlspecialchars($user['first_name']) ?>">
+<input type="text" name="lastname" value="<?= htmlspecialchars($user['last_name']) ?>">
+<input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
+<input type="text" name="phone" value="<?= htmlspecialchars($user['phone']) ?>">
+<input type="text" name="address" value="<?= htmlspecialchars($user['address']) ?>">
+<input type="text" name="zip" value="<?= htmlspecialchars($user['zip']) ?>">
+<input type="text" name="country" value="<?= htmlspecialchars($user['country']) ?>">
+
         <button type="submit">Update Profile</button>
       </form>
     </div>
