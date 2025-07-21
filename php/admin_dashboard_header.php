@@ -13,7 +13,6 @@
       <?php endif; ?>
 
       <?php if (isset($_SESSION['username'])): ?>
-        <span style="color: #075eb6; font-weight: bold;">Hi, <?= htmlspecialchars($_SESSION['username']) ?></span>
         <a href="/php/logout.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Logout</a>
       <?php else: ?>
         <a href="/php/login.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Login</a>
