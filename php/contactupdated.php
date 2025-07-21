@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <div class="container">
-    <h1>Stay in Touch</h1>
+    <h1>Stay Connected</h1>
     <p class="contact-intro">
       Have a question or comment for Threadline? We’re here for you! Fill out the form below and we’ll be in touch soon.
     </p>
