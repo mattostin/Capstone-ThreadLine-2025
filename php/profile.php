@@ -51,6 +51,12 @@ $user = $result->fetch_assoc();
 $conn->close();
 ?>
 
+<?php if (!empty($profile_update_success)): ?>
+  <p style="color: green;">Profile updated successfully.</p>
+<?php elseif (!empty($profile_update_error)): ?>
+  <p style="color: red;">Error: <?= htmlspecialchars($profile_update_error) ?></p>
+<?php endif; ?>
+
 
 <?php
 session_start();
