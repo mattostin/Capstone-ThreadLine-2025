@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
   <title>ThreadLine | Home</title>
 
   <!-- Google Fonts -->
- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Manufacturing+Consent&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Manufacturing+Consent&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -20,27 +21,28 @@
       font-family: 'Poppins', sans-serif;
     }
 
-.hero {
-  text-align: center;
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem;
-  background: url('/images/2597205.jpg') no-repeat center center;
-  background-size: cover;
-  color: #075eb6;
-}
-.hero .btn:hover {
-  background: #075eb6;
-  color: #fff;
-  transition: 0.3s;
-}
+    .hero {
+      text-align: center;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      background: url('/images/2597205.jpg') no-repeat center center;
+      background-size: cover;
+      color: #075eb6;
+    }
 
-.hero .btn-secondary:hover {
-  background: white;
-  color: #075eb6;
-}
+    .hero .btn:hover {
+      background: #075eb6;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .hero .btn-secondary:hover {
+      background: white;
+      color: #075eb6;
+    }
 
     .hero h1 {
       font-size: 3rem;
@@ -81,20 +83,19 @@
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <!-- HERO SECTION -->
-<?php session_start(); ?>
-<section class="hero">
-  <h1>ThreadLine</h1>
-  <p>Your Brand. Your Rules.</p>
-  <a href="/php/product-catalog.php" class="btn">Shop Now</a>
+  <section class="hero">
+    <h1>ThreadLine</h1>
+    <p>Your Brand. Your Rules.</p>
+    <a href="/php/product-catalog.php" class="btn">Shop Now</a>
 
-  <?php if (!isset($_SESSION['user_id'])): ?>
-    <a href="/php/login.php" class="btn">Login / Signup</a>
-  <?php endif; ?>
-</section>
-
+    <?php if (!isset($_SESSION['user_id'])): ?>
+      <a href="/php/login.php" class="btn">Login / Signup</a>
+    <?php endif; ?>
+  </section>
 
   <!-- FOOTER INCLUDE -->
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
 </body>
 </html>
+
