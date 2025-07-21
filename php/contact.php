@@ -1,9 +1,9 @@
 <?php
 // DB connection settings
-$host = 'localhost';
-$db   = 'threadline_db'; // update with your actual database name
-$user = 'your_db_user';  // update with your DB username
-$pass = 'your_db_password';  // update with your DB password
+$host = "localhost";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
 
 // Connect to MySQL
 $conn = new mysqli($host, $user, $pass, $db);
