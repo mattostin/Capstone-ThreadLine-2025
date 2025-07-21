@@ -132,7 +132,7 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 
 <script>
-function renderCart() {
+  function renderCart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const container = document.getElementById('cartContainer');
     const checkoutButtons = document.getElementById('checkoutButtons');
@@ -149,24 +149,14 @@ function renderCart() {
     cart.forEach(item => {
       const subtotal = item.quantity * item.price;
       total += subtotal;
-      html += <tr>
+      html += `<tr>
         <td>${item.name}</td>
         <td>${item.size}</td>
         <td>${item.quantity}</td>
         <td>$${item.price.toFixed(2)}</td>
         <td>$${subtotal.toFixed(2)}</td>
-      </tr>;
+      </tr>`;
     });
-
-    html += </tbody></table><p class="total">Total: $${total.toFixed(2)}</p>;
-    container.innerHTML = html;
-    if (checkoutButtons) checkoutButtons.style.display = 'flex';
-  }
-
-  function clearCart() {
-    localStorage.removeItem('cart');
-    renderCart();
-  }
 
     html += `</tbody></table><p class="total">Total: $${total.toFixed(2)}</p>`;
     container.innerHTML = html;
