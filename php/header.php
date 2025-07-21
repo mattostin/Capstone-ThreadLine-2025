@@ -16,6 +16,9 @@
         </a>
         <ul class="dropdown-style" style="display: none; position: absolute; top: 100%; right: 0; background: white; list-style: none; padding: 1rem; margin: 0; box-shadow: 0 0 8px rgba(0,0,0,0.1); border-radius: 8px; min-width: 180px;">
           <?php if (isset($_SESSION['username'])): ?>
+            <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
+              <li><a href="/php/admin_dashboard.php" style="display: block; padding: 0.5rem 1rem; color: #075eb6; text-decoration: none; font-weight: bold;">Dashboard</a></li>
+            <?php endif; ?>
             <li><a href="/php/profile.php" style="display: block; padding: 0.5rem 1rem; color: #075eb6; text-decoration: none; font-weight: bold;">Edit Profile</a></li>
             <li><a href="/php/logout.php" style="display: block; padding: 0.5rem 1rem; color: #075eb6; text-decoration: none; font-weight: bold;">Logout</a></li>
           <?php else: ?>
