@@ -107,13 +107,15 @@ tfoot {
     .card p {
       margin-top: 1rem;
       font-size: 1.1rem;
-      color: #ddd;
+      color: 075eb6;
     }
 
     .section-title {
       margin-top: 4rem;
       font-size: 1.8rem;
       font-weight: 600;
+      color: 075eb6;
+
     }
 
     table {
