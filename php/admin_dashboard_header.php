@@ -8,7 +8,6 @@
       <a href="/php/checkout.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Checkout</a>
 
       <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'admin@threadline.com'): ?>
-        <a href="/php/index.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Admin Home</a>
         <a href="/php/admin-dashboard.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Dashboard</a>
         <a href="/php/admin-product-crud.php" style="color: #075eb6; text-decoration: none; font-weight: bold;">Manage Products</a>
       <?php endif; ?>
