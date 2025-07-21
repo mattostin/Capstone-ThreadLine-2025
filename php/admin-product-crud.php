@@ -223,5 +223,7 @@ $('.delete-form').on('submit', async function(e) {
 });
 </script>
 
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
+  
 </body>
 </html>
