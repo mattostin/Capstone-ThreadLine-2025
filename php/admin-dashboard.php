@@ -129,7 +129,7 @@ $mostViewedProduct = $conn->query("
       text-align: left;
       color: white;
     }
-
+`
     td {
       border-top: 1px solid rgba(255,255,255,0.1);
     }
