@@ -112,6 +112,8 @@ $conn->close();
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="page-wrapper">
+
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <div style="max-width:800px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;font-family:'Poppins',sans-serif;">
@@ -124,6 +126,7 @@ $conn->close();
   </div>
 
   <script>localStorage.removeItem('cart');</script>
+    </div>
 </body>
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
   
