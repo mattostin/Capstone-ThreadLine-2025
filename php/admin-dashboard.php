@@ -1,19 +1,6 @@
-  <!-- GLOBAL HEADER -->
-  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/admin_dashboard_header.php'; ?>
-
-
 <?php
-/*
-  File: admin_dashboard.php
-  Project: ThreadLine E-Commerce Platform
-  Description: Admin dashboard that displays product, user, order,
-               revenue, and site-analytics metrics pulled from MySQL.
-               Only accessible to the designated admin account.
-*/
-
 session_start();
 
-// Ensure admin is logged in
 if (!isset($_SESSION['email']) || $_SESSION['email'] !== 'admin@threadline.com') {
   header("Location: login.php");
   exit;
@@ -24,13 +11,11 @@ $username = "thredqwx_admin";
 $password = "Mostin2003$";
 $database = "thredqwx_threadline";
 
-// Connect to DB
 $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get metrics
 $totalProducts = $conn->query("SELECT COUNT(*) as total FROM products")->fetch_assoc()['total'];
 $outOfStock = $conn->query("SELECT COUNT(*) as total FROM products WHERE stock = 0")->fetch_assoc()['total'];
 $lowStock = $conn->query("SELECT COUNT(*) as total FROM products WHERE stock BETWEEN 1 AND 2")->fetch_assoc()['total'];
@@ -62,28 +47,54 @@ $mostViewedProduct = $conn->query("
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Admin Dashboard - ThreadLine</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      margin: 0;
       background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       color: white;
-      margin: 0;
       padding: 2rem;
     }
 
+    header {
+      background: linear-gradient(to right, #005d95, #0071b3);
+      padding: 1.5rem 2rem;
+    }
+
+    .admin-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .admin-nav .logo {
+      font-weight: bold;
+      font-size: 1.6rem;
+    }
+
+    .admin-nav .nav-links a {
+      color: white;
+      font-weight: bold;
+      margin-left: 2rem;
+      text-decoration: none;
+    }
+
     h1 {
-      font-family: 'Lilita One', cursive;
       font-size: 2.5rem;
-      margin-bottom: 2rem;
+      margin-top: 2rem;
+      font-weight: 700;
     }
 
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
+      margin-top: 2rem;
     }
 
     .card {
@@ -106,7 +117,7 @@ $mostViewedProduct = $conn->query("
     }
 
     .section-title {
-      margin-top: 4rem;
+      margin-top: 3rem;
       font-size: 1.8rem;
       font-weight: 600;
     }
@@ -129,7 +140,7 @@ $mostViewedProduct = $conn->query("
       text-align: left;
       color: white;
     }
-`
+
     td {
       border-top: 1px solid rgba(255,255,255,0.1);
     }
@@ -140,66 +151,83 @@ $mostViewedProduct = $conn->query("
   </style>
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
 
-  <h2 class="section-title"> Product Stats</h2>
-  <div class="dashboard-grid">
-    <div class="card"><h2><?= $totalProducts ?></h2><p>Total Products</p></div>
-    <div class="card"><h2><?= $outOfStock ?></h2><p>Out of Stock</p></div>
-    <div class="card"><h2><?= $lowStock ?></h2><p>Low Stock (1–2)</p></div>
-    <div class="card"><h2>$<?= number_format($inventoryValue, 2) ?></h2><p>Total Inventory Value</p></div>
+<header>
+  <div class="admin-nav">
+    <div class="logo">ThreadLine</div>
+    <div class="nav-links">
+      <a href="/php/product-catalog.php">Shop</a>
+      <a href="/php/checkout.php">Checkout</a>
+      <a href="/php/index.php">Admin Home</a>
+      <a href="/php/admin-dashboard.php">Dashboard</a>
+      <a href="/php/manage_products.php">Manage Products</a>
+      <a href="#">Hi, Admin</a>
+      <a href="/php/logout.php">Logout</a>
+    </div>
   </div>
+</header>
 
-  <h2 class="section-title"> User Activity</h2>
-  <div class="dashboard-grid">
-    <div class="card"><h2><?= $totalUsers ?></h2><p>Registered Users</p></div>
-    <div class="card"><h2><?= $loggedInUsers ?></h2><p>Currently Logged In</p></div>
-    <div class="card"><h2><?= $activeUsers24h ?></h2><p>Active in Last 24h</p></div>
-  </div>
+<h1>Admin Dashboard</h1>
 
-  <h2 class="section-title"> Orders & Revenue</h2>
-  <div class="dashboard-grid">
-    <div class="card"><h2><?= $totalOrders ?></h2><p>Total Orders</p></div>
-    <div class="card"><h2>$<?= number_format($totalRevenue, 2) ?></h2><p>Total Revenue</p></div>
-  </div>
+<h2 class="section-title">Product Stats</h2>
+<div class="dashboard-grid">
+  <div class="card"><h2><?= $totalProducts ?></h2><p>Total Products</p></div>
+  <div class="card"><h2><?= $outOfStock ?></h2><p>Out of Stock</p></div>
+  <div class="card"><h2><?= $lowStock ?></h2><p>Low Stock (1–2)</p></div>
+  <div class="card"><h2>$<?= number_format($inventoryValue, 2) ?></h2><p>Total Inventory Value</p></div>
+</div>
 
-  <h2 class="section-title"> Site Analytics</h2>
-  <div class="dashboard-grid">
-    <div class="card"><h2><?= $totalPageviews ?></h2><p>Total Page Views</p></div>
-    <div class="card"><h2><?= round($avgSessionTime, 1) ?>s</h2><p>Avg. Session Duration</p></div>
-    <div class="card"><h2><?= $mostViewedProduct['product_name'] ?></h2><p>Most Viewed Product (<?= $mostViewedProduct['views'] ?> views)</p></div>
-  </div>
+<h2 class="section-title">User Activity</h2>
+<div class="dashboard-grid">
+  <div class="card"><h2><?= $totalUsers ?></h2><p>Registered Users</p></div>
+  <div class="card"><h2><?= $loggedInUsers ?></h2><p>Currently Logged In</p></div>
+  <div class="card"><h2><?= $activeUsers24h ?></h2><p>Active in Last 24h</p></div>
+</div>
 
-  <h2 class="section-title"> All Products Overview</h2>
-  <table>
-    <thead>
+<h2 class="section-title">Orders & Revenue</h2>
+<div class="dashboard-grid">
+  <div class="card"><h2><?= $totalOrders ?></h2><p>Total Orders</p></div>
+  <div class="card"><h2>$<?= number_format($totalRevenue, 2) ?></h2><p>Total Revenue</p></div>
+</div>
+
+<h2 class="section-title">Site Analytics</h2>
+<div class="dashboard-grid">
+  <div class="card"><h2><?= $totalPageviews ?></h2><p>Total Page Views</p></div>
+  <div class="card"><h2><?= round($avgSessionTime, 1) ?>s</h2><p>Avg. Session Duration</p></div>
+  <div class="card"><h2><?= htmlspecialchars($mostViewedProduct['product_name']) ?></h2><p>Most Viewed Product (<?= $mostViewedProduct['views'] ?> views)</p></div>
+</div>
+
+<h2 class="section-title">All Products Overview</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th style="text-align: right;">Price</th>
+      <th style="text-align: right;">Stock</th>
+      <th style="text-align: right;">Views</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    $productResult = $conn->query("
+      SELECT 
+        p.product_name,
+        p.price,
+        p.stock,
+        (SELECT COUNT(*) FROM site_analytics sa WHERE sa.product_id = p.id) AS views
+      FROM products p
+    ");
+    while ($row = $productResult->fetch_assoc()):
+    ?>
       <tr>
-        <th>Product Name</th>
-        <th style="text-align: right;">Price</th>
-        <th style="text-align: right;">Stock</th>
-        <th style="text-align: right;">Views</th>
+        <td><?= htmlspecialchars($row['product_name']) ?></td>
+        <td style="text-align: right;">$<?= number_format($row['price'], 2) ?></td>
+        <td style="text-align: right;"><?= $row['stock'] ?></td>
+        <td style="text-align: right;"><?= $row['views'] ?></td>
       </tr>
-    </thead>
-    <tbody>
-      <?php
-      $productResult = $conn->query("
-        SELECT 
-          p.product_name,
-          p.price,
-          p.stock,
-          (SELECT COUNT(*) FROM site_analytics sa WHERE sa.product_id = p.id) AS views
-        FROM products p
-      ");
-      while ($row = $productResult->fetch_assoc()):
-      ?>
-        <tr>
-          <td><?= htmlspecialchars($row['product_name']) ?></td>
-          <td style="text-align: right;">$<?= number_format($row['price'], 2) ?></td>
-          <td style="text-align: right;"><?= $row['stock'] ?></td>
-          <td style="text-align: right;"><?= $row['views'] ?></td>
-        </tr>
-      <?php endwhile; $conn->close(); ?>
-    </tbody>
-  </table>
+    <?php endwhile; $conn->close(); ?>
+  </tbody>
+</table>
+
 </body>
 </html>
