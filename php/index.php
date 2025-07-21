@@ -72,11 +72,15 @@
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
 
   <!-- HERO SECTION -->
+<?php session_start(); ?>
 <section class="hero">
   <h1>ThreadLine</h1>
   <p>Your Brand. Your Rules.</p>
   <a href="/php/product-catalog.php" class="btn">Shop Now</a>
-  <a href="/php/login.php" class="btn">Login / Signup</a>
+
+  <?php if (!isset($_SESSION['user_id'])): ?>
+    <a href="/php/login.php" class="btn">Login / Signup</a>
+  <?php endif; ?>
 </section>
 
 
