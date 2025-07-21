@@ -4,6 +4,60 @@ if (!isset($_SESSION['user_id'])) {
   header("Location: /php/login.php");
   exit();
 }
+
+$host = "localhost";
+$username = "thredqwx_admin";
+$password = "Mostin2003$";
+$database = "thredqwx_threadline";
+
+$conn = new mysqli($host, $username, $password, $database);
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle profile update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstname'])) {
+  $user_id  = $_SESSION['user_id'];
+  $first    = $conn->real_escape_string($_POST['firstname']);
+  $last     = $conn->real_escape_string($_POST['lastname']);
+  $email    = $conn->real_escape_string($_POST['email']);
+  $phone    = $conn->real_escape_string($_POST['phone']);
+  $address  = $conn->real_escape_string($_POST['address']);
+  $zip      = $conn->real_escape_string($_POST['zip']);
+  $country  = $conn->real_escape_string($_POST['country']);
+
+  $update_sql = "UPDATE users SET 
+    first_name='$first', 
+    last_name='$last', 
+    email='$email', 
+    phone='$phone', 
+    address='$address', 
+    zip='$zip', 
+    country='$country' 
+    WHERE id=$user_id";
+
+  if ($conn->query($update_sql)) {
+    $profile_update_success = true;
+  } else {
+    $profile_update_error = $conn->error;
+  }
+}
+
+// Fetch current info to pre-fill
+$user_id = $_SESSION['user_id'];
+$result = $conn->query("SELECT * FROM users WHERE id = $user_id");
+$user = $result->fetch_assoc();
+
+$conn->close();
+?>
+
+
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+  header("Location: /php/login.php");
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
