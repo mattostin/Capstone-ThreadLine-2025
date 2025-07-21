@@ -35,7 +35,7 @@ session_destroy();
 // Output script to clear cart and redirect
 echo '<script>
   localStorage.removeItem("cart");
-  window.location.href = "../html/index.html";
+  window.location.href = "../php/index.php";
 </script>';
 exit;
 ?>
