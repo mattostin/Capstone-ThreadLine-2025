@@ -64,23 +64,8 @@ if (!$product) {
   </style>
 </head>
 <body>
-  <header class="navbar">
-    <a href="<?= isset($_SESSION['username']) ? '/php/home.php' : '/html/index.html' ?>" class="logo">ThreadLine</a>
-    <ul class="nav-links">
-      <li><a href="/php/codeForBothJackets.php">Shop</a></li>
-      <li><a href="/php/checkout.php">Checkout</a></li>
-      <?php if (isset($_SESSION['username'])): ?>
-        <?php if ($_SESSION['email'] === 'admin@threadline.com'): ?>
-          <li><a href="/php/admin-dashboard.php">Dashboard</a></li>
-        <?php endif; ?>
-        <li style="color: white;">Hi, <?= ucfirst(htmlspecialchars($_SESSION['username'])) ?></li>
-        <li><a href="/php/logout.php">Logout</a></li>
-      <?php else: ?>
-        <li><a href="/php/login.php">Login</a></li>
-        <li><a href="/php/signup.php">Signup</a></li>
-      <?php endif; ?>
-    </ul>
-  </header>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
+
 
   <main>
     <div class="product-detail-box">
@@ -185,8 +170,6 @@ if (!$product) {
     });
   </script>
 </body>
-
-  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/header.php'; ?>
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/php/footer.php'; ?>
 
 
